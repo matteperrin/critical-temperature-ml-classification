@@ -39,6 +39,21 @@ The features describe aggregate properties of each material, including the numbe
 
 These summaries are calculated for properties such as atomic mass, atomic radius, density, electron affinity, electronegativity, thermal conductivity and valence.
 
+### Fetching the data
+
+Run the acquisition script from the repository root:
+
+```bash
+python fetch_data.py
+```
+
+The script uses only the Python standard library to download the original UCI dataset 464 archive and extract both source files:
+
+- `data/raw/train.csv` — 81 engineered features and the `critical_temp` target
+- `data/raw/unique_m.csv` — elemental quantities, `critical_temp` and chemical formula
+
+The files are excluded from Git because they can be reproduced by rerunning the script. The script overwrites existing copies with the files from the current UCI archive, and an internet connection is required. See [`data/README.md`](data/README.md) for data-directory details.
+
 ## Analytical objective
 
 The original dataset supports regression using the numerical critical temperature. For this project, the target will be transformed into a binary classification label:
@@ -132,6 +147,15 @@ The original `critical_temp` column will be retained for exploratory analysis an
 - Critical current and critical magnetic field are not captured by the classification target.
 - Database selection effects, repeated material families and measurement variation may affect generalisation.
 - Predictions require experimental validation before practical use.
+
+## Project schedule and collaboration
+
+- The Project Phase I deadline has been extended to **31 August 2026**.
+- Project Assessment 1 group feedback meetings will take place in the Week 6 lab; all group members must attend the same lab session.
+- The group must use one shared GitHub repository with every member added as a collaborator.
+- Members must commit directly to the shared repository rather than use separate individual branches.
+- Each student must make at least two commits per week; commit history will be used to monitor individual contribution and participation.
+- Shared repository use does not remove the requirement for each student to complete their own assessed code, analysis, visualisations and report.
 
 ## Reproducibility principles
 

@@ -209,6 +209,9 @@ tempCodeRunnerFile.py
 # PyPI configuration file
 .pypirc
 
+# Reproducible downloaded datasets
+/data/raw/
+
 # Marimo
 marimo/_static/
 marimo/_lsp/
