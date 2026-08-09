@@ -1,9 +1,6 @@
-# critical-temperature-ml-classification
-A machine-learning project that uses elemental and compositional features to classify known superconductors according to whether their critical temperature exceeds 77 K—the approximate operating threshold for liquid-nitrogen cooling.
+# Critical Temperature Machine-Learning Classification
 
-# Critical Temperature Classification
-
-An end-to-end data engineering and machine-learning project using the UCI Superconductivity dataset. The project investigates whether the elemental and compositional features of known superconductors can identify materials with a critical temperature above 77 K.
+An end-to-end data engineering and machine-learning project using the UCI Superconductivity dataset to classify known superconductors according to whether their critical temperature exceeds 77 K—the approximate threshold for liquid-nitrogen cooling.
 
 ## Research question
 
