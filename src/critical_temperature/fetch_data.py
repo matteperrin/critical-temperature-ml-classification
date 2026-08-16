@@ -7,7 +7,8 @@ DATASET_URL = (
     "https://archive.ics.uci.edu/static/public/464/"
     "superconductivty+data.zip"
 )
-DATA_DIR = Path(__file__).parent / "data" / "raw"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DATA_DIR = PROJECT_ROOT / "data" / "raw"
 DATA_FILES = ("train.csv", "unique_m.csv")
 
 

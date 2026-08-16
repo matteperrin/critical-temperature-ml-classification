@@ -44,7 +44,7 @@ These summaries are calculated for properties such as atomic mass, atomic radius
 Run the acquisition script from the repository root:
 
 ```bash
-python fetch_data.py
+python src/critical_temperature/fetch_data.py
 ```
 
 The script uses only the Python standard library to download the original UCI dataset 464 archive and extract both source files:

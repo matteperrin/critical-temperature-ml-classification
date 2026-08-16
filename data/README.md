@@ -3,7 +3,7 @@
 Run the acquisition script from the repository root:
 
 ```bash
-python fetch_data.py
+python src/critical_temperature/fetch_data.py
 ```
 
 It downloads the original archive for [UCI Superconductivity Data (dataset 464)](https://archive.ics.uci.edu/dataset/464/superconductivty+data) and extracts:
