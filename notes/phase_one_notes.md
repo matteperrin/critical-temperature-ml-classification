@@ -128,3 +128,7 @@ Completed code, written explanations, interpretations and assessment responses m
 ## Academic-integrity requirement
 
 Large language models may assist with Python suggestions, error explanations and debugging. They must not be used to write the project report, interpret results, produce the discussion, complete the critical reflection or generate the conclusion. All code must be understood, checked and run by the submitting student.
+
+## JUST TO REMEMBER
+
+No code in final report
