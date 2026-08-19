@@ -201,3 +201,51 @@ print("Blank material names:",
 
 print("Material names with leading/trailing spaces:",
       (unique_df["material"] != unique_df["material"].str.strip()).sum())
+
+# Check numerical columns for potential outliers using the IQR method
+print("\n--- POTENTIAL OUTLIERS ---")
+
+numeric_columns = train_original.select_dtypes(include="number").columns
+
+outlier_counts = {}
+
+for column in numeric_columns:
+    Q1 = train_original[column].quantile(0.25)
+    Q3 = train_original[column].quantile(0.75)
+    IQR = Q3 - Q1
+
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+
+    outliers = (
+        (train_original[column] < lower_bound) |
+        (train_original[column] > upper_bound)
+    ).sum()
+
+    outlier_counts[column] = outliers
+
+outlier_counts = pd.Series(outlier_counts)
+
+print(
+    outlier_counts[outlier_counts > 0]
+    .sort_values(ascending=False)
+    .to_string()
+)
+
+# Review rows that are exact duplicates in train.csv
+duplicate_mask = train_original.duplicated(keep=False)
+
+duplicate_review = unique_original.loc[
+    duplicate_mask,
+    ["material", "critical_temp"]
+]
+
+print("\n--- DUPLICATE REVIEW ---")
+print("Rows involved:", len(duplicate_review))
+print(duplicate_review.head(30).to_string())
+
+print("\nUnique materials in duplicated rows:")
+print(duplicate_review["material"].nunique())
+
+print("\nRepeated material names:")
+print(duplicate_review["material"].duplicated().sum())
