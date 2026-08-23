@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Load the raw UCI Superconductivity training dataset
-train_df = pd.read_csv("data/raw/train.csv")
+train_df = pd.read_csv("data/processed/train_clean.csv")
 
 # Keep an untouched copy of the raw dataset
 train_original = train_df.copy(deep=True)
@@ -29,3 +29,11 @@ print(
     .value_counts(normalize=True)
     .sort_index()
 )
+
+# Save the transformed dataset
+train_transformed.to_csv(
+    "data/processed/train_transformed.csv",
+    index=False
+)
+
+print("\nTransformed dataset saved successfully.")
