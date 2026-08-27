@@ -43,15 +43,6 @@ feature_variance = train_numeric.var().sort_values()
 
 print(feature_variance.to_string())
 
-# Identify constant features
-constant_features = feature_variance[feature_variance == 0]
-
-print("\n--- CONSTANT FEATURES ---")
-
-if constant_features.empty:
-    print("No constant features found.")
-else:
-    print(constant_features.to_string())
 
 # Check missing values in train.csv
 missing = train_original.isna().sum()
