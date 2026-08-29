@@ -35,6 +35,24 @@ print(train_original.nunique(dropna=False).sort_values().to_string())
 print("\n--- UNIQUE_M.CSV UNIQUE VALUE COUNTS ---")
 print(unique_original.nunique(dropna=False).sort_values().to_string())
 
+#Check feature variance
+print("\n--- FEATURE VARIANCE ---")
+
+train_numeric = train_original.select_dtypes(include="number")
+feature_variance = train_numeric.var().sort_values()
+
+print(feature_variance.to_string())
+
+# Identify constant features
+constant_features = feature_variance[feature_variance == 0]
+
+print("\n--- CONSTANT FEATURES ---")
+
+if constant_features.empty:
+    print("No constant features found.")
+else:
+    print(constant_features.to_string())
+
 # Check missing values in train.csv
 missing = train_original.isna().sum()
 
