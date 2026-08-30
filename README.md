@@ -39,6 +39,16 @@ The features describe aggregate properties of each material, including the numbe
 
 These summaries are calculated for properties such as atomic mass, atomic radius, density, electron affinity, electronegativity, thermal conductivity and valence.
 
+### Setup
+
+Create a virtual environment and install the recorded dependencies:
+
+```bash
+python -m venv .venv
+# Activate .venv using the command for your shell, then run:
+python -m pip install -r requirements.txt
+```
+
 ### Fetching the data
 
 Run the acquisition script from the repository root:
@@ -53,6 +63,20 @@ The script uses only the Python standard library to download the original UCI da
 - `data/raw/unique_m.csv` — elemental quantities, `critical_temp` and chemical formula
 
 The files are excluded from Git because they can be reproduced by rerunning the script. The script overwrites existing copies with the files from the current UCI archive, and an internet connection is required. See [`data/README.md`](data/README.md) for data-directory details.
+
+### Reproducing the Phase I pipeline
+
+Run each stage from the repository root:
+
+```bash
+python src/critical_temperature/fetch_data.py
+python src/critical_temperature/data_inspection.py
+python src/critical_temperature/data_cleaning.py
+python src/critical_temperature/data_transformation.py
+python src/critical_temperature/data_analysis.py
+```
+
+Generated datasets, tables and figures are excluded from Git and recreated under `data/processed/` and `reports/`.
 
 ## Analytical objective
 
