@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 
 # Load raw datasets
@@ -34,7 +36,8 @@ print("\nFinal dataset shapes:")
 print("train.csv:", train_clean.shape)
 print("unique_m.csv:", unique_clean.shape)
 
-# Save cleaned datasets
+# Create the output directory before saving cleaned datasets
+Path("data/processed").mkdir(parents=True, exist_ok=True)
 train_clean.to_csv("data/processed/train_clean.csv", index=False)
 unique_clean.to_csv("data/processed/unique_m_clean.csv", index=False)
 
