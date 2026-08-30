@@ -213,6 +213,11 @@ tempCodeRunnerFile.py
 # Reproducible downloaded datasets
 /data/raw/
 
+# Reproducible generated analysis outputs
+/data/processed/*.csv
+/reports/figures/*.png
+/reports/tables/*.csv
+
 # Marimo
 marimo/_static/
 marimo/_lsp/
