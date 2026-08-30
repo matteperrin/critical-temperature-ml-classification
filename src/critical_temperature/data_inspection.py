@@ -128,6 +128,11 @@ print(
     .sum()
 )
 
+# Confirm that number_of_elements matches the elemental composition
+print("\nRows with inconsistent number_of_elements values:")
+derived_element_count = unique_original[element_columns].gt(0).sum(axis=1)
+print(derived_element_count.ne(train_original["number_of_elements"]).sum())
+
 # Check duplicated predictor values without using critical_temp
 train_features = train_original.drop(columns=["critical_temp"])
 print("\nRows with duplicated predictor values in train.csv:")

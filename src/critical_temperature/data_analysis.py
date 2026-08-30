@@ -4,6 +4,8 @@ import pandas as pd
 from pathlib import Path
 
 project_root = Path(__file__).resolve().parents[2]
+figures_dir = project_root / "reports" / "figures"
+figures_dir.mkdir(parents=True, exist_ok=True)
 
 df = pd.read_csv(
     project_root / "data" / "processed" / "train_transformed.csv"
@@ -33,7 +35,8 @@ plt.xlabel("Above 77 K")
 plt.ylabel("Number of Records")
 plt.xticks([0, 1], ["0 = 77 K or below", "1 = Above 77 K"], rotation=0)
 plt.tight_layout()
-plt.show()
+plt.savefig(figures_dir / "class_distribution.png", dpi=300)
+plt.close()
 
 # Histogram of critical temperature
 plt.hist(df["critical_temp"], bins=30)
@@ -42,7 +45,8 @@ plt.title("Distribution of Critical Temperature")
 plt.xlabel("Critical Temperature (K)")
 plt.ylabel("Frequency")
 plt.tight_layout()
-plt.show()
+plt.savefig(figures_dir / "critical_temperature_histogram.png", dpi=300)
+plt.close()
 
 # Boxplot of critical temperature
 plt.boxplot(df["critical_temp"])
@@ -50,7 +54,8 @@ plt.boxplot(df["critical_temp"])
 plt.title("Critical Temperature Boxplot")
 plt.ylabel("Critical Temperature (K)")
 plt.tight_layout()
-plt.show()
+plt.savefig(figures_dir / "critical_temperature_boxplot.png", dpi=300)
+plt.close()
 
 # Correlation analysis
 correlations = (
@@ -87,7 +92,8 @@ plt.yticks(
 
 plt.title("Correlation Heatmap of Key Features")
 plt.tight_layout()
-plt.show()
+plt.savefig(figures_dir / "correlation_heatmap.png", dpi=300)
+plt.close()
 
 # Scatter plot: weighted mean valence vs critical temperature
 plt.scatter(
@@ -100,7 +106,8 @@ plt.title("Weighted Mean Valence vs Critical Temperature")
 plt.xlabel("Weighted Mean Valence")
 plt.ylabel("Critical Temperature (K)")
 plt.tight_layout()
-plt.show()
+plt.savefig(figures_dir / "weighted_mean_valence_scatter.png", dpi=300)
+plt.close()
 
 print("\n--- KEY EDA FINDINGS ---")
 print("The dataset is class imbalanced, with fewer materials above 77 K.")

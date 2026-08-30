@@ -1,9 +1,9 @@
 import pandas as pd
 
-# Load the raw UCI Superconductivity training dataset
+# Load the cleaned UCI Superconductivity training dataset
 train_df = pd.read_csv("data/processed/train_clean.csv")
 
-# Keep an untouched copy of the raw dataset
+# Keep an untouched copy of the cleaned dataset
 train_original = train_df.copy(deep=True)
 
 # Work on a copy so the original data is unchanged
