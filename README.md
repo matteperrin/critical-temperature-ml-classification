@@ -78,6 +78,31 @@ python src/critical_temperature/data_analysis.py
 
 Generated datasets, tables and figures are excluded from Git and recreated under `data/processed/` and `reports/`.
 
+### Starting Phase II
+
+To get started, use this read-only loader from the repository root. It does not
+add any modelling dependencies yet:
+
+```python
+from src.critical_temperature.model_data import load_model_data
+
+X, y, groups = load_model_data()
+```
+
+By default, it reads the raw `train.csv` and keeps every row. It leaves
+`critical_temp`, `above_77k`, and `material` out of the predictors so the model
+cannot use the target or a material identifier as a shortcut. `groups` puts
+identical feature vectors together for group-aware validation, but it does not
+catch every repeated material or material family. Check those separately before
+choosing the final split. Fit scaling and feature selection on training folds
+only, and use the same folds for every model.
+
+Run the loader tests with:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
 ## Analytical objective
 
 The original dataset supports regression using the numerical critical temperature. For this project, the target will be transformed into a binary classification label:
@@ -142,7 +167,7 @@ The original `critical_temp` column will be retained for exploratory analysis an
 
 - Establish a simple baseline classifier.
 - Implement the required Learning Classifier System.
-- Compare it with at least two suitable machine-learning approaches.
+- Compare it with at least three suitable non-deep-learning approaches.
 - Candidate comparison models include logistic regression, support vector machines, random forests and gradient boosting.
 - Tune models without using the held-out test set.
 

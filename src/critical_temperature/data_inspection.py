@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 # Load the raw UCI Superconductivity datasets
@@ -14,28 +15,28 @@ print("Datasets loaded successfully.")
 print("\ntrain.csv shape:", train_df.shape)
 print("unique_m.csv shape:", unique_df.shape)
 
-#Inspect data types
+# Inspect data types
 print("\n--- TRAIN.CSV DATA TYPES ---")
 print(train_df.dtypes.to_string())
 
 print("\n--- UNIQUE_M.CSV DATA TYPES ---")
 print(unique_df.dtypes.to_string())
 
-#Inspect value ranges
+# Inspect value ranges
 print("\n--- TRAIN.CSV VALUE RANGES ---")
 print(train_df.describe().T[["min", "max"]].to_string())
 
 print("\n--- UNIQUE_M.CSV VALUE RANGES ---")
 print(unique_df.describe().T[["min", "max"]].to_string())
 
-#Inspect number of unique values
+# Inspect number of unique values
 print("\n--- TRAIN.CSV UNIQUE VALUE COUNTS ---")
 print(train_original.nunique(dropna=False).sort_values().to_string())
 
 print("\n--- UNIQUE_M.CSV UNIQUE VALUE COUNTS ---")
 print(unique_original.nunique(dropna=False).sort_values().to_string())
 
-#Check feature variance
+# Check feature variance
 print("\n--- FEATURE VARIANCE ---")
 
 train_numeric = train_original.select_dtypes(include="number")
@@ -57,10 +58,7 @@ else:
 missing = train_original.isna().sum()
 
 print("\nColumns containing missing values in train.csv:")
-print(
-    missing[missing > 0]
-    .sort_values(ascending=False)
-)
+print(missing[missing > 0].sort_values(ascending=False))
 
 # Check duplicate rows in train.csv
 print("\nNumber of duplicate rows in train.csv:")
@@ -70,10 +68,7 @@ print(train_original.duplicated().sum())
 missing = unique_original.isna().sum()
 
 print("\nColumns containing missing values in unique_m.csv:")
-print(
-    missing[missing > 0]
-    .sort_values(ascending=False)
-)
+print(missing[missing > 0].sort_values(ascending=False))
 
 # Check duplicate rows in unique_m.csv
 print("\nNumber of duplicate rows in unique_m.csv:")
@@ -84,32 +79,17 @@ print("\nBlank material labels in unique_m.csv:")
 print(unique_original["material"].str.strip().eq("").sum())
 
 print("\nMaterial labels with surrounding spaces:")
-print(
-    (
-        unique_original["material"]
-        != unique_original["material"].str.strip()
-    ).sum()
-)
+print((unique_original["material"] != unique_original["material"].str.strip()).sum())
 
 # Check infinite numeric values
 train_numeric = train_original.select_dtypes(include="number")
 unique_numeric = unique_original.select_dtypes(include="number")
 
 print("\nInfinite numeric values in train.csv:")
-print(
-    train_numeric
-    .isin([float("inf"), float("-inf")])
-    .sum()
-    .sum()
-)
+print(train_numeric.isin([float("inf"), float("-inf")]).sum().sum())
 
 print("\nInfinite numeric values in unique_m.csv:")
-print(
-    unique_numeric
-    .isin([float("inf"), float("-inf")])
-    .sum()
-    .sum()
-)
+print(unique_numeric.isin([float("inf"), float("-inf")]).sum().sum())
 
 # Check values that are invalid for these documented variables
 print("\nNon-positive number_of_elements values:")
@@ -119,14 +99,8 @@ print("\nNon-positive critical_temp values in train.csv:")
 print((train_original["critical_temp"] <= 0).sum())
 
 print("\nNegative elemental quantities in unique_m.csv:")
-element_columns = unique_original.columns.drop(
-    ["critical_temp", "material"]
-)
-print(
-    (unique_original[element_columns] < 0)
-    .sum()
-    .sum()
-)
+element_columns = unique_original.columns.drop(["critical_temp", "material"])
+print((unique_original[element_columns] < 0).sum().sum())
 
 # Confirm that number_of_elements matches the elemental composition
 print("\nRows with inconsistent number_of_elements values:")
@@ -140,8 +114,7 @@ print(train_features.duplicated().sum())
 
 # Review duplicated formulas and their recorded temperatures
 formula_duplicates = unique_original.loc[
-    unique_original["material"].duplicated(keep=False),
-    ["material", "critical_temp"]
+    unique_original["material"].duplicated(keep=False), ["material", "critical_temp"]
 ].sort_values(["material", "critical_temp"])
 
 print("\nRecords containing duplicated chemical formulas:")
@@ -150,11 +123,9 @@ print(len(formula_duplicates))
 print("\nNumber of duplicated chemical formulas:")
 print(formula_duplicates["material"].nunique())
 
-formula_temperature_counts = (
-    formula_duplicates
-    .groupby("material")["critical_temp"]
-    .nunique()
-)
+formula_temperature_counts = formula_duplicates.groupby("material")[
+    "critical_temp"
+].nunique()
 print("\nDuplicated formulas with multiple temperatures:")
 print((formula_temperature_counts > 1).sum())
 
@@ -163,10 +134,7 @@ print((formula_temperature_counts > 1).sum())
 # Zero values may be valid, so report them without removing them
 zero_values = (train_numeric == 0).sum()
 print("\nColumns containing zero values in train.csv:")
-print(
-    zero_values[zero_values > 0]
-    .sort_values(ascending=False)
-)
+print(zero_values[zero_values > 0].sort_values(ascending=False))
 
 print("\nFirst 20 duplicated formula records for review:")
 print(formula_duplicates.head(20).to_string(index=False))
@@ -176,11 +144,7 @@ print("\nBoth datasets contain the same number of rows:")
 print(len(train_original) == len(unique_original))
 
 print("\ncritical_temp matches between the datasets:")
-print(
-    train_original["critical_temp"].equals(
-        unique_original["critical_temp"]
-    )
-)
+print(train_original["critical_temp"].equals(unique_original["critical_temp"]))
 
 
 # Inspect missing values
@@ -198,20 +162,20 @@ print("unique_m.csv duplicate rows:", unique_df.duplicated().sum())
 
 
 # Inspect infinite values
-import numpy as np
-
 print("\n--- INFINITE VALUES ---")
-print("train.csv infinite values:",
-      np.isinf(train_df.select_dtypes(include="number")).sum().sum())
+print(
+    "train.csv infinite values:",
+    np.isinf(train_df.select_dtypes(include="number")).sum().sum(),
+)
 
-print("unique_m.csv infinite values:",
-      np.isinf(unique_df.select_dtypes(include="number")).sum().sum())
+print(
+    "unique_m.csv infinite values:",
+    np.isinf(unique_df.select_dtypes(include="number")).sum().sum(),
+)
 
 
 # Check critical temperature consistency between the two files
-temp_mismatches = (
-    train_df["critical_temp"] != unique_df["critical_temp"]
-).sum()
+temp_mismatches = (train_df["critical_temp"] != unique_df["critical_temp"]).sum()
 
 print("\n--- CRITICAL TEMPERATURE CONSISTENCY ---")
 print("Temperature mismatches between files:", temp_mismatches)
@@ -219,11 +183,14 @@ print("Temperature mismatches between files:", temp_mismatches)
 
 # Check formatting of material names
 print("\n--- MATERIAL FORMATTING ---")
-print("Blank material names:",
-      unique_df["material"].astype(str).str.strip().eq("").sum())
+print(
+    "Blank material names:", unique_df["material"].astype(str).str.strip().eq("").sum()
+)
 
-print("Material names with leading/trailing spaces:",
-      (unique_df["material"] != unique_df["material"].str.strip()).sum())
+print(
+    "Material names with leading/trailing spaces:",
+    (unique_df["material"] != unique_df["material"].str.strip()).sum(),
+)
 
 # Check numerical columns for potential outliers using the IQR method
 print("\n--- POTENTIAL OUTLIERS ---")
@@ -241,27 +208,19 @@ for column in numeric_columns:
     upper_bound = Q3 + 1.5 * IQR
 
     outliers = (
-        (train_original[column] < lower_bound) |
-        (train_original[column] > upper_bound)
+        (train_original[column] < lower_bound) | (train_original[column] > upper_bound)
     ).sum()
 
     outlier_counts[column] = outliers
 
 outlier_counts = pd.Series(outlier_counts)
 
-print(
-    outlier_counts[outlier_counts > 0]
-    .sort_values(ascending=False)
-    .to_string()
-)
+print(outlier_counts[outlier_counts > 0].sort_values(ascending=False).to_string())
 
 # Review rows that are exact duplicates in train.csv
 duplicate_mask = train_original.duplicated(keep=False)
 
-duplicate_review = unique_original.loc[
-    duplicate_mask,
-    ["material", "critical_temp"]
-]
+duplicate_review = unique_original.loc[duplicate_mask, ["material", "critical_temp"]]
 
 print("\n--- DUPLICATE REVIEW ---")
 print("Rows involved:", len(duplicate_review))

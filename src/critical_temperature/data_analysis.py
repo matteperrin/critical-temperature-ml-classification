@@ -1,15 +1,15 @@
+from pathlib import Path
+
+import matplotlib.pyplot as plt
 import pandas as pd
 
 # Load transformed dataset
-from pathlib import Path
 
 project_root = Path(__file__).resolve().parents[2]
 figures_dir = project_root / "reports" / "figures"
 figures_dir.mkdir(parents=True, exist_ok=True)
 
-df = pd.read_csv(
-    project_root / "data" / "processed" / "train_transformed.csv"
-)
+df = pd.read_csv(project_root / "data" / "processed" / "train_transformed.csv")
 
 print("Dataset loaded successfully.")
 print("Shape:", df.shape)
@@ -24,8 +24,6 @@ print(df["above_77k"].value_counts().sort_index())
 
 print("\nClass proportions:")
 print(df["above_77k"].value_counts(normalize=True).sort_index())
-
-import matplotlib.pyplot as plt
 
 # Plot class distribution
 df["above_77k"].value_counts().sort_index().plot(kind="bar")
@@ -79,16 +77,9 @@ plt.figure(figsize=(10, 8))
 plt.imshow(correlation_matrix, aspect="auto")
 plt.colorbar(label="Correlation")
 
-plt.xticks(
-    range(len(heatmap_columns)),
-    heatmap_columns,
-    rotation=90
-)
+plt.xticks(range(len(heatmap_columns)), heatmap_columns, rotation=90)
 
-plt.yticks(
-    range(len(heatmap_columns)),
-    heatmap_columns
-)
+plt.yticks(range(len(heatmap_columns)), heatmap_columns)
 
 plt.title("Correlation Heatmap of Key Features")
 plt.tight_layout()
@@ -96,11 +87,7 @@ plt.savefig(figures_dir / "correlation_heatmap.png", dpi=300)
 plt.close()
 
 # Scatter plot: weighted mean valence vs critical temperature
-plt.scatter(
-    df["wtd_mean_Valence"],
-    df["critical_temp"],
-    alpha=0.4
-)
+plt.scatter(df["wtd_mean_Valence"], df["critical_temp"], alpha=0.4)
 
 plt.title("Weighted Mean Valence vs Critical Temperature")
 plt.xlabel("Weighted Mean Valence")
@@ -112,5 +99,8 @@ plt.close()
 print("\n--- KEY EDA FINDINGS ---")
 print("The dataset is class imbalanced, with fewer materials above 77 K.")
 print("Critical temperature is unevenly distributed and has one clear high outlier.")
-print("Several thermal conductivity and atomic-radius features are related to critical temperature.")
+print(
+    "Several thermal conductivity and atomic-radius features are related "
+    "to critical temperature."
+)
 print("Weighted mean valence shows a negative relationship with critical temperature.")

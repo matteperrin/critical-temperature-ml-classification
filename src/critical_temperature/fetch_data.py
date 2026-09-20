@@ -3,10 +3,7 @@ from pathlib import Path
 from urllib.request import urlopen
 from zipfile import ZipFile
 
-DATASET_URL = (
-    "https://archive.ics.uci.edu/static/public/464/"
-    "superconductivty+data.zip"
-)
+DATASET_URL = "https://archive.ics.uci.edu/static/public/464/superconductivty+data.zip"
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = PROJECT_ROOT / "data" / "raw"
 DATA_FILES = ("train.csv", "unique_m.csv")

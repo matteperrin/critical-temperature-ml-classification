@@ -232,3 +232,5 @@ notebooks/data_cleaning.ipynb
 notebooks/exploratory_data_analysis.ipynb
 notebooks/ayushman.ipynb
 notes/ayushman_notes.md
+project_phase_two.md
+.gitignore
