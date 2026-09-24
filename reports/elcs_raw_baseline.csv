@@ -1,0 +1,8 @@
+model,data,validation,n_splits,random_state,learning_iterations,population_size,fold,training_rows,test_rows,accuracy,balanced_accuracy,precision,recall,f1
+unmodified eLCS,data/raw/train.csv,StratifiedGroupKFold,5,42,100,100,1,17010.000000,4253.000000,0.388667,0.340980,0.092617,0.265725,0.137359
+unmodified eLCS,data/raw/train.csv,StratifiedGroupKFold,5,42,100,100,2,17010.000000,4253.000000,0.416647,0.459683,0.162837,0.527599,0.248865
+unmodified eLCS,data/raw/train.csv,StratifiedGroupKFold,5,42,100,100,3,17010.000000,4253.000000,0.395486,0.313287,0.068816,0.183569,0.100105
+unmodified eLCS,data/raw/train.csv,StratifiedGroupKFold,5,42,100,100,4,17011.000000,4252.000000,0.367121,0.521968,0.192209,0.766367,0.307336
+unmodified eLCS,data/raw/train.csv,StratifiedGroupKFold,5,42,100,100,5,17011.000000,4252.000000,0.378645,0.423472,0.146221,0.494223,0.225674
+unmodified eLCS,data/raw/train.csv,StratifiedGroupKFold,5,42,100,100,mean,,,0.389313,0.411878,0.132540,0.447497,0.203868
+unmodified eLCS,data/raw/train.csv,StratifiedGroupKFold,5,42,100,100,std,,,0.018654,0.085566,0.050794,0.230747,0.084256

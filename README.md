@@ -76,7 +76,8 @@ python src/critical_temperature/data_transformation.py
 python src/critical_temperature/data_analysis.py
 ```
 
-Generated datasets, tables and figures are excluded from Git and recreated under `data/processed/` and `reports/`.
+Generated Phase I outputs are recreated under `data/processed/` and `reports/`.
+The Phase II baseline CSV described below is retained in Git as an experiment record.
 
 ### Starting Phase II
 
@@ -97,11 +98,37 @@ catch every repeated material or material family. Check those separately before
 choosing the final split. Fit scaling and feature selection on training folds
 only, and use the same folds for every model.
 
-Run the loader tests with:
+Run the loader and baseline-runner tests with:
 
 ```bash
 python -m unittest discover -s tests -v
 ```
+
+### Running the initial Phase II baseline
+
+From the repository root, after installing dependencies and fetching the raw data:
+
+```bash
+python src/critical_temperature/run_elcs.py
+```
+
+This evaluates unmodified eLCS on raw `train.csv` using all five
+`StratifiedGroupKFold` folds. The loader creates the `critical_temp > 77` label,
+removes target/identifier columns from the inputs, and groups identical feature
+vectors. No scaling, feature selection or deduplication is applied. These groups
+do not guarantee separation of repeated compositions or material families.
+
+The initial configuration uses 100 learning iterations, a population-size limit
+of 100, and random seed 42 for both splitting and each fresh fold model. This is
+a small initial training budget, not a tuned or convergence-validated setup.
+
+Each run overwrites `reports/elcs_raw_baseline.csv`, which is retained in Git.
+It records configuration, fold sizes, accuracy, balanced accuracy, precision,
+recall and F1, followed by unweighted fold means and sample standard deviations.
+Precision, recall and F1 use class `1` (above 77 K) as positive and return zero
+when undefined. Fold standard deviations are not confidence intervals or
+significance tests. The runner tests use a stand-in estimator to stay fast and
+are included in the unittest command above.
 
 ## Analytical objective
 
