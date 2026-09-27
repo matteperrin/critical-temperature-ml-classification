@@ -7,6 +7,7 @@ from skeLCS import eLCS
 from sklearn.metrics import (
     accuracy_score,
     balanced_accuracy_score,
+    confusion_matrix,
     f1_score,
     precision_score,
     recall_score,
@@ -47,6 +48,9 @@ def main() -> None:
         )
         model.fit(X_values[train_indices], y_values[train_indices])
         predictions = model.predict(X_values[test_indices])
+        tn, fp, fn, tp = confusion_matrix(
+            y_values[test_indices], predictions, labels=[0, 1]
+        ).ravel()
         results.append(
             {
                 "model": "unmodified eLCS",
@@ -59,6 +63,10 @@ def main() -> None:
                 "fold": fold,
                 "training_rows": len(train_indices),
                 "test_rows": len(test_indices),
+                "true_negatives": int(tn),
+                "false_positives": int(fp),
+                "false_negatives": int(fn),
+                "true_positives": int(tp),
                 "accuracy": accuracy_score(y_values[test_indices], predictions),
                 "balanced_accuracy": balanced_accuracy_score(
                     y_values[test_indices], predictions

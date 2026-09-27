@@ -125,6 +125,11 @@ a small initial training budget, not a tuned or convergence-validated setup.
 Each run overwrites `reports/elcs_raw_baseline.csv`, which is retained in Git.
 It records configuration, fold sizes, accuracy, balanced accuracy, precision,
 recall and F1, followed by unweighted fold means and sample standard deviations.
+New runs also record per-fold true negatives, false positives, false negatives
+and true positives, with class `1` (above 77 K) as positive. These counts make
+class-specific errors available for the recorded 81.7% / 18.3% class split;
+count columns are left blank in the mean/std rows. The existing committed
+baseline CSV predates these columns; rerun the command above to regenerate it.
 Precision, recall and F1 use class `1` (above 77 K) as positive and return zero
 when undefined. Fold standard deviations are not confidence intervals or
 significance tests. The runner tests use a stand-in estimator to stay fast and

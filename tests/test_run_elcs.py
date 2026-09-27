@@ -66,6 +66,20 @@ class BaselineRunnerTests(unittest.TestCase):
         folds = output.iloc[:5]
         self.assertEqual(folds["training_rows"].tolist(), [len(m.train) for m in models])
         self.assertEqual(folds["test_rows"].tolist(), [len(m.test) for m in models])
+        counts = [
+            "true_negatives", "false_positives", "false_negatives", "true_positives"
+        ]
+        for index, model in enumerate(models):
+            # Each held-out group contains one negative and one positive label.
+            predicted_positive = int((model.test % 2).sum()) // 2
+            predicted_negative = len(model.test) // 2 - predicted_positive
+            self.assertEqual(
+                folds.loc[index, counts].tolist(),
+                [predicted_negative, predicted_positive,
+                 predicted_negative, predicted_positive],
+            )
+        np.testing.assert_array_equal(folds[counts].sum(axis=1), folds["test_rows"])
+        self.assertTrue(output.iloc[5:][counts].isna().all().all())
         for metric in run_elcs.METRICS:
             for index, statistic in [(5, "mean"), (6, "std")]:
                 self.assertAlmostEqual(
