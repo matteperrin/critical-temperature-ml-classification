@@ -122,18 +122,26 @@ The initial configuration uses 100 learning iterations, a population-size limit
 of 100, and random seed 42 for both splitting and each fresh fold model. This is
 a small initial training budget, not a tuned or convergence-validated setup.
 
-Each run overwrites `reports/elcs_raw_baseline.csv`, which is retained in Git.
+The runner now uses 1,000 learning iterations, with all other settings unchanged,
+to check the training budget. Each run overwrites
+`reports/elcs_raw_1000_iterations.csv`, preserving the 100-iteration experiment
+in `reports/elcs_raw_baseline.csv`.
 It records configuration, fold sizes, accuracy, balanced accuracy, precision,
 recall and F1, followed by unweighted fold means and sample standard deviations.
 New runs also record per-fold true negatives, false positives, false negatives
 and true positives, with class `1` (above 77 K) as positive. These counts make
 class-specific errors available for the recorded 81.7% / 18.3% class split;
-count columns are left blank in the mean/std rows. The existing committed
-baseline CSV predates these columns; rerun the command above to regenerate it.
+count columns are left blank in the mean/std rows.
 Precision, recall and F1 use class `1` (above 77 K) as positive and return zero
 when undefined. Fold standard deviations are not confidence intervals or
 significance tests. The runner tests use a stand-in estimator to stay fast and
 are included in the unittest command above.
+
+We increased eLCS training from 100 to 1,000 iterations, keeping the data,
+folds and population size unchanged. Mean balanced accuracy changed from
+0.412 to 0.428, while recall changed from 0.447 to 0.439. Next, we plan to
+test a larger iteration budget on the same folds before changing preprocessing
+or other model settings; convergence has not yet been established.
 
 ## Analytical objective
 

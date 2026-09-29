@@ -20,10 +20,10 @@ else:
     from model_data import load_model_data
 
 RANDOM_STATE = 42
-LEARNING_ITERATIONS = 100
+LEARNING_ITERATIONS = 1000
 POPULATION_SIZE = 100
 N_SPLITS = 5
-REPORT_PATH = Path(__file__).resolve().parents[2] / "reports/elcs_raw_baseline.csv"
+REPORT_PATH = Path(__file__).resolve().parents[2] / "reports/elcs_raw_1000_iterations.csv"
 METRICS = ("accuracy", "balanced_accuracy", "precision", "recall", "f1")
 
 

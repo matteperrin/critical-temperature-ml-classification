@@ -1,0 +1,8 @@
+model,data,validation,n_splits,random_state,learning_iterations,population_size,fold,training_rows,test_rows,true_negatives,false_positives,false_negatives,true_positives,accuracy,balanced_accuracy,precision,recall,f1
+unmodified eLCS,data/raw/train.csv,StratifiedGroupKFold,5,42,1000,100,1,17010.000000,4253.000000,1190.000000,2284.000000,386.000000,393.000000,0.372208,0.423519,0.146806,0.504493,0.227431
+unmodified eLCS,data/raw/train.csv,StratifiedGroupKFold,5,42,1000,100,2,17010.000000,4253.000000,1402.000000,2072.000000,439.000000,340.000000,0.409593,0.420013,0.140962,0.436457,0.213099
+unmodified eLCS,data/raw/train.csv,StratifiedGroupKFold,5,42,1000,100,3,17010.000000,4253.000000,1442.000000,2032.000000,477.000000,302.000000,0.410063,0.401380,0.129392,0.387677,0.194025
+unmodified eLCS,data/raw/train.csv,StratifiedGroupKFold,5,42,1000,100,4,17011.000000,4252.000000,1604.000000,1869.000000,495.000000,284.000000,0.444026,0.413209,0.131909,0.364570,0.193724
+unmodified eLCS,data/raw/train.csv,StratifiedGroupKFold,5,42,1000,100,5,17011.000000,4252.000000,1602.000000,1871.000000,387.000000,392.000000,0.468956,0.482241,0.173221,0.503209,0.257725
+unmodified eLCS,data/raw/train.csv,StratifiedGroupKFold,5,42,1000,100,mean,,,,,,,0.420969,0.428072,0.144458,0.439281,0.217201
+unmodified eLCS,data/raw/train.csv,StratifiedGroupKFold,5,42,1000,100,std,,,,,,,0.036947,0.031438,0.017532,0.064405,0.026702
