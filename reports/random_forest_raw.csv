@@ -1,0 +1,8 @@
+model,data,validation,n_splits,random_state,n_estimators,fold,training_rows,test_rows,accuracy,balanced_accuracy,precision,recall,f1,roc_auc,pr_auc
+Random Forest,data/raw/train.csv,StratifiedGroupKFold,5,42,200,1,17010.000000,4253.000000,0.942629,0.903638,0.844273,0.842105,0.843188,0.976747,0.878158
+Random Forest,data/raw/train.csv,StratifiedGroupKFold,5,42,200,2,17010.000000,4253.000000,0.947802,0.910289,0.862159,0.851091,0.856589,0.980527,0.900979
+Random Forest,data/raw/train.csv,StratifiedGroupKFold,5,42,200,3,17010.000000,4253.000000,0.943569,0.908695,0.840708,0.853659,0.847134,0.980391,0.881328
+Random Forest,data/raw/train.csv,StratifiedGroupKFold,5,42,200,4,17011.000000,4252.000000,0.946143,0.917741,0.839506,0.872914,0.855884,0.983084,0.921875
+Random Forest,data/raw/train.csv,StratifiedGroupKFold,5,42,200,5,17011.000000,4252.000000,0.942145,0.906830,0.836066,0.851091,0.843511,0.983794,0.919316
+Random Forest,data/raw/train.csv,StratifiedGroupKFold,5,42,200,mean,,,0.944457,0.909438,0.844542,0.854172,0.849261,0.980908,0.900331
+Random Forest,data/raw/train.csv,StratifiedGroupKFold,5,42,200,std,,,0.002424,0.005260,0.010275,0.011359,0.006558,0.002774,0.020480
