@@ -1,5 +1,6 @@
 """Evaluate the unmodified eLCS baseline on the raw dataset."""
 
+import argparse
 from pathlib import Path
 
 import pandas as pd
@@ -23,12 +24,22 @@ RANDOM_STATE = 42
 LEARNING_ITERATIONS = 1000
 POPULATION_SIZE = 100
 N_SPLITS = 5
-REPORT_PATH = Path(__file__).resolve().parents[2] / "reports/elcs_raw_1000_iterations.csv"
+REPORT_DIR = Path(__file__).resolve().parents[2] / "reports"
 METRICS = ("accuracy", "balanced_accuracy", "precision", "recall", "f1")
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
     """Evaluate unmodified eLCS across all grouped stratified folds."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--iterations", type=int, default=LEARNING_ITERATIONS,
+        help="Positive learning-iteration budget per fold (default: %(default)s).",
+    )
+    args = parser.parse_args(argv)
+    if args.iterations <= 0:
+        parser.error("--iterations must be a positive integer")
+    iterations = args.iterations
+    report_path = REPORT_DIR / f"elcs_raw_{iterations}_iterations.csv"
     X, y, groups = load_model_data()
     X_values = X.to_numpy()
     y_values = y.to_numpy()
@@ -42,7 +53,7 @@ def main() -> None:
         splitter.split(X_values, y_values, groups=group_values), start=1
     ):
         model = eLCS(
-            learning_iterations=LEARNING_ITERATIONS,
+            learning_iterations=iterations,
             N=POPULATION_SIZE,
             random_state=RANDOM_STATE,
         )
@@ -58,7 +69,7 @@ def main() -> None:
                 "validation": "StratifiedGroupKFold",
                 "n_splits": N_SPLITS,
                 "random_state": RANDOM_STATE,
-                "learning_iterations": LEARNING_ITERATIONS,
+                "learning_iterations": iterations,
                 "population_size": POPULATION_SIZE,
                 "fold": fold,
                 "training_rows": len(train_indices),
@@ -88,7 +99,7 @@ def main() -> None:
         "validation": "StratifiedGroupKFold",
         "n_splits": N_SPLITS,
         "random_state": RANDOM_STATE,
-        "learning_iterations": LEARNING_ITERATIONS,
+        "learning_iterations": iterations,
         "population_size": POPULATION_SIZE,
     }
     summary = pd.DataFrame(
@@ -102,10 +113,10 @@ def main() -> None:
         ]
     )
     output = pd.concat([fold_results, summary], ignore_index=True)
-    REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    output.to_csv(REPORT_PATH, index=False, float_format="%.6f")
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    output.to_csv(report_path, index=False, float_format="%.6f")
 
-    print(f"Saved {N_SPLITS}-fold baseline results to {REPORT_PATH}")
+    print(f"Saved {N_SPLITS}-fold baseline results to {report_path}")
     print(
         f"Balanced accuracy: {fold_results['balanced_accuracy'].mean():.3f} "
         f"(+/- {fold_results['balanced_accuracy'].std():.3f})"

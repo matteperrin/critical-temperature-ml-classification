@@ -15,6 +15,24 @@ from src.critical_temperature import run_elcs
 
 class BaselineRunnerTests(unittest.TestCase):
     def test_folds_models_and_report(self):
+        self.check_run([], run_elcs.LEARNING_ITERATIONS)
+
+    def test_custom_iterations(self):
+        self.check_run(["--iterations", "10000"], 10000)
+
+    def test_invalid_iterations(self):
+        for value in ("0", "-1", "1.5", "abc"):
+            with (
+                self.subTest(value=value),
+                patch.object(run_elcs, "load_model_data") as loader,
+                contextlib.redirect_stderr(io.StringIO()),
+            ):
+                with self.assertRaises(SystemExit) as error:
+                    run_elcs.main(["--iterations", value])
+                self.assertEqual(error.exception.code, 2)
+                loader.assert_not_called()
+
+    def check_run(self, argv, iterations):
         # Each group has repeated features and both target classes.
         groups = pd.Series(np.repeat(np.arange(10), 2))
         X = pd.DataFrame({"feature": groups})
@@ -37,25 +55,27 @@ class BaselineRunnerTests(unittest.TestCase):
                 return (self.test % 2).astype(int)
 
         with tempfile.TemporaryDirectory() as directory:
-            report = Path(directory) / "reports" / "baseline.csv"
+            report_dir = Path(directory) / "reports"
+            report = report_dir / f"elcs_raw_{iterations}_iterations.csv"
             with (
                 patch.object(run_elcs, "load_model_data", return_value=(X, y, groups)),
                 patch.object(run_elcs, "eLCS", Estimator),
-                patch.object(run_elcs, "REPORT_PATH", report),
+                patch.object(run_elcs, "REPORT_DIR", report_dir),
                 contextlib.redirect_stdout(io.StringIO()),
             ):
-                run_elcs.main()
+                run_elcs.main(argv)
             output = pd.read_csv(report)
 
         self.assertEqual(len(models), 5)
         self.assertEqual(output["fold"].tolist(), ["1", "2", "3", "4", "5", "mean", "std"])
         self.assertEqual(output["n_splits"].tolist(), [5] * 7)
+        self.assertEqual(output["learning_iterations"].tolist(), [iterations] * 7)
         for model in models:
             self.assertTrue(set(model.train).isdisjoint(model.test))
             self.assertEqual(len(model.train) + len(model.test), len(X))
             self.assertEqual(len(model.labels), len(model.train))
             self.assertEqual(model.parameters, {
-                "learning_iterations": run_elcs.LEARNING_ITERATIONS,
+                "learning_iterations": iterations,
                 "N": run_elcs.POPULATION_SIZE,
                 "random_state": run_elcs.RANDOM_STATE,
             })

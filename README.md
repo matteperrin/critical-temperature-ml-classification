@@ -122,10 +122,17 @@ The initial configuration uses 100 learning iterations, a population-size limit
 of 100, and random seed 42 for both splitting and each fresh fold model. This is
 a small initial training budget, not a tuned or convergence-validated setup.
 
-The runner now uses 1,000 learning iterations, with all other settings unchanged,
-to check the training budget. Each run overwrites
-`reports/elcs_raw_1000_iterations.csv`, preserving the 100-iteration experiment
-in `reports/elcs_raw_baseline.csv`.
+The runner defaults to 1,000 learning iterations. To test another budget while
+keeping all other settings unchanged, pass a positive integer:
+
+```bash
+python src/critical_temperature/run_elcs.py --iterations 10000
+```
+
+Results are saved to `reports/elcs_raw_<iterations>_iterations.csv` (for example,
+`reports/elcs_raw_10000_iterations.csv`). Repeating a budget overwrites that
+budget's file; other budgets and the original `reports/elcs_raw_baseline.csv`
+are preserved.
 It records configuration, fold sizes, accuracy, balanced accuracy, precision,
 recall and F1, followed by unweighted fold means and sample standard deviations.
 New runs also record per-fold true negatives, false positives, false negatives
