@@ -43,9 +43,10 @@ METRICS = [
 
 
 def main():
-    # Load the same raw dataset used by eLCS.
+    # Use raw data like eLCS; running preprocess.py does not change this input.
     X, y, groups = load_model_data()
 
+    # Match eLCS split settings; these holdouts are not a final untouched test set.
     splitter = StratifiedGroupKFold(
         n_splits=N_SPLITS,
         shuffle=True,
@@ -100,6 +101,7 @@ def main():
             "roc_auc": roc_auc_score(
                 y_test, probabilities
             ),
+            # Average precision, not trapezoidal area under the PR curve.
             "pr_auc": average_precision_score(
                 y_test, probabilities
             ),
@@ -113,7 +115,7 @@ def main():
             f"{scores['balanced_accuracy']:.3f}"
         )
 
-    # Calculate summary statistics.
+    # Unweighted fold means and sample SDs are not confidence intervals.
     fold_results = pd.DataFrame(results)
 
     metadata = {
@@ -144,6 +146,7 @@ def main():
         exist_ok=True,
     )
 
+    # Re-running overwrites the tracked experiment report at REPORT_PATH.
     output.to_csv(
         REPORT_PATH,
         index=False,

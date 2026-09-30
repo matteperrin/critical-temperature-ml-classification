@@ -45,6 +45,8 @@ def main(argv: list[str] | None = None) -> None:
     y_values = y.to_numpy()
     group_values = groups.to_numpy()
 
+    # Keep data, row order, grouping and split settings identical across models.
+    # Feature groups do not guarantee separation of related material families.
     splitter = StratifiedGroupKFold(
         n_splits=N_SPLITS, shuffle=True, random_state=RANDOM_STATE
     )
@@ -102,6 +104,7 @@ def main(argv: list[str] | None = None) -> None:
         "learning_iterations": iterations,
         "population_size": POPULATION_SIZE,
     }
+    # Unweighted fold means and sample SDs are not confidence intervals.
     summary = pd.DataFrame(
         [
             {

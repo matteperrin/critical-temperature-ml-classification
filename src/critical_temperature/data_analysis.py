@@ -66,7 +66,8 @@ correlations = (
 print("\n--- TOP CORRELATIONS WITH CRITICAL TEMPERATURE ---")
 print(correlations.head(10))
 
-# Select the 10 most correlated features
+# These full-dataset rankings are exploratory, not model feature selection.
+# Any learned selection for evaluation must be fitted on training folds only.
 top_features = correlations.head(10).index.tolist()
 heatmap_columns = top_features + ["critical_temp"]
 

@@ -21,6 +21,8 @@ def preprocess_data():
     print(f"Original columns: {len(data.columns)}")
 
 
+    # Unlike Phase I cleaning, this path removes rows; raw-model runners
+    # do not consume its output, and unique_m.csv is not filtered alongside it.
     duplicate_count = data.duplicated().sum()
     print(f"Duplicate rows found: {duplicate_count}")
 
