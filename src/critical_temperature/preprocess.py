@@ -14,6 +14,7 @@ PROCESSED_DATA_PATH = PROJECT_ROOT / "data" / "processed" / "train_preprocessed.
 def preprocess_data():
     """Load, clean, and save the preprocessed dataset."""
 
+    #raw dataset
     data = pd.read_csv(RAW_DATA_PATH)
 
     print(f"Original rows: {len(data)}")
@@ -25,12 +26,10 @@ def preprocess_data():
 
     data = data.drop_duplicates().reset_index(drop=True)
 
-
-
     data = data.dropna(subset=["critical_temp"])
 
-
     data = data[data["critical_temp"] > 0]
+
 
 
     numeric_columns = data.select_dtypes(include="number").columns
@@ -47,7 +46,6 @@ def preprocess_data():
     data["above_77k"] = (
         data["critical_temp"] > 77
     ).astype(int)
-
 
 
     PROCESSED_DATA_PATH.parent.mkdir(
