@@ -1,4 +1,4 @@
-"""Evaluate Logistic Regression using the original superconductivity dataset."""
+"""Evaluate Logistic Regression using the original superconductivity dataset.git """
 
 from pathlib import Path
 
