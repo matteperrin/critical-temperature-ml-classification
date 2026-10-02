@@ -1,0 +1,8 @@
+model,data,validation,n_splits,random_state,max_iter,fold,training_rows,test_rows,accuracy,balanced_accuracy,precision,recall,f1,roc_auc,pr_auc
+Logistic Regression,data/raw/train.csv,StratifiedGroupKFold,5,42,1000,1,17010.000000,4253.000000,0.882201,0.806898,0.675063,0.688062,0.681500,0.941092,0.741237
+Logistic Regression,data/raw/train.csv,StratifiedGroupKFold,5,42,1000,2,17010.000000,4253.000000,0.899365,0.811927,0.751073,0.673941,0.710419,0.954553,0.796884
+Logistic Regression,data/raw/train.csv,StratifiedGroupKFold,5,42,1000,3,17010.000000,4253.000000,0.883141,0.791540,0.694215,0.646983,0.669767,0.946941,0.760162
+Logistic Regression,data/raw/train.csv,StratifiedGroupKFold,5,42,1000,4,17011.000000,4252.000000,0.888053,0.805508,0.702270,0.675225,0.688482,0.949536,0.781407
+Logistic Regression,data/raw/train.csv,StratifiedGroupKFold,5,42,1000,5,17011.000000,4252.000000,0.894873,0.806197,0.735127,0.666239,0.698990,0.951759,0.801775
+Logistic Regression,data/raw/train.csv,StratifiedGroupKFold,5,42,1000,mean,,,0.889527,0.804414,0.711550,0.670090,0.689832,0.948776,0.776293
+Logistic Regression,data/raw/train.csv,StratifiedGroupKFold,5,42,1000,std,,,0.007450,0.007628,0.030967,0.015107,0.015665,0.005130,0.025439

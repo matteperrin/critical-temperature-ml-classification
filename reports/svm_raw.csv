@@ -1,0 +1,8 @@
+model,data,validation,n_splits,random_state,kernel,C,fold,training_rows,test_rows,accuracy,balanced_accuracy,precision,recall,f1,roc_auc,pr_auc
+SVM,data/raw/train.csv,StratifiedGroupKFold,5,42,rbf,1.000000,1,17010.000000,4253.000000,0.877498,0.789580,0.670635,0.650834,0.660586,0.933035,0.726735
+SVM,data/raw/train.csv,StratifiedGroupKFold,5,42,rbf,1.000000,2,17010.000000,4253.000000,0.892076,0.794022,0.736686,0.639281,0.684536,0.942501,0.782086
+SVM,data/raw/train.csv,StratifiedGroupKFold,5,42,rbf,1.000000,3,17010.000000,4253.000000,0.885493,0.789992,0.707386,0.639281,0.671612,0.939929,0.750653
+SVM,data/raw/train.csv,StratifiedGroupKFold,5,42,rbf,1.000000,4,17011.000000,4252.000000,0.882643,0.787758,0.696078,0.637997,0.665774,0.940339,0.769370
+SVM,data/raw/train.csv,StratifiedGroupKFold,5,42,rbf,1.000000,5,17011.000000,4252.000000,0.892521,0.794800,0.738166,0.640565,0.685911,0.944555,0.782750
+SVM,data/raw/train.csv,StratifiedGroupKFold,5,42,rbf,1.000000,mean,,,0.886046,0.791230,0.709790,0.641592,0.673684,0.940072,0.762319
+SVM,data/raw/train.csv,StratifiedGroupKFold,5,42,rbf,1.000000,std,,,0.006388,0.003035,0.028528,0.005246,0.011244,0.004348,0.023771
