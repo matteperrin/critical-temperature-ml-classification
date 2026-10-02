@@ -41,7 +41,10 @@ These summaries are calculated for properties such as atomic mass, atomic radius
 
 ### Setup
 
-Create a virtual environment and install the recorded dependencies:
+From the repository root, create a virtual environment and install the recorded
+dependencies. eLCS is installed from the bundled `third_party/scikit-eLCS`
+source; other dependencies (and any required build tools) still need access to
+a package index or a local cache. This is not a fully offline setup:
 
 ```bash
 python -m venv .venv
@@ -103,6 +106,23 @@ Run the loader and baseline-runner tests with:
 ```bash
 python -m unittest discover -s tests -v
 ```
+
+### scikit-eLCS implementation and bundled reference
+
+We integrate **scikit-eLCS 1.2.4** rather than implementing the eLCS algorithm
+from scratch. Our code supplies the superconductivity-data loader and the
+cross-validation/reporting pipeline around the unmodified library.
+
+See [the integration note](notes/elcs_integration.md) for implementation details,
+recorded baseline results, attribution and limitations. A complete copy of the
+supplied upstream folder is preserved in [`third_party/scikit-eLCS/`](third_party/scikit-eLCS/),
+including its [README](third_party/scikit-eLCS/README.md),
+[user guide](third_party/scikit-eLCS/eLCS%20User%20Guide.ipynb) and
+[GPL-3.0 licence](third_party/scikit-eLCS/LICENSE). `requirements.txt` installs
+this bundled source as the `skeLCS` package used by the runner. Rerun
+`python -m pip install -r requirements.txt` from the repository root to switch
+an existing environment to the bundled source.
+Upstream exports and saved models are not our project's experiment results.
 
 ### Running the initial Phase II baseline
 
