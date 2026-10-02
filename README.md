@@ -126,6 +126,15 @@ Upstream exports and saved models are not our project's experiment results.
 
 ### Running the initial Phase II baseline
 
+All model runners share the fold recipe in `model_data.model_folds()` and use
+unchanged raw rows for evaluation. `run_elcs.py --data preprocessed` now removes
+exact full-row duplicates from **training folds only**; it does not load the
+globally cleaned CSV. These runs save to
+`reports/elcs_training_dedup_<iterations>_iterations.csv`, leaving historical
+preprocessed results untouched. Matching folds across runs require the same raw
+data, row order, split settings and library version. See
+[the code follow-ups](notes/phase_two_code_followups.md) for remaining limitations.
+
 From the repository root, after installing dependencies and fetching the raw data:
 
 ```bash

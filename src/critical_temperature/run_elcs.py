@@ -1,4 +1,4 @@
-"""Evaluate the unmodified eLCS baseline on the raw or preprocessed dataset."""
+"""Evaluate eLCS on raw holdouts, optionally deduplicating training rows."""
 
 import argparse
 from pathlib import Path
@@ -13,12 +13,10 @@ from sklearn.metrics import (
     precision_score,
     recall_score,
 )
-from sklearn.model_selection import StratifiedGroupKFold
-
 if __package__:
-    from .model_data import load_model_data
+    from .model_data import load_model_data, model_folds
 else:
-    from model_data import load_model_data
+    from model_data import load_model_data, model_folds
 
 
 RANDOM_STATE = 42
@@ -27,13 +25,6 @@ POPULATION_SIZE = 100
 N_SPLITS = 5
 
 REPORT_DIR = Path(__file__).resolve().parents[2] / "reports"
-
-PROCESSED_DATA_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "data"
-    / "processed"
-    / "train_preprocessed.csv"
-)
 
 METRICS = (
     "accuracy",
@@ -61,7 +52,8 @@ def main(argv: list[str] | None = None) -> None:
         "--data",
         choices=("raw", "preprocessed"),
         default="raw",
-        help="Dataset to evaluate (default: %(default)s).",
+        help="raw: unchanged training; preprocessed: deduplicate training rows "
+        "only. Both use unchanged raw holdouts (default: %(default)s).",
     )
 
     args = parser.parse_args(argv)
@@ -71,46 +63,27 @@ def main(argv: list[str] | None = None) -> None:
 
     iterations = args.iterations
 
-    # Select the dataset and report name.
+    # Always split raw rows; the global preprocessed export changes holdouts.
+    source = None
     if args.data == "preprocessed":
-        data_path = PROCESSED_DATA_PATH
-        report_path = (
-            REPORT_DIR
-            / f"elcs_preprocessed_{iterations}_iterations.csv"
-        )
+        X, y, groups, source = load_model_data(include_source=True)
+        report_path = REPORT_DIR / f"elcs_training_dedup_{iterations}_iterations.csv"
     else:
-        data_path = None
-        report_path = (
-            REPORT_DIR
-            / f"elcs_raw_{iterations}_iterations.csv"
-        )
-
-    # Load the selected dataset.
-    # Passing None uses the raw dataset through model_data.py.
-    X, y, groups = load_model_data(data_path)
+        X, y, groups = load_model_data()
+        report_path = REPORT_DIR / f"elcs_raw_{iterations}_iterations.csv"
 
     X_values = X.to_numpy()
     y_values = y.to_numpy()
-    group_values = groups.to_numpy()
-
-    # Keep data, row order, grouping and split settings identical across models.
-    # Feature groups do not guarantee separation of related material families.
-    splitter = StratifiedGroupKFold(
-        n_splits=N_SPLITS,
-        shuffle=True,
-        random_state=RANDOM_STATE,
-    )
-
     results = []
 
     for fold, (train_indices, test_indices) in enumerate(
-        splitter.split(
-            X_values,
-            y_values,
-            groups=group_values,
-        ),
+        model_folds(X, y, groups, n_splits=N_SPLITS, random_state=RANDOM_STATE),
         start=1,
     ):
+        if source is not None:
+            # Include continuous temperature: equal binary labels are not duplicates.
+            keep = ~source.iloc[train_indices].duplicated().to_numpy()
+            train_indices = train_indices[keep]
         # Create a fresh unmodified eLCS model for each fold.
         model = eLCS(
             learning_iterations=iterations,
@@ -140,11 +113,8 @@ def main(argv: list[str] | None = None) -> None:
         results.append(
             {
                 "model": "unmodified eLCS",
-                "data": (
-                    str(data_path)
-                    if data_path
-                    else "data/raw/train.csv"
-                ),
+                "data": "data/raw/train.csv",
+                "preprocessing": "training_only_exact_dedup" if source is not None else "none",
                 "validation": "StratifiedGroupKFold",
                 "n_splits": N_SPLITS,
                 "random_state": RANDOM_STATE,
@@ -189,11 +159,8 @@ def main(argv: list[str] | None = None) -> None:
     # Store experiment configuration in the summary.
     metadata = {
         "model": "unmodified eLCS",
-        "data": (
-            str(data_path)
-            if data_path
-            else "data/raw/train.csv"
-        ),
+        "data": "data/raw/train.csv",
+        "preprocessing": "training_only_exact_dedup" if source is not None else "none",
         "validation": "StratifiedGroupKFold",
         "n_splits": N_SPLITS,
         "random_state": RANDOM_STATE,

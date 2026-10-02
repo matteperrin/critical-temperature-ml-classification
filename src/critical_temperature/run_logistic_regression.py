@@ -13,13 +13,12 @@ from sklearn.metrics import (
     roc_auc_score,
     average_precision_score,
 )
-from sklearn.model_selection import StratifiedGroupKFold
 from sklearn.preprocessing import StandardScaler
 
 if __package__:
-    from .model_data import load_model_data
+    from .model_data import load_model_data, model_folds
 else:
-    from model_data import load_model_data
+    from model_data import load_model_data, model_folds
 
 
 RANDOM_STATE = 42
@@ -48,16 +47,11 @@ def main():
     X, y, groups = load_model_data()
 
 
-    splitter = StratifiedGroupKFold(
-        n_splits=N_SPLITS,
-        shuffle=True,
-        random_state=RANDOM_STATE,
-    )
-
     results = []
 
     for fold, (train_idx, test_idx) in enumerate(
-        splitter.split(X, y, groups=groups), start=1
+        model_folds(X, y, groups, n_splits=N_SPLITS, random_state=RANDOM_STATE),
+        start=1
     ):
         X_train = X.iloc[train_idx]
         X_test = X.iloc[test_idx]

@@ -4,11 +4,12 @@ from pathlib import Path
 
 import pandas as pd
 from pandas.api.types import is_numeric_dtype
+from sklearn.model_selection import StratifiedGroupKFold
 
 DEFAULT_DATA_PATH = Path(__file__).resolve().parents[2] / "data/raw/train.csv"
 
 
-def load_model_data(path: str | Path = DEFAULT_DATA_PATH):
+def load_model_data(path: str | Path = DEFAULT_DATA_PATH, *, include_source=False):
     """Load the data and return predictors, labels, and feature groups.
 
     This works with either the raw CSV or the Phase I transformed CSV. The
@@ -19,7 +20,9 @@ def load_model_data(path: str | Path = DEFAULT_DATA_PATH):
     Rows with identical feature values receive the same group ID. This helps
     with group-aware validation, but does not catch every repeated composition
     or related material family. The group IDs are created for this file only
-    and should be regenerated whenever its rows change.
+    and should be regenerated whenever its rows change. With ``include_source``,
+    also return the original rows for training-only full-row duplicate checks.
+    The original rows must not be used as predictors.
     """
     data = pd.read_csv(path)
     if data.empty or "critical_temp" not in data:
@@ -41,4 +44,16 @@ def load_model_data(path: str | Path = DEFAULT_DATA_PATH):
 
     y = data["critical_temp"].gt(77).astype(int).rename("above_77k")
     groups = X.groupby(list(X.columns), sort=False, dropna=False).ngroup()
-    return X, y, groups.rename("feature_group")
+    result = (X, y, groups.rename("feature_group"))
+    return (*result, data) if include_source else result
+
+
+def model_folds(X, y, groups, *, n_splits=5, random_state=42):
+    """Use one split recipe on unchanged raw inputs for every model variant.
+
+    Matching folds require the same data, row order, groups and library version.
+    Apply row-removing preprocessing only after obtaining the training indices.
+    """
+    return StratifiedGroupKFold(
+        n_splits=n_splits, shuffle=True, random_state=random_state,
+    ).split(X, y, groups=groups)
