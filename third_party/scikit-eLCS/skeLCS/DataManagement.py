@@ -42,7 +42,7 @@ class DataManagement:
                 self.phenotypeList.append(target)
                 self.classCount[target] = 1
             currentPhenotypeIndex+=1
-        self.majorityClass = max(self.classCount)
+        self.majorityClass = max(self.classCount, key=self.classCount.get)
 
     def characterizePhenotype(self,phenotypes,elcs):
         for target in phenotypes:
