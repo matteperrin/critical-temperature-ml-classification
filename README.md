@@ -124,9 +124,58 @@ this bundled source as the `skeLCS` package used by the runner. Rerun
 an existing environment to the bundled source.
 Upstream exports and saved models are not our project's experiment results.
 
+### Development CV and a separate final holdout
+
+`run_holdout.py` provides a separate workflow; the existing full-data CV runners
+below are unchanged. It reserves the first of five stratified group folds
+(seed 42) as an approximately 20% test set, then runs five-fold grouped CV only
+within the remaining approximately 80%. Groups are identical feature vectors;
+they do not guarantee separation of all related material families. Group sizes
+mean the proportions are approximate, not an exact row-level 80/20 split.
+
+Run development CV from the repository root after installing dependencies and
+fetching the data:
+
+```bash
+python src/critical_temperature/run_holdout.py cv --model elcs_dedup --iterations 1000 --output-dir reports/holdout/elcs-dedup-1000
+```
+
+Available models are `elcs`, `elcs_dedup`, `ensemble`, `logistic_regression`,
+`svm` and `random_forest`. Ensemble member seeds default to `11 42 73`; change
+these with `--seeds` during CV only. `elcs_dedup` removes exact source-row
+duplicates only from each training partition; other eLCS configurations use raw
+training rows. Logistic Regression and SVM fit scaling within their training
+partitions. Use `--data PATH` for a different raw dataset and a new output
+directory for each configuration. Matching comparisons require the same data
+and split environment.
+
+CV writes `config.json`, `splits.csv`, `cv_results.csv`, `cv_predictions.csv`
+and a completion record to the experiment directory. Original zero-based row
+positions identify predictions; they never enter the predictors. No reserved
+rows are fitted or predicted during this stage. Choose and freeze the final
+configurations using development CV results **before viewing any final scores**.
+Then explicitly run final evaluation:
+
+```bash
+python src/critical_temperature/run_holdout.py test --experiment reports/holdout/elcs-dedup-1000
+```
+
+The final stage accepts no model-setting overrides. It validates the saved
+configuration, CV artifacts, dataset and split environment, trains on the whole
+development partition, and saves `test_results.csv` and `test_predictions.csv`.
+CV refuses existing experiment directories. Final testing refuses repeated or
+previously interrupted runs; `test_started.json` records that evaluation began.
+Do not edit saved configuration/artifacts or remove this marker to tune against
+final results. A failed final run needs investigation rather than automatic retry.
+
+**Limitation:** earlier full-data analyses and CV already used these records.
+This workflow separates future development from testing; it does not make the
+reserved rows retroactively unseen for earlier model choices. An independent
+new dataset would be needed to remove that historical exposure.
+
 ### Running the initial Phase II baseline
 
-All model runners share the fold recipe in `model_data.model_folds()` and use
+The four baseline runners share the fold recipe in `model_data.model_folds()` and use
 unchanged raw rows for evaluation. `run_elcs.py --data preprocessed` now removes
 exact full-row duplicates from **training folds only**; it does not load the
 globally cleaned CSV. These runs save to

@@ -16,9 +16,17 @@ The fix is kept small:
 
 There is no saved fold file. The raw data, row order, split settings and library version need to stay the same between runs. The groups only cover identical feature vectors, not every repeated composition or material family.
 
+## Development CV and final test
+
+`run_holdout.py` adds a separate workflow without changing the older runners. The first of five grouped, stratified folds is reserved for final testing. Five-fold CV runs only within the remaining roughly 80%.
+
+Use the `cv` command to compare configurations, then the separate `test` command once the choices are fixed. Each experiment saves its settings, row assignments and predictions. Test runs reject changed settings or data and do not overwrite an earlier final run. A failed final run also leaves a marker so it needs checking before any retry.
+
+The earlier full-data experiments already used these records. Reserving them now separates future runs, but does not make them unseen for decisions already made. See the README for commands.
+
 ## Code still to do
 
-- **Improved eLCS:** set up a clearly separate improved configuration or pipeline. Keep the raw baseline, preprocessed baseline and improved system separate. Use training-side validation to choose changes, not the final evaluation folds.
+- **Improved eLCS:** the multi-seed ensemble experiment is now available. Keep the raw baseline, preprocessed baseline and improved system separate, and finish the improved-system comparison on preprocessed or feature-engineered training data. Use development CV to choose changes, not the reserved final test.
 - **Statistical test:** add a suitable test for comparing the models. Fold means and standard deviations alone do not cover this requirement.
 - **Results:** make the outputs easier to compare. The conventional models save ROC-AUC and average precision, while eLCS saves confusion counts. Also, the current `pr_auc` column is average precision, not trapezoidal PR-AUC.
 - **Tests:** add coverage for the standalone preprocessing script and rule export. The shared-fold test uses fake models and a test scaler, so it checks the pipeline rather than model performance or old result files.
