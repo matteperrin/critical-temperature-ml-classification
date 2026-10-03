@@ -72,25 +72,33 @@ iteration/population study. Commands and the predeclared selection rule are in
 the [README](../README.md#bounded-corrected-library-development-study); library
 isolation and provenance are documented in the [integration note](elcs_integration.md#corrected-versus-supplied-implementation).
 
-Six experiments completed under `reports/holdout/elcs_development_v1/`:
+All eight experiments completed under `reports/holdout/elcs_development_v1/`:
 
 - **Bug repair:** mean development balanced accuracy increased from 47.4% to
   59.5% with the raw data and training settings unchanged.
 - **Training deduplication:** the corrected model reached 61.9%, versus 59.5%
   without deduplication.
 - **Larger budgets:** increasing population alone reached 56.2%; increasing
-  iterations alone reached 60.9%. Neither beat the 61.9% setting.
+  iterations alone reached 60.9%; increasing both reached 59.5%. None beat the
+  61.9% setting. The predeclared rule selected 1,000 iterations / population 100.
+- **Ensemble:** three members at the selected budget reached 59.2%, versus 61.9%
+  for the matched single model: a decrease of 2.7 percentage points. Positive-class
+  recall fell from 33.2% to 23.0%, while precision rose from 44.4% to 54.1%. The
+  ensemble was more selective but missed more above-77-K materials. It used three
+  times the total iteration budget and did not improve the primary metric.
 
 Balanced accuracy averages recall for the two classes; it is not the proportion
 of all rows classified correctly. These differences are descriptive development
 results, not statistically tested improvements or final-test evidence.
 
-The process exited during the 10,000-iteration / population-1,000 experiment.
-That partial experiment and machine-local logs were archived outside the repo.
-`status.json` now records the interruption. The ensemble comparison is still
-pending; no configuration has been selected from the incomplete grid. Completed
-experiment artifacts and historical CSVs were preserved. No reserved holdout
-rows were evaluated.
+After the earlier interruption, the last grid setting was rerun from scratch
+and the ensemble was fitted. `continuation.json` records the source check and
+preserved artifacts; only the study driver's bookkeeping differed from the
+original plan. Model, loader, split and bundled-library sources were unchanged.
+The original six experiments and plan were preserved. `selection.json` records
+the development-selected budget, and `study_complete.json` / `status.json` mark
+completion. No reserved holdout rows were evaluated. The ensemble is a tested
+candidate enhancement, not a demonstrated performance improvement.
 
 Verification: **30 tests passed**, covering tiny real-model fits of both variants,
 source provenance, training-only preprocessing and study selection boundaries.

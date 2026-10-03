@@ -1,0 +1,78 @@
+{
+  "original_plan_sha256": "a6a338ed9125f5d1cc8caf97cfe87c927b0563d03939478cbb4c01ee62563d80",
+  "selection_rule": "Highest mean development balanced accuracy; ties prefer fewer iterations, then smaller population.",
+  "source_sha256": {
+    "src\\critical_temperature\\data_analysis.py": "978b20e47f190da6dea48f293af423d4b63fbcfab51b7b62a6a2b8df4371d7e3",
+    "src\\critical_temperature\\data_cleaning.py": "048254e9cc832f843cc5445678bc6aa63b69a9c0f6097e8298f91eb6ad6b416e",
+    "src\\critical_temperature\\data_inspection.py": "c380edfece53284a47f91110d40480c0d6e85f05a7fca44be80d771a035915b9",
+    "src\\critical_temperature\\data_transformation.py": "84bdde68c632a138b289b7b8e3338b791751dc6ab1d1eedfa9307866642fd91b",
+    "src\\critical_temperature\\elcs_runtime.py": "815108297a887831a57a288fbc53c11b8bb458869fabc8732522479edff00d41",
+    "src\\critical_temperature\\extract_elcs_rules.py": "9e432e4cab4ee313cc0aaa4f43be387c81d6c3784ed3b8e3b875a6886b310b84",
+    "src\\critical_temperature\\fetch_data.py": "c8cf390b5e06af645cd8b27e2fe62f819e96092fbedb3de148c8576c4004e9b0",
+    "src\\critical_temperature\\model_data.py": "b196022e554f3682c6fcb4784f71790a5bf1ecd888033b372220ba940227f01b",
+    "src\\critical_temperature\\preprocess.py": "72cb786e87b47f10b1424d54aa2230171164d8a52cbcbe0d38a01a36500285d7",
+    "src\\critical_temperature\\run_development_experiments.py": "91a0514aa979f0c7073a18bb64d2b23965f302d88887f9c6e03213ce646706e9",
+    "src\\critical_temperature\\run_elcs.py": "4c972b63cea158daea62d94cdf60edabd34987d25481103763ffac043f4e88cd",
+    "src\\critical_temperature\\run_elcs_ensemble.py": "33b062db969879b6e343dee5cb05b873bab47da1119570902ff5527cfe42afd4",
+    "src\\critical_temperature\\run_holdout.py": "138e4ea36666781261043618329cec54ae6c022780525ac3d036be34cb6d6b91",
+    "src\\critical_temperature\\run_logistic_regression.py": "216ad1679d31d3a560720ea8f92a4d5c5f3f4a7f0b2d6e550f7336287f5d1fd9",
+    "src\\critical_temperature\\run_random_forest.py": "8d247834536f588366740fd3368f134788bfc025b2484c7941fcba24756e5342",
+    "src\\critical_temperature\\run_svm.py": "6ee1fc0281c0f158691b81796833a7980c84f799efe624cf4a95344e4614d2b5",
+    "third_party\\scikit-eLCS\\skeLCS\\__init__.py": "ad0e86be8c79d496cbd0d540874e7ac80a7bce8cd02e225ae96edb842ec4fe14",
+    "third_party\\scikit-eLCS\\skeLCS\\Classifier.py": "e5210cf77c96dbb13a133bbd4c785d971981aca9a6cf4e859205b04659de87f7",
+    "third_party\\scikit-eLCS\\skeLCS\\ClassifierSet.py": "f0151476f8d47e5fb30d9c1d4065b831679def77ca1a15e8d21bfe2ea35e7944",
+    "third_party\\scikit-eLCS\\skeLCS\\DataCleanup.py": "1e15a8bf3221903e5aa3428f72b6e91e6c6a9fe1c3c900a94f15590cec800a14",
+    "third_party\\scikit-eLCS\\skeLCS\\DataManagement.py": "2f11d587e7d4daf2834bb93a27eddc7a47b8da11fb2668e451aab24c5667d699",
+    "third_party\\scikit-eLCS\\skeLCS\\eLCS.py": "d14e76dea1f99ca844e7353bcda30f4aed1f903f84e774ca5fa24c470683cb2e",
+    "third_party\\scikit-eLCS\\skeLCS\\IterationRecord.py": "6c3746747ebd0bf4ffc1768f150032ab6ea0b04bd2ae22453474972ff5343e69",
+    "third_party\\scikit-eLCS\\skeLCS\\OfflineEnvironment.py": "5129f4e31f8630dc989ea03e5b76aa44ebe3773ee3b18456dbaccd3aa5bda20d",
+    "third_party\\scikit-eLCS\\skeLCS\\Prediction.py": "244a72ac8d332c58b17287c67578db610b98d4f223c193d923b8f5835dbdb7f6",
+    "third_party\\scikit-eLCS\\skeLCS\\Timer.py": "d6e656566c78459863fa8080e128357c51a8f24601691e70d70fd1da02be05e6"
+  },
+  "bookkeeping_change": "The study driver was shortened after interruption. Model, loader, split and bundled-library sources are unchanged; original plan remains untouched.",
+  "preserved_experiments": {
+    "unmodified_raw_i1000_n100": {
+      "config.json": "66e656932ff4e6fb9c31b50617cd3d0d2b9ae588dfc347f92ca561b5089f7607",
+      "splits.csv": "c3704a8fc3d6f6be0527186d15cbe1652dd73b04e3d2ba8dd7b45f3df95c6c93",
+      "cv_results.csv": "1dd863c7ce68da0497cca7e1bd1b613264e255277f3bfe59495bb0bebc295a8b",
+      "cv_predictions.csv": "57e11fc8ff198f0486c1bf9b30895b16358ec666573f1001d0085819acd857db"
+    },
+    "unmodified_dedup_i1000_n100": {
+      "config.json": "9bc99fd385df6764b3e3601c48be28acadbcd8e0666f1e0be2491404199012a9",
+      "splits.csv": "c3704a8fc3d6f6be0527186d15cbe1652dd73b04e3d2ba8dd7b45f3df95c6c93",
+      "cv_results.csv": "bc2f1b39b58cb98f53e5639e7ea81645e8fd379c9ede325fb6abc9de9944efe4",
+      "cv_predictions.csv": "1e73ea4b728112a9561964a7c88ba4570c144d66569982b1421d5e70a8bcc697"
+    },
+    "corrected_raw_i1000_n100": {
+      "config.json": "c91f38c59395fc308e5f8bce9c5c2411a52c42d4984a060d62343c760e52a856",
+      "splits.csv": "c3704a8fc3d6f6be0527186d15cbe1652dd73b04e3d2ba8dd7b45f3df95c6c93",
+      "cv_results.csv": "f36e0c132efaf041e618fa379d38a96db08ab149cba72eb8cd37fd411faef762",
+      "cv_predictions.csv": "b887737922d74fa6a0d2b7e16dbcbc16b24dd2d3043e7e41fa451469060351ad"
+    },
+    "corrected_dedup_i1000_n100": {
+      "config.json": "c894321d36a55c91c2959daf9b844e21cdd03ff81da81edcbaecd24ac0c12559",
+      "splits.csv": "c3704a8fc3d6f6be0527186d15cbe1652dd73b04e3d2ba8dd7b45f3df95c6c93",
+      "cv_results.csv": "4cdf219eb6af9beb2e634453cbdd4164f916de8c57ad50d6385cf444c8558e17",
+      "cv_predictions.csv": "1a0fd9ee87a5bb1242ea136459537dcb4f36e02fa03291cadf26256dd7ad2839"
+    },
+    "corrected_dedup_i1000_n1000": {
+      "config.json": "58b627f81f604d5923282a3a8041eea59f44630708ec0a5e570d3d5caf7a933a",
+      "splits.csv": "c3704a8fc3d6f6be0527186d15cbe1652dd73b04e3d2ba8dd7b45f3df95c6c93",
+      "cv_results.csv": "ccf0ba870104ea00c098b73408d9de4a1153279171ed8153b606654cb4c79dc5",
+      "cv_predictions.csv": "46e71971f95eba8d9c06612f631e8f06467704be3438f0a035de543e8d42b568"
+    },
+    "corrected_dedup_i10000_n100": {
+      "config.json": "78cb94778265a2e2267858c69ee16ad4e99c0883378b7edfcc799ae34498240a",
+      "splits.csv": "c3704a8fc3d6f6be0527186d15cbe1652dd73b04e3d2ba8dd7b45f3df95c6c93",
+      "cv_results.csv": "69ee6329978b6573b48fac0c4fb710c24741537e22974b7802652c191d04952b",
+      "cv_predictions.csv": "ad755320be67836511f9888a299a105f49d82c65f0d4bdd139d711d36ab5cf53"
+    }
+  },
+  "pending_at_start": [
+    "corrected_dedup_i10000_n1000",
+    "corrected_ensemble_dedup_selected"
+  ],
+  "command": "python src/critical_temperature/run_holdout.py cv --model elcs_dedup --iterations 10000 --population-size 1000 --library-variant corrected --output-dir reports/holdout/elcs_development_v1/corrected_dedup_i10000_n1000",
+  "ensemble_command": "python src/critical_temperature/run_holdout.py cv --model ensemble_dedup --iterations 1000 --population-size 100 --library-variant corrected --seeds 11 42 73 --output-dir reports/holdout/elcs_development_v1/corrected_ensemble_dedup_selected",
+  "reserved_holdout_evaluated": false
+}

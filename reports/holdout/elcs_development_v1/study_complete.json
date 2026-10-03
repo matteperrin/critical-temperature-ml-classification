@@ -1,5 +1,4 @@
 {
-  "state": "completed",
   "completed": [
     "unmodified_raw_i1000_n100",
     "unmodified_dedup_i1000_n100",
@@ -9,5 +8,9 @@
     "corrected_dedup_i10000_n100",
     "corrected_dedup_i10000_n1000",
     "corrected_ensemble_dedup_selected"
-  ]
+  ],
+  "selected_single_experiment": "corrected_dedup_i1000_n100",
+  "ensemble_experiment": "corrected_ensemble_dedup_selected",
+  "development_balanced_accuracy_difference": -0.027338732726045478,
+  "reserved_holdout_evaluated": false
 }

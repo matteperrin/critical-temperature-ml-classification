@@ -26,7 +26,7 @@ The earlier full-data experiments already used these records. Reserving them now
 
 ## Code still to do
 
-- **Improved eLCS:** finish the interrupted development grid and preprocessed ensemble comparison. See [progress](matte_notes.md#development-study-progress) and the [study command](../README.md#bounded-corrected-library-development-study).
+- **Improved eLCS:** the development grid and preprocessed ensemble comparison are complete. The ensemble did not beat the selected single model on balanced accuracy; discuss the lack of improvement honestly. See [findings](matte_notes.md#development-study-progress).
 - **Statistical test:** add a suitable test for comparing the models. Fold means and standard deviations alone do not cover this requirement.
 - **Results:** the eLCS-only study writes `development_summary.csv`, but the full six-system comparison is still needed. The conventional models save ROC-AUC and average precision, while eLCS saves confusion counts. The legacy `pr_auc` column is average precision, not trapezoidal PR-AUC.
 - **Tests:** add coverage for the standalone preprocessing script and rule export. The shared-fold test uses fake models and a test scaler, so it checks the pipeline rather than model performance or old result files.

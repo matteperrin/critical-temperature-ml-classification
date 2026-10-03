@@ -186,8 +186,8 @@ new dataset would be needed to remove that historical exposure.
 
 ### Bounded corrected-library development study
 
-Run the study in a new directory (`elcs_development_v1` contains an interrupted
-study; see [progress and findings](notes/matte_notes.md#development-study-progress)):
+Run the study in a new directory (`elcs_development_v1` contains the completed
+study; see [findings](notes/matte_notes.md#development-study-progress)):
 
 ```bash
 python src/critical_temperature/run_development_experiments.py --output-dir reports/holdout/elcs_development_v2
