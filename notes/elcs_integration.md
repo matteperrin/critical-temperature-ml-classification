@@ -4,8 +4,11 @@
 
 This project integrates the existing **scikit-eLCS 1.2.4** library. We implemented
 its superconductivity-data loading and evaluation pipeline, not the eLCS
-algorithm from scratch. The runner imports `eLCS` from `skeLCS` and uses its
-unmodified `fit` and `predict` methods.
+algorithm from scratch. The legacy runners import `eLCS` from the installed
+`skeLCS` package. The development/holdout runner now explicitly loads the bundled
+implementation and records its provenance. The bundled source includes one local
+majority-class fallback repair, documented in [Matte's notes](matte_notes.md).
+Historical results used the supplied implementation before this repair.
 
 - Dependency: [`requirements.txt`](../requirements.txt), installs the bundled version 1.2.4 from `./third_party/scikit-eLCS`.
 - Runner: [`src/critical_temperature/run_elcs.py`](../src/critical_temperature/run_elcs.py).
@@ -33,8 +36,10 @@ budget overwrites that budget's report.
 
 ## Recorded baseline results
 
-These values come from the saved reports; they were not regenerated when this
-note was added.
+These are **historical unmodified-library results**, taken from the saved reports.
+They have not been regenerated after the majority-class repair and must not be
+overwritten or represented as corrected-library results. The legacy runner does
+not record implementation hashes; use the development workflow for new runs.
 
 | Learning iterations | Mean accuracy | Mean balanced accuracy | Mean recall | Mean F1 | Report |
 | --- | --- | --- | --- | --- | --- |
@@ -48,8 +53,9 @@ achievable performance.
 
 ## Bundled upstream files
 
-[`third_party/scikit-eLCS/`](../third_party/scikit-eLCS/) contains a complete, unmodified
-copy of the supplied `scikit-eLCS-master` folder, including source code, tests,
+[`third_party/scikit-eLCS/`](../third_party/scikit-eLCS/) contains the supplied
+`scikit-eLCS-master` folder with the documented local majority-class repair,
+including source code, tests,
 performance datasets, notebooks, images, generated exports and hidden files.
 Its `setup.py` identifies the package as version **1.2.4**. No upstream commit
 identifier was available in the supplied folder; the version alone does not
@@ -66,6 +72,21 @@ offline setup. Upstream exports and saved models are
 upstream artifacts, **not results from our superconductivity experiments**.
 Treat serialized models as untrusted data; do not load them just to inspect the
 copy.
+
+## Corrected versus supplied implementation
+
+The new development workflow identifies `corrected` and `unmodified` library
+variants explicitly. The latter reproduces the supplied implementation by
+reversing only the known fallback repair in an isolated runtime; it does not
+modify the installed package or tracked bundled files. Internal imports use a
+private namespace to prevent variant mixing. These in-memory models do not
+support serialization through the temporary namespace.
+
+Each experiment freezes bundled/effective source hashes, package metadata and
+variant. Final evaluation rejects changed or missing provenance; version `1.2.4`
+alone is insufficient. See the [README](../README.md#bounded-corrected-library-development-study)
+for study commands and selection, and [Matte's notes](matte_notes.md#development-study-progress)
+for results and unfinished work.
 
 Useful upstream references:
 

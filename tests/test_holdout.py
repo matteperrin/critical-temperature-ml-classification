@@ -61,7 +61,7 @@ class HoldoutTests(unittest.TestCase):
 
     def test_cv_final_guards_and_shared_holdout(self):
         final_ids = []
-        for name in ("elcs", "elcs_dedup", "ensemble", "logistic_regression", "svm", "random_forest"):
+        for name in ("elcs", "elcs_dedup", "ensemble", "ensemble_dedup", "logistic_regression", "svm", "random_forest"):
             records = []
             output = self.root / name
             with patch.object(h, "make_model", side_effect=lambda config: self.recorder(records)()):
@@ -71,9 +71,9 @@ class HoldoutTests(unittest.TestCase):
                 for record, (train, valid) in zip(records, folds):
                     np.testing.assert_array_equal(record.valid, self.X.iloc[valid].to_numpy())
                     self.assertTrue(set(record.train[:, 0]).isdisjoint(self.X.iloc[test, 0]))
-                    expected = len(train) * 3 // 4 if name == "elcs_dedup" else len(train)
+                    expected = len(train) * 3 // 4 if name in ("elcs_dedup", "ensemble_dedup") else len(train)
                     self.assertEqual(len(record.train), expected)
-                    if name == "elcs_dedup":
+                    if name in ("elcs_dedup", "ensemble_dedup"):
                         self.assertEqual(record.labels.sum(), expected * 2 // 3)
                 self.assertFalse((output / "test_results.csv").exists())
                 cv_predictions = pd.read_csv(output / "cv_predictions.csv")
@@ -173,10 +173,54 @@ class HoldoutTests(unittest.TestCase):
         self.assertEqual(len(records), 5)
         self.assertFalse((output / "test_started.json").exists())
 
+    def test_final_rejects_missing_or_changed_runtime_before_loading_data(self):
+        records = []
+        output = self.root / "provenance"
+        with patch.object(h, "make_model", side_effect=lambda config: self.recorder(records)()):
+            h.run_cv("elcs", output, data_path=self.source)
+        config_path = output / "config.json"
+        saved = json.loads(config_path.read_text())
+        for change in ("missing", "changed"):
+            config = json.loads(json.dumps(saved))
+            if change == "missing":
+                del config["model"]["runtime"]
+                del config["model"]["library_variant"]
+            else:
+                config["model"]["runtime"]["source_sha256"]["DataManagement.py"] = "old"
+            config_path.write_text(json.dumps(config))
+            completion_path = output / "cv_complete.json"
+            completion = json.loads(completion_path.read_text())
+            completion["config.json"] = h.data_hash(config_path)
+            completion_path.write_text(json.dumps(completion))
+            with patch.object(h, "load_model_data", side_effect=AssertionError("must not access data")):
+                with self.assertRaisesRegex(ValueError, "provenance"):
+                    h.run_test(output)
+            self.assertFalse((output / "test_started.json").exists())
+
+    def test_cli_and_frozen_baseline_budget(self):
+        output = self.root / "baseline"
+        records = []
+        with patch.object(h, "make_model", side_effect=lambda config: self.recorder(records)()):
+            h.main(["cv", "--model", "ensemble_dedup", "--data", str(self.source),
+                    "--output-dir", str(output), "--iterations", "7",
+                    "--population-size", "23", "--library-variant", "unmodified"])
+        model = json.loads((output / "config.json").read_text())["model"]
+        self.assertEqual(model["parameters"]["N"], 23)
+        self.assertEqual(model["parameters"]["learning_iterations"], 7)
+        self.assertEqual(model["library_variant"], "unmodified")
+        self.assertFalse(model["runtime"]["majority_repair"]["applied"])
+        self.assertEqual(len(records), 5)
+
+    def test_conventional_configuration_does_not_read_elcs_source(self):
+        with patch.object(h.elcs_runtime, "provenance", side_effect=AssertionError("not needed")):
+            config = h.model_configuration("random_forest", 1, [11, 42, 73])
+            self.assertNotIn("runtime", config)
+            h.make_model(config)
+
     def test_fresh_ensemble_and_scaler_train_only(self):
         records = []
         config = h.model_configuration("ensemble", 3, [11, 42, 73])
-        with patch.object(h, "elcs_model", side_effect=lambda params: self.recorder(records)()):
+        with patch.object(h, "elcs_model", side_effect=lambda params, **kwargs: self.recorder(records)()):
             first = h.make_model(config).fit(self.X.iloc[:8], self.y.iloc[:8])
             second = h.make_model(config).fit(self.X.iloc[8:16], self.y.iloc[8:16])
             self.assertEqual(len(records), 6)

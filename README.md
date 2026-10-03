@@ -111,7 +111,9 @@ python -m unittest discover -s tests -v
 
 We integrate **scikit-eLCS 1.2.4** rather than implementing the eLCS algorithm
 from scratch. Our code supplies the superconductivity-data loader and the
-cross-validation/reporting pipeline around the unmodified library.
+cross-validation/reporting pipeline around the library, with one documented
+local repair to its majority-class fallback. Historical baseline CSVs predate
+that repair; see [Matte's notes](notes/matte_notes.md).
 
 See [the integration note](notes/elcs_integration.md) for implementation details,
 recorded baseline results, attribution and limitations. A complete copy of the
@@ -140,17 +142,26 @@ fetching the data:
 python src/critical_temperature/run_holdout.py cv --model elcs_dedup --iterations 1000 --output-dir reports/holdout/elcs-dedup-1000
 ```
 
-Available models are `elcs`, `elcs_dedup`, `ensemble`, `logistic_regression`,
-`svm` and `random_forest`. Ensemble member seeds default to `11 42 73`; change
-these with `--seeds` during CV only. `elcs_dedup` removes exact source-row
-duplicates only from each training partition; other eLCS configurations use raw
-training rows. Logistic Regression and SVM fit scaling within their training
-partitions. Use `--data PATH` for a different raw dataset and a new output
+Available models are `elcs`, `elcs_dedup`, `ensemble`, `ensemble_dedup`,
+`logistic_regression`, `svm` and `random_forest`. Ensemble member seeds default to
+`11 42 73`; change these with `--seeds` during CV only. `elcs_dedup` and
+`ensemble_dedup` remove exact source-row duplicates only from each training
+partition, including the continuous temperature in the duplicate check. Other
+eLCS configurations use raw training rows. Validation rows are never removed.
+The ensemble uses majority voting and three times the single model's total
+iteration budget at equal per-member settings. Logistic Regression and SVM fit
+scaling within their training partitions. Use `--data PATH` for a different raw dataset and a new output
 directory for each configuration. Matching comparisons require the same data
 and split environment.
 
+For eLCS, `--population-size` defaults to `100` and `--library-variant` defaults
+to `corrected`. Use `unmodified` for a supplied-library baseline. Both variants
+load isolated bundled source; see [runtime provenance](notes/elcs_integration.md#corrected-versus-supplied-implementation).
+
 CV writes `config.json`, `splits.csv`, `cv_results.csv`, `cv_predictions.csv`
-and a completion record to the experiment directory. Original zero-based row
+and a completion record to the experiment directory. eLCS experiments also freeze
+implementation provenance, including source fingerprints, so version `1.2.4`
+alone cannot conceal a changed implementation. Original zero-based row
 positions identify predictions; they never enter the predictors. No reserved
 rows are fitted or predicted during this stage. Choose and freeze the final
 configurations using development CV results **before viewing any final scores**.
@@ -173,6 +184,27 @@ This workflow separates future development from testing; it does not make the
 reserved rows retroactively unseen for earlier model choices. An independent
 new dataset would be needed to remove that historical exposure.
 
+### Bounded corrected-library development study
+
+Run the study in a new directory (`elcs_development_v1` contains an interrupted
+study; see [progress and findings](notes/matte_notes.md#development-study-progress)):
+
+```bash
+python src/critical_temperature/run_development_experiments.py --output-dir reports/holdout/elcs_development_v2
+```
+
+The driver records the plan before running matched unmodified baselines and a
+corrected raw baseline at 1,000 iterations / population 100. It compares corrected
+training-dedup eLCS at all four combinations of iterations 1,000 / 10,000 and
+population 100 / 1,000. Highest mean development balanced accuracy selects the
+ensemble budget; ties prefer fewer iterations, then smaller population.
+
+Results go to `development_summary.csv`; selection and progress are recorded in
+JSON. `study_complete.json` appears only when all eight experiments finish.
+Existing directories are refused, and interrupted studies are not automatically
+resumed. No final holdout is evaluated. Development selection does not establish
+unbiased performance, statistical significance or convergence.
+
 ### Running the initial Phase II baseline
 
 The four baseline runners share the fold recipe in `model_data.model_folds()` and use
@@ -190,7 +222,12 @@ From the repository root, after installing dependencies and fetching the raw dat
 python src/critical_temperature/run_elcs.py
 ```
 
-This evaluates unmodified eLCS on raw `train.csv` using all five
+This legacy runner imports the installed `skeLCS` package, so its implementation
+depends on what was installed. The historical CSVs were generated before the
+fallback repair; do not overwrite them with corrected results. Prefer the
+provenance-recording development workflow above for new experiments.
+
+This evaluates eLCS on raw `train.csv` using all five
 `StratifiedGroupKFold` folds. The loader creates the `critical_temp > 77` label,
 removes target/identifier columns from the inputs, and groups identical feature
 vectors. No scaling, feature selection or deduplication is applied. These groups
@@ -222,11 +259,9 @@ when undefined. Fold standard deviations are not confidence intervals or
 significance tests. The runner tests use a stand-in estimator to stay fast and
 are included in the unittest command above.
 
-We increased eLCS training from 100 to 1,000 iterations, keeping the data,
-folds and population size unchanged. Mean balanced accuracy changed from
-0.412 to 0.428, while recall changed from 0.447 to 0.439. Next, we plan to
-test a larger iteration budget on the same folds before changing preprocessing
-or other model settings; convergence has not yet been established.
+The historical increase from 100 to 1,000 iterations changed mean balanced
+accuracy from 0.412 to 0.428 and recall from 0.447 to 0.439. These results predate
+the fallback repair and do not establish convergence.
 
 ## Analytical objective
 

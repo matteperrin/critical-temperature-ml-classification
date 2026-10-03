@@ -26,9 +26,9 @@ The earlier full-data experiments already used these records. Reserving them now
 
 ## Code still to do
 
-- **Improved eLCS:** the multi-seed ensemble experiment is now available. Keep the raw baseline, preprocessed baseline and improved system separate, and finish the improved-system comparison on preprocessed or feature-engineered training data. Use development CV to choose changes, not the reserved final test.
+- **Improved eLCS:** finish the interrupted development grid and preprocessed ensemble comparison. See [progress](matte_notes.md#development-study-progress) and the [study command](../README.md#bounded-corrected-library-development-study).
 - **Statistical test:** add a suitable test for comparing the models. Fold means and standard deviations alone do not cover this requirement.
-- **Results:** make the outputs easier to compare. The conventional models save ROC-AUC and average precision, while eLCS saves confusion counts. Also, the current `pr_auc` column is average precision, not trapezoidal PR-AUC.
+- **Results:** the eLCS-only study writes `development_summary.csv`, but the full six-system comparison is still needed. The conventional models save ROC-AUC and average precision, while eLCS saves confusion counts. The legacy `pr_auc` column is average precision, not trapezoidal PR-AUC.
 - **Tests:** add coverage for the standalone preprocessing script and rule export. The shared-fold test uses fake models and a test scaler, so it checks the pipeline rather than model performance or old result files.
 - **Rule export:** let `extract_elcs_rules.py` use the final model configuration. It currently trains on all the raw data, so keep that separate from held-out evaluation.
 

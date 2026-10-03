@@ -21,10 +21,13 @@ from sklearn.svm import SVC
 
 if __package__:
     from .model_data import DEFAULT_DATA_PATH, load_model_data, model_folds
+    from . import elcs_runtime
 else:
     from model_data import DEFAULT_DATA_PATH, load_model_data, model_folds
+    import elcs_runtime
 
-MODELS = ("elcs", "elcs_dedup", "ensemble", "logistic_regression", "svm", "random_forest")
+ELCS_MODELS = ("elcs", "elcs_dedup", "ensemble", "ensemble_dedup")
+MODELS = (*ELCS_MODELS, "logistic_regression", "svm", "random_forest")
 SPLIT = {"n_splits": 5, "random_state": 42, "outer_fold": 1}
 REPORT_DIR = Path(__file__).resolve().parents[2] / "reports" / "holdout"
 
@@ -47,36 +50,46 @@ def create_splits(X, y, groups):
     return dev, test, folds
 
 
-def model_configuration(name, iterations, seeds):
+def model_configuration(name, iterations, seeds, *, population_size=100, library_variant="corrected"):
     """Capture the model parameters before final-test access."""
     if name not in MODELS or iterations <= 0:
         raise ValueError("Unknown model or non-positive iteration budget.")
     if len(seeds) < 3 or len(seeds) % 2 != 1 or len(set(seeds)) != len(seeds):
         raise ValueError("Provide at least three unique seeds, with an odd count.")
+    if isinstance(population_size, bool) or not isinstance(population_size, int) or population_size <= 0:
+        raise ValueError("Population size must be a positive integer.")
+    if library_variant not in elcs_runtime.VARIANTS:
+        raise ValueError("Unknown eLCS library variant.")
     parameters = {
-        "elcs": {"learning_iterations": iterations, "N": 100, "random_state": 42},
-        "elcs_dedup": {"learning_iterations": iterations, "N": 100, "random_state": 42},
-        "ensemble": {"learning_iterations": iterations, "N": 100, "seeds": list(seeds)},
+        "elcs": {"learning_iterations": iterations, "N": population_size, "random_state": 42},
+        "elcs_dedup": {"learning_iterations": iterations, "N": population_size, "random_state": 42},
+        "ensemble": {"learning_iterations": iterations, "N": population_size, "seeds": list(seeds)},
+        "ensemble_dedup": {"learning_iterations": iterations, "N": population_size, "seeds": list(seeds)},
         "logistic_regression": {"max_iter": 1000, "random_state": 42},
         "svm": {"kernel": "rbf", "C": 1.0, "probability": True, "random_state": 42},
         "random_forest": {"n_estimators": 200, "n_jobs": -1, "random_state": 42},
     }
-    return {"name": name, "parameters": parameters[name]}
+    config = {"name": name, "parameters": parameters[name]}
+    if name in ELCS_MODELS:
+        config.update(library_variant=library_variant, runtime=elcs_runtime.provenance(library_variant))
+    return config
 
 
-def elcs_model(parameters):
-    from skeLCS import eLCS
-    return eLCS(**parameters)
+def elcs_model(parameters, library_variant="corrected", runtime=None):
+    return elcs_runtime.create_model(parameters, library_variant, expected=runtime)
 
 
 class Ensemble:
     """Fresh independently seeded eLCS members on each fit; binary majority vote."""
-    def __init__(self, parameters):
+    def __init__(self, parameters, library_variant="corrected", runtime=None):
         self.parameters = parameters
+        self.library_variant = library_variant
+        self.runtime = runtime
 
     def fit(self, X, y):
         params = {k: v for k, v in self.parameters.items() if k != "seeds"}
-        self.members = [elcs_model({**params, "random_state": seed}).fit(X, y)
+        self.members = [elcs_model({**params, "random_state": seed},
+                                   library_variant=self.library_variant, runtime=self.runtime).fit(X, y)
                         for seed in self.parameters["seeds"]]
         return self
 
@@ -87,10 +100,11 @@ class Ensemble:
 
 def make_model(config):
     name, params = config["name"], config["parameters"]
-    if name in ("elcs", "elcs_dedup"):
-        return elcs_model(params)
-    if name == "ensemble":
-        return Ensemble(params)
+    if name in ELCS_MODELS:
+        elcs_runtime.validate_configuration(config)
+        if name in ("elcs", "elcs_dedup"):
+            return elcs_model(params, library_variant=config["library_variant"], runtime=config["runtime"])
+        return Ensemble(params, config["library_variant"], config["runtime"])
     if name == "logistic_regression":
         return make_pipeline(StandardScaler(), LogisticRegression(**params))
     if name == "svm":
@@ -110,7 +124,7 @@ def split_table(length, dev, test, folds):
 
 def evaluate(config, X, y, source, train, valid, fold):
     original_count = len(train)
-    if config["name"] == "elcs_dedup":
+    if config["name"] in ("elcs_dedup", "ensemble_dedup"):
         train = train[~source.iloc[train].duplicated().to_numpy()]
     model = make_model(config)
     model.fit(X.iloc[train].to_numpy(), y.iloc[train].to_numpy())
@@ -128,7 +142,7 @@ def evaluate(config, X, y, source, train, valid, fold):
               "f1": f1_score(truth, predictions, zero_division=0)}
     rows = pd.DataFrame({"row_id": valid, "fold": fold, "y_true": truth, "y_pred": predictions})
     # eLCS probabilities are deliberately omitted; do not mislabel vote fractions.
-    if config["name"] not in ("elcs", "elcs_dedup", "ensemble") and hasattr(model, "predict_proba"):
+    if config["name"] not in ELCS_MODELS and hasattr(model, "predict_proba"):
         score = model.predict_proba(values)[:, 1]
         rows["score"] = score
         result.update(roc_auc=roc_auc_score(truth, score),
@@ -140,13 +154,15 @@ def data_hash(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def run_cv(model, output_dir=None, *, data_path=DEFAULT_DATA_PATH, iterations=1000, seeds=(11, 42, 73)):
+def run_cv(model, output_dir=None, *, data_path=DEFAULT_DATA_PATH, iterations=1000, seeds=(11, 42, 73),
+           population_size=100, library_variant="corrected"):
     """Freeze configuration and report CV only; never fit or predict reserved rows."""
     output = Path(output_dir) if output_dir is not None else REPORT_DIR / model
     if output.exists():
         raise FileExistsError(f"Use a new experiment directory: {output}")
     path = Path(data_path).resolve()
-    config = {"model": model_configuration(model, iterations, seeds), "data_path": str(path),
+    config = {"model": model_configuration(model, iterations, seeds, population_size=population_size,
+                                            library_variant=library_variant), "data_path": str(path),
               "data_sha256": data_hash(path), "sklearn_version": sklearn.__version__,
               "split": SPLIT.copy()}
     X, y, groups, source = load_model_data(path, include_source=True)
@@ -196,6 +212,8 @@ def run_test(experiment):
     config = json.loads((output / "config.json").read_text(encoding="utf-8"))
     if config["sklearn_version"] != sklearn.__version__ or config["split"] != SPLIT:
         raise ValueError("Split environment differs from the frozen configuration.")
+    if config["model"]["name"] in ELCS_MODELS:
+        elcs_runtime.validate_configuration(config["model"])
     path = Path(config["data_path"])
     if data_hash(path) != config["data_sha256"]:
         raise ValueError("Dataset differs from the frozen configuration.")
@@ -222,13 +240,16 @@ def main(argv=None):
     cv.add_argument("--model", choices=MODELS, required=True)
     cv.add_argument("--data", type=Path, default=DEFAULT_DATA_PATH)
     cv.add_argument("--iterations", type=int, default=1000)
+    cv.add_argument("--population-size", type=int, default=100)
+    cv.add_argument("--library-variant", choices=elcs_runtime.VARIANTS, default="corrected")
     cv.add_argument("--seeds", type=int, nargs="+", default=[11, 42, 73])
     cv.add_argument("--output-dir", type=Path)
     final = commands.add_parser("test", help="Run a frozen experiment's final test once")
     final.add_argument("--experiment", type=Path, required=True)
     args = parser.parse_args(argv)
     if args.stage == "cv":
-        run_cv(args.model, args.output_dir, data_path=args.data, iterations=args.iterations, seeds=args.seeds)
+        run_cv(args.model, args.output_dir, data_path=args.data, iterations=args.iterations, seeds=args.seeds,
+               population_size=args.population_size, library_variant=args.library_variant)
     else:
         run_test(args.experiment)
 

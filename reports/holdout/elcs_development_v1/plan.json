@@ -1,0 +1,60 @@
+{
+  "stage": "development_cv_only",
+  "data_path": "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification\\data\\raw\\train.csv",
+  "data_sha256": "4dfb6e3a1f6ffd969e5a5e42f093c4800d1e2a6c8b1e309f8fcd9f23d86952f3",
+  "source_sha256": {
+    "src\\critical_temperature\\data_analysis.py": "978b20e47f190da6dea48f293af423d4b63fbcfab51b7b62a6a2b8df4371d7e3",
+    "src\\critical_temperature\\data_cleaning.py": "048254e9cc832f843cc5445678bc6aa63b69a9c0f6097e8298f91eb6ad6b416e",
+    "src\\critical_temperature\\data_inspection.py": "c380edfece53284a47f91110d40480c0d6e85f05a7fca44be80d771a035915b9",
+    "src\\critical_temperature\\data_transformation.py": "84bdde68c632a138b289b7b8e3338b791751dc6ab1d1eedfa9307866642fd91b",
+    "src\\critical_temperature\\elcs_runtime.py": "815108297a887831a57a288fbc53c11b8bb458869fabc8732522479edff00d41",
+    "src\\critical_temperature\\extract_elcs_rules.py": "9e432e4cab4ee313cc0aaa4f43be387c81d6c3784ed3b8e3b875a6886b310b84",
+    "src\\critical_temperature\\fetch_data.py": "c8cf390b5e06af645cd8b27e2fe62f819e96092fbedb3de148c8576c4004e9b0",
+    "src\\critical_temperature\\model_data.py": "b196022e554f3682c6fcb4784f71790a5bf1ecd888033b372220ba940227f01b",
+    "src\\critical_temperature\\preprocess.py": "72cb786e87b47f10b1424d54aa2230171164d8a52cbcbe0d38a01a36500285d7",
+    "src\\critical_temperature\\run_development_experiments.py": "c7ec0aeabf6a454588f0774d524a52c4f37e2d37c8e6c397741b2dac883fb243",
+    "src\\critical_temperature\\run_elcs.py": "4c972b63cea158daea62d94cdf60edabd34987d25481103763ffac043f4e88cd",
+    "src\\critical_temperature\\run_elcs_ensemble.py": "33b062db969879b6e343dee5cb05b873bab47da1119570902ff5527cfe42afd4",
+    "src\\critical_temperature\\run_holdout.py": "138e4ea36666781261043618329cec54ae6c022780525ac3d036be34cb6d6b91",
+    "src\\critical_temperature\\run_logistic_regression.py": "216ad1679d31d3a560720ea8f92a4d5c5f3f4a7f0b2d6e550f7336287f5d1fd9",
+    "src\\critical_temperature\\run_random_forest.py": "8d247834536f588366740fd3368f134788bfc025b2484c7941fcba24756e5342",
+    "src\\critical_temperature\\run_svm.py": "6ee1fc0281c0f158691b81796833a7980c84f799efe624cf4a95344e4614d2b5",
+    "third_party\\scikit-eLCS\\skeLCS\\__init__.py": "ad0e86be8c79d496cbd0d540874e7ac80a7bce8cd02e225ae96edb842ec4fe14",
+    "third_party\\scikit-eLCS\\skeLCS\\Classifier.py": "e5210cf77c96dbb13a133bbd4c785d971981aca9a6cf4e859205b04659de87f7",
+    "third_party\\scikit-eLCS\\skeLCS\\ClassifierSet.py": "f0151476f8d47e5fb30d9c1d4065b831679def77ca1a15e8d21bfe2ea35e7944",
+    "third_party\\scikit-eLCS\\skeLCS\\DataCleanup.py": "1e15a8bf3221903e5aa3428f72b6e91e6c6a9fe1c3c900a94f15590cec800a14",
+    "third_party\\scikit-eLCS\\skeLCS\\DataManagement.py": "2f11d587e7d4daf2834bb93a27eddc7a47b8da11fb2668e451aab24c5667d699",
+    "third_party\\scikit-eLCS\\skeLCS\\eLCS.py": "d14e76dea1f99ca844e7353bcda30f4aed1f903f84e774ca5fa24c470683cb2e",
+    "third_party\\scikit-eLCS\\skeLCS\\IterationRecord.py": "6c3746747ebd0bf4ffc1768f150032ab6ea0b04bd2ae22453474972ff5343e69",
+    "third_party\\scikit-eLCS\\skeLCS\\OfflineEnvironment.py": "5129f4e31f8630dc989ea03e5b76aa44ebe3773ee3b18456dbaccd3aa5bda20d",
+    "third_party\\scikit-eLCS\\skeLCS\\Prediction.py": "244a72ac8d332c58b17287c67578db610b98d4f223c193d923b8f5835dbdb7f6",
+    "third_party\\scikit-eLCS\\skeLCS\\Timer.py": "d6e656566c78459863fa8080e128357c51a8f24601691e70d70fd1da02be05e6"
+  },
+  "budgets": [
+    [
+      1000,
+      100
+    ],
+    [
+      1000,
+      1000
+    ],
+    [
+      10000,
+      100
+    ],
+    [
+      10000,
+      1000
+    ]
+  ],
+  "selection_rule": "Highest mean development balanced accuracy; ties prefer fewer iterations, then smaller population.",
+  "ensemble_seeds": [
+    11,
+    42,
+    73
+  ],
+  "baseline_iterations": 1000,
+  "baseline_population_size": 100,
+  "warning": "The ensemble uses three times the total iteration budget of a single model."
+}

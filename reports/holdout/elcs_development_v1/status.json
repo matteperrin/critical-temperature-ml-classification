@@ -1,0 +1,13 @@
+{
+  "state": "interrupted",
+  "unfinished": ["corrected_dedup_i10000_n1000", "corrected_ensemble_dedup_selected"],
+  "note": "Process exited without a completion record or traceback. Partial experiment archived outside the repository; six completed experiments retained.",
+  "completed": [
+    "unmodified_raw_i1000_n100",
+    "unmodified_dedup_i1000_n100",
+    "corrected_raw_i1000_n100",
+    "corrected_dedup_i1000_n100",
+    "corrected_dedup_i1000_n1000",
+    "corrected_dedup_i10000_n100"
+  ]
+}
