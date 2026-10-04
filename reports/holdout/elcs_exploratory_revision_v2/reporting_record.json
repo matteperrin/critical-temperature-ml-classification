@@ -1,0 +1,66 @@
+{
+  "reused_test_exploratory": true,
+  "no_new_inferential_test": true,
+  "selection_rule": "Highest mean development balanced accuracy; ties prefer fewer iterations, then smaller population.",
+  "plan_sha256": "d8c93d52f1921863bf8cb34ef62b4a7a83e1f33dc82103c0773abd9532f764c7",
+  "selection_sha256": "9f66b6b7a3c36505114c3b76567eaa4b3558408fcefa17c0510a44ede73ae6b6",
+  "test_order": [
+    "corrected_dedup_i339280_n1000",
+    "corrected_ensemble_dedup_selected"
+  ],
+  "selected_cv_artifacts_sha256": {
+    "corrected_dedup_i339280_n1000": {
+      "config.json": "97d8ffe707bdf5bd0865ad4207a5eec8ef50951435e901c3a0f0920aa41063c9",
+      "cv_complete.json": "8ba51692111a595a60194264ed01e7238d1305bc2fb772a78bd7a3eea619e87c",
+      "cv_predictions.csv": "289613cad3086aa550cbc1dddac831034d1dba75c56b11361a1251c0d5cfed76",
+      "cv_results.csv": "85cd84514f601b4bbdf2de9021b96ecfa40ab88b8f97a605aae488997f0e11a3",
+      "splits.csv": "c3704a8fc3d6f6be0527186d15cbe1652dd73b04e3d2ba8dd7b45f3df95c6c93"
+    },
+    "corrected_ensemble_dedup_selected": {
+      "config.json": "8e58dcb4bf7377f5a4a3bd0b9894669a2c5beac7ccbba150ca43b45d429ff350",
+      "cv_complete.json": "9f8c1f3402f53f90575ffa2cb0675d830283c4f7ccf89132c00e441dcae4913c",
+      "cv_predictions.csv": "d2f24409afb4468d115a8d4f8068c2d1365543ce93e7b8378c5a12d0bde470e9",
+      "cv_results.csv": "790896a0bbe0e0212e73a09269db8ca2f72eb75183d375f1cb795c99bcd15577",
+      "splits.csv": "c3704a8fc3d6f6be0527186d15cbe1652dd73b04e3d2ba8dd7b45f3df95c6c93"
+    }
+  },
+  "historical_references_sha256": {
+    "experiments": {
+      "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification\\reports\\holdout\\conventional_defaults\\logistic_regression": {
+        "config.json": "f06b780c494aad94cce0866d9760dcfcaab0c60965e862704dc7c842054feb5d",
+        "cv_complete.json": "46b11ba8313bf15d2ce5fb3f5a7912504aecac5cedfc524f3f1e35a0174475fa",
+        "cv_predictions.csv": "333185bec5a695617056b0b78bdb0d80e794f0ecb8b0cce73f6cdf7406e6e668",
+        "cv_results.csv": "ffbf00cedc9058518c36987b7735e0ad69f7c0b02432e8b96ebcc9bf2f660eaa",
+        "splits.csv": "c3704a8fc3d6f6be0527186d15cbe1652dd73b04e3d2ba8dd7b45f3df95c6c93",
+        "test_complete.json": "b16601358ba278c83d101206c3a5609d4c9ee3f21dcc5ab7eefd960903ab8fb2",
+        "test_predictions.csv": "b0cdf99274d024a3539ccc9649184ff98032cf68476f9eb821030e993568d0f6",
+        "test_results.csv": "a44274723a706a5eb35b1b0a061744e625006116c1fe7ea4fcba50b9a274ac49",
+        "test_started.json": "f06b780c494aad94cce0866d9760dcfcaab0c60965e862704dc7c842054feb5d"
+      },
+      "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification\\reports\\holdout\\conventional_defaults\\svm": {
+        "config.json": "6355272547a133bd476c8a0d4c263895bc26a9f4aae7201c46e370d9dc0e6b51",
+        "cv_complete.json": "e632c14c4b31086b2945d6016a6034f2c533f849f540fa2df02271bcad9843a7",
+        "cv_predictions.csv": "e3f267fdce21b23dc960077a58ea44047fa9a414fc3a84d5b47029e364f1d260",
+        "cv_results.csv": "075fead8acf2a96196aabab39c7f640efdbc3231bef22ac8f7578ae0efbb9c49",
+        "splits.csv": "c3704a8fc3d6f6be0527186d15cbe1652dd73b04e3d2ba8dd7b45f3df95c6c93",
+        "test_complete.json": "18a45e3af8063ba3d7226533561d690b744b2112b476ae7963fb4ef02e56c19f",
+        "test_predictions.csv": "f68234b63f100d96b1e9753fd96943b82384bc5afd982529ef24e833dce873a5",
+        "test_results.csv": "141d8d72ae5fb63117715c65f8c0f1a75c29352b6d46650b92ad1ff85853ada3",
+        "test_started.json": "6355272547a133bd476c8a0d4c263895bc26a9f4aae7201c46e370d9dc0e6b51"
+      },
+      "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification\\reports\\holdout\\conventional_defaults\\random_forest": {
+        "config.json": "13e1cbdda78b3f5abe335633b33858031bcc6071e0674aa37f205c0d2f6f3c34",
+        "cv_complete.json": "16372b5ae419085e097c0b4538d3abc4e1041af4f5eda67a7c675d31dad8a3ad",
+        "cv_predictions.csv": "f8e102ff4cf96a234b0a869e4a04696e4a06aa9d038164101558feb189f3a47a",
+        "cv_results.csv": "19c38dfd61c76f3b11eaca6e225a33d8f80ca86970275535a0ee8b221422fb41",
+        "splits.csv": "c3704a8fc3d6f6be0527186d15cbe1652dd73b04e3d2ba8dd7b45f3df95c6c93",
+        "test_complete.json": "c45e9cda0137265d70117886bcafe527a41d56bbd5ed8e09fc267dd288fdfdd0",
+        "test_predictions.csv": "642055d22a4bf05bb8fed6fb6d61587577d29e4771db64210dacc1ab1e3b8c89",
+        "test_results.csv": "d57c1a73d76d31519ce20f950b4d16ea3732ea6e703dd17d2cff8771294174ec",
+        "test_started.json": "13e1cbdda78b3f5abe335633b33858031bcc6071e0674aa37f205c0d2f6f3c34"
+      }
+    }
+  },
+  "reporting_rule": "Five-row validated descriptive CV/test tables: revised single/ensemble then three fixed conventional references; no test-driven reselection. Old eLCS findings are retained in parent-owned prose, not bound as artifacts.",
+  "no_test_driven_reselection": true
+}

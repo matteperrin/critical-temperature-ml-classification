@@ -2,7 +2,10 @@
 
 This is a technical results summary, not the final assessment report. For the
 plain-language presentation, open [results.html](../results.html) in a browser
-from a downloaded or cloned copy of the repository.
+from a downloaded or cloned copy of the repository. This interpretation revision
+makes the learning-budget limitation explicit and adds a derived majority-class
+reference. Frozen configurations, predictions, scores and statistical results
+are unchanged; no additional final evaluations or hypothesis tests were run.
 
 ## Main findings
 
@@ -10,7 +13,9 @@ from a downloaded or cloned copy of the repository.
   balanced accuracy was **90.4%**, compared with 80.8% for Logistic Regression,
   79.0% for SVM and 63.1% for corrected, deduplicated single eLCS. These rankings
   are descriptive; no significance tests were conducted between conventional models.
-- **The library repair helped, but did not make eLCS competitive here.** Final
+  eLCS received less than one full pass of rule-learning updates, so this does not
+  establish how adequately trained versions of the algorithms compare.
+- **The library repair improved the tested eLCS configuration.** Final
   balanced accuracy was 47.5% for unmodified deduplicated eLCS and 63.1% for its
   corrected counterpart. The only difference was the majority-class repair.
 - **The ensemble enhancement was unsuccessful on the primary metric.** It reached
@@ -41,7 +46,7 @@ iteration budget. It is not an equal-compute comparison.
 
 Exact full-source-row deduplication occurred only in training partitions. Different
 continuous-temperature measurements were retained. Logistic Regression and SVM
-used training-fitted standard scaling. Conventional defaults were unchanged:
+used training-fitted standard scaling. Conventional project defaults were unchanged:
 Logistic Regression `max_iter=1000`, RBF SVM `C=1`, and Random Forest with 200 trees.
 
 Development tested four single-model iteration/population combinations. The
@@ -56,11 +61,60 @@ post-test tuning. Each has predictions, confusion counts, a start marker and a
 completion manifest. Completed eLCS rule exports came from those exact fitted
 models, without a separate fit.
 
+## Learning-budget interpretation
+
+In the bundled implementation, one eLCS iteration processes one training record,
+not one epoch. The data is shuffled before learning, then traversed sequentially;
+only after reaching the end does traversal wrap. See the learning loop in
+[`eLCS.py`](../third_party/scikit-eLCS/skeLCS/eLCS.py) and traversal in
+[`OfflineEnvironment.py`](../third_party/scikit-eLCS/skeLCS/OfflineEnvironment.py).
+
+The corrected, deduplicated final single model had 16,964 training records but
+only 1,000 individual record presentations for rule learning: approximately
+**5.9%** received direct rule-learning updates. All supplied training records
+still informed feature characterization and class counts, including the majority
+fallback. It would therefore be inaccurate to say the model used only 1,000
+records altogether.
+
+Development training partitions contained 13,566–13,578 deduplicated records.
+At 1,000 iterations, approximately 7.4% received direct updates. Even the largest
+tested budget of 10,000 iterations did not complete one full development-training
+pass. Ensemble seeds changed the shuffled training prefixes as well as evolutionary
+randomness. The three-member comparison is not purely a test of different
+rule populations learned from complete passes through the same records.
+
+These are **sub-epoch rule-learning budgets**, not evidence of adequate training
+or convergence. The observed ranking and unsuccessful ensemble remain valid for
+the recorded configurations. They do not establish eLCS's fully trained capability,
+and they do not prove longer training would help. The correct response is to
+qualify the interpretation, not silently replace scores or retune using the
+already-viewed final records.
+
 ## Metrics and supporting results
 
 Balanced accuracy averages negative-class and positive-class recall equally. It
 is not the percentage of all rows classified correctly. Precision, recall and F1
 refer to class 1 (`critical_temp > 77`). Zero-denominator metrics return zero.
+
+### Majority-class reference
+
+The final records contain 3,474 negatives and 779 positives. Always predicting
+class 0 would therefore achieve **81.7% ordinary accuracy**, **50.0% balanced
+accuracy** and **0% positive recall**. Positive precision is undefined with no
+positive predictions; the project's zero-division convention would report zero.
+
+This reference is derived from saved confusion counts, not an eighth fitted
+experiment or an additional hypothesis test. It was added during interpretation
+and is not represented as a predeclared benchmark.
+
+The ensemble's ordinary accuracy is exactly equal to this reference because its
+167 true positives equal its 167 false positives. Its predictions are nevertheless
+different: it detects 167 positive records and reaches 58.3% balanced accuracy.
+Thus it improves on the trivial reference on balanced accuracy, but still loses
+to corrected single eLCS on the predeclared comparison. Do not describe the
+ensemble as equivalent to always predicting the majority class.
+
+### Aggregation and evidence
 
 CV metrics are unweighted fold means with sample standard deviations, not
 confidence intervals. CV confusion counts are pooled. Final metrics use all

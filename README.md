@@ -225,6 +225,11 @@ under `reports/holdout/final_comparison/`: the frozen plan, development/final CS
 statistical result and completion record. The final holdout has now been scored;
 **do not tune configurations against these results or remove final-run markers**.
 
+The comparison is limited to the recorded configurations: selected eLCS training
+used only 1,000 individual record presentations, not epochs. The results page and
+technical note explain this sub-epoch budget and a derived majority-class reference;
+neither addition replaces the saved experiments or constitutes a new evaluation.
+
 `compare_models.py table` combines compatible completed experiments using
 `--stage cv` or `--stage test`, `--experiments` and a new `--output` path. It checks
 saved hashes, dataset identity, rows, labels and folds; it never trains models.

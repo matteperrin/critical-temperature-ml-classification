@@ -1,0 +1,16 @@
+{
+  "pid": 35148,
+  "launched_utc": "2026-10-04T03:07:20.489414+00:00",
+  "command": [
+    "C:\\Users\\matte\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+    "-u",
+    "src/critical_temperature/run_exploratory_revision.py",
+    "--output-dir",
+    "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification\\reports\\holdout\\elcs_exploratory_revision_v2"
+  ],
+  "working_directory": "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification",
+  "output_directory": "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification\\reports\\holdout\\elcs_exploratory_revision_v2",
+  "stdout": "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification\\reports\\exploratory_execution_v2\\stdout.log",
+  "stderr": "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification\\reports\\exploratory_execution_v2\\stderr.log",
+  "exploratory": true
+}

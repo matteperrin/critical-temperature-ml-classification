@@ -1,0 +1,182 @@
+{
+  "exploratory": true,
+  "authorization": "User explicitly authorized same-dataset exploratory revision, six CV candidates and two once-only reused-test scores.",
+  "test_exposure": "The reserved test is reused and has already been exposed; earlier full-data analyses also prevent an untouched-test claim.",
+  "interpretation": "Descriptive exploratory scores only; no new inferential test. The original statistical_test endpoint and recipe remain unchanged.",
+  "selection_rule": "Highest mean development balanced accuracy; ties prefer fewer iterations, then smaller population.",
+  "single_seed": 42,
+  "ensemble_seeds": [
+    11,
+    42,
+    73
+  ],
+  "data_path": "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification\\data\\raw\\train.csv",
+  "data_sha256": "4dfb6e3a1f6ffd969e5a5e42f093c4800d1e2a6c8b1e309f8fcd9f23d86952f3",
+  "source_sha256": {
+    "src\\critical_temperature\\build_results_page.py": "70cb1cee1bd805e8008bb08c4946561d921295a1065562496c78962a9a064b7b",
+    "src\\critical_temperature\\compare_models.py": "dd9ae1719da837426d088ff3eaf1d966b7d9f707c723f049e398a378a828696f",
+    "src\\critical_temperature\\data_analysis.py": "978b20e47f190da6dea48f293af423d4b63fbcfab51b7b62a6a2b8df4371d7e3",
+    "src\\critical_temperature\\data_cleaning.py": "048254e9cc832f843cc5445678bc6aa63b69a9c0f6097e8298f91eb6ad6b416e",
+    "src\\critical_temperature\\data_inspection.py": "c380edfece53284a47f91110d40480c0d6e85f05a7fca44be80d771a035915b9",
+    "src\\critical_temperature\\data_transformation.py": "84bdde68c632a138b289b7b8e3338b791751dc6ab1d1eedfa9307866642fd91b",
+    "src\\critical_temperature\\elcs_runtime.py": "815108297a887831a57a288fbc53c11b8bb458869fabc8732522479edff00d41",
+    "src\\critical_temperature\\extract_elcs_rules.py": "c22121f13d08c7e42c31e5c8983d596d5528889106f806e4d985c29bd112e557",
+    "src\\critical_temperature\\fetch_data.py": "c8cf390b5e06af645cd8b27e2fe62f819e96092fbedb3de148c8576c4004e9b0",
+    "src\\critical_temperature\\model_data.py": "b196022e554f3682c6fcb4784f71790a5bf1ecd888033b372220ba940227f01b",
+    "src\\critical_temperature\\preprocess.py": "72cb786e87b47f10b1424d54aa2230171164d8a52cbcbe0d38a01a36500285d7",
+    "src\\critical_temperature\\run_development_experiments.py": "91a0514aa979f0c7073a18bb64d2b23965f302d88887f9c6e03213ce646706e9",
+    "src\\critical_temperature\\run_elcs.py": "4c972b63cea158daea62d94cdf60edabd34987d25481103763ffac043f4e88cd",
+    "src\\critical_temperature\\run_elcs_ensemble.py": "33b062db969879b6e343dee5cb05b873bab47da1119570902ff5527cfe42afd4",
+    "src\\critical_temperature\\run_exploratory_revision.py": "9fa6578c12c5719c9e2cc624c3ee6eadbfc48f2a64bfec6c7b03313667953ea0",
+    "src\\critical_temperature\\run_holdout.py": "cf9b36f53551ef5962e5f3e38aa3ab1607a88adcb946960b06d37d7b49a6f350",
+    "src\\critical_temperature\\run_logistic_regression.py": "216ad1679d31d3a560720ea8f92a4d5c5f3f4a7f0b2d6e550f7336287f5d1fd9",
+    "src\\critical_temperature\\run_random_forest.py": "8d247834536f588366740fd3368f134788bfc025b2484c7941fcba24756e5342",
+    "src\\critical_temperature\\run_svm.py": "6ee1fc0281c0f158691b81796833a7980c84f799efe624cf4a95344e4614d2b5",
+    "src\\critical_temperature\\statistical_comparison.py": "ff949c908d0b8e163b7a359057791c6529d719cfddf11d1abcd6bfc50b90ec58",
+    "third_party\\scikit-eLCS\\skeLCS\\__init__.py": "ad0e86be8c79d496cbd0d540874e7ac80a7bce8cd02e225ae96edb842ec4fe14",
+    "third_party\\scikit-eLCS\\skeLCS\\Classifier.py": "e5210cf77c96dbb13a133bbd4c785d971981aca9a6cf4e859205b04659de87f7",
+    "third_party\\scikit-eLCS\\skeLCS\\ClassifierSet.py": "f0151476f8d47e5fb30d9c1d4065b831679def77ca1a15e8d21bfe2ea35e7944",
+    "third_party\\scikit-eLCS\\skeLCS\\DataCleanup.py": "1e15a8bf3221903e5aa3428f72b6e91e6c6a9fe1c3c900a94f15590cec800a14",
+    "third_party\\scikit-eLCS\\skeLCS\\DataManagement.py": "2f11d587e7d4daf2834bb93a27eddc7a47b8da11fb2668e451aab24c5667d699",
+    "third_party\\scikit-eLCS\\skeLCS\\eLCS.py": "d14e76dea1f99ca844e7353bcda30f4aed1f903f84e774ca5fa24c470683cb2e",
+    "third_party\\scikit-eLCS\\skeLCS\\IterationRecord.py": "6c3746747ebd0bf4ffc1768f150032ab6ea0b04bd2ae22453474972ff5343e69",
+    "third_party\\scikit-eLCS\\skeLCS\\OfflineEnvironment.py": "5129f4e31f8630dc989ea03e5b76aa44ebe3773ee3b18456dbaccd3aa5bda20d",
+    "third_party\\scikit-eLCS\\skeLCS\\Prediction.py": "244a72ac8d332c58b17287c67578db610b98d4f223c193d923b8f5835dbdb7f6",
+    "third_party\\scikit-eLCS\\skeLCS\\Timer.py": "d6e656566c78459863fa8080e128357c51a8f24601691e70d70fd1da02be05e6"
+  },
+  "training_counts": {
+    "final_raw": 17010,
+    "final_deduplicated": 16964,
+    "cv_raw": [
+      13607,
+      13608,
+      13609,
+      13608,
+      13608
+    ],
+    "cv_deduplicated": [
+      13566,
+      13578,
+      13567,
+      13573,
+      13572
+    ],
+    "development_validation_rows": 17010,
+    "reused_test_rows": 4253
+  },
+  "budgets": [
+    {
+      "final_development_passes": 1,
+      "iterations_per_member": 16964,
+      "population_size_per_member": 100,
+      "cv_pass_equivalents": [
+        1.2504791390240306,
+        1.2493739873324496,
+        1.2503869683791553,
+        1.2498342297207692,
+        1.2499263188918361
+      ]
+    },
+    {
+      "final_development_passes": 1,
+      "iterations_per_member": 16964,
+      "population_size_per_member": 1000,
+      "cv_pass_equivalents": [
+        1.2504791390240306,
+        1.2493739873324496,
+        1.2503869683791553,
+        1.2498342297207692,
+        1.2499263188918361
+      ]
+    },
+    {
+      "final_development_passes": 5,
+      "iterations_per_member": 84820,
+      "population_size_per_member": 100,
+      "cv_pass_equivalents": [
+        6.252395695120153,
+        6.2468699366622475,
+        6.2519348418957765,
+        6.249171148603846,
+        6.2496315944591805
+      ]
+    },
+    {
+      "final_development_passes": 5,
+      "iterations_per_member": 84820,
+      "population_size_per_member": 1000,
+      "cv_pass_equivalents": [
+        6.252395695120153,
+        6.2468699366622475,
+        6.2519348418957765,
+        6.249171148603846,
+        6.2496315944591805
+      ]
+    },
+    {
+      "final_development_passes": 20,
+      "iterations_per_member": 339280,
+      "population_size_per_member": 100,
+      "cv_pass_equivalents": [
+        25.009582780480613,
+        24.98747974664899,
+        25.007739367583106,
+        24.996684594415385,
+        24.998526377836722
+      ]
+    },
+    {
+      "final_development_passes": 20,
+      "iterations_per_member": 339280,
+      "population_size_per_member": 1000,
+      "cv_pass_equivalents": [
+        25.009582780480613,
+        24.98747974664899,
+        25.007739367583106,
+        24.996684594415385,
+        24.998526377836722
+      ]
+    }
+  ],
+  "budget_rule": "Constant integer iterations across CV folds and final fit: passes times exact final-development source-row dedup count.",
+  "ensemble_budget": "Three independently seeded members; three times the single model's total iterations.",
+  "historical_references_sha256": {
+    "experiments": {
+      "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification\\reports\\holdout\\conventional_defaults\\logistic_regression": {
+        "config.json": "f06b780c494aad94cce0866d9760dcfcaab0c60965e862704dc7c842054feb5d",
+        "cv_complete.json": "46b11ba8313bf15d2ce5fb3f5a7912504aecac5cedfc524f3f1e35a0174475fa",
+        "cv_predictions.csv": "333185bec5a695617056b0b78bdb0d80e794f0ecb8b0cce73f6cdf7406e6e668",
+        "cv_results.csv": "ffbf00cedc9058518c36987b7735e0ad69f7c0b02432e8b96ebcc9bf2f660eaa",
+        "splits.csv": "c3704a8fc3d6f6be0527186d15cbe1652dd73b04e3d2ba8dd7b45f3df95c6c93",
+        "test_complete.json": "b16601358ba278c83d101206c3a5609d4c9ee3f21dcc5ab7eefd960903ab8fb2",
+        "test_predictions.csv": "b0cdf99274d024a3539ccc9649184ff98032cf68476f9eb821030e993568d0f6",
+        "test_results.csv": "a44274723a706a5eb35b1b0a061744e625006116c1fe7ea4fcba50b9a274ac49",
+        "test_started.json": "f06b780c494aad94cce0866d9760dcfcaab0c60965e862704dc7c842054feb5d"
+      },
+      "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification\\reports\\holdout\\conventional_defaults\\svm": {
+        "config.json": "6355272547a133bd476c8a0d4c263895bc26a9f4aae7201c46e370d9dc0e6b51",
+        "cv_complete.json": "e632c14c4b31086b2945d6016a6034f2c533f849f540fa2df02271bcad9843a7",
+        "cv_predictions.csv": "e3f267fdce21b23dc960077a58ea44047fa9a414fc3a84d5b47029e364f1d260",
+        "cv_results.csv": "075fead8acf2a96196aabab39c7f640efdbc3231bef22ac8f7578ae0efbb9c49",
+        "splits.csv": "c3704a8fc3d6f6be0527186d15cbe1652dd73b04e3d2ba8dd7b45f3df95c6c93",
+        "test_complete.json": "18a45e3af8063ba3d7226533561d690b744b2112b476ae7963fb4ef02e56c19f",
+        "test_predictions.csv": "f68234b63f100d96b1e9753fd96943b82384bc5afd982529ef24e833dce873a5",
+        "test_results.csv": "141d8d72ae5fb63117715c65f8c0f1a75c29352b6d46650b92ad1ff85853ada3",
+        "test_started.json": "6355272547a133bd476c8a0d4c263895bc26a9f4aae7201c46e370d9dc0e6b51"
+      },
+      "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification\\reports\\holdout\\conventional_defaults\\random_forest": {
+        "config.json": "13e1cbdda78b3f5abe335633b33858031bcc6071e0674aa37f205c0d2f6f3c34",
+        "cv_complete.json": "16372b5ae419085e097c0b4538d3abc4e1041af4f5eda67a7c675d31dad8a3ad",
+        "cv_predictions.csv": "f8e102ff4cf96a234b0a869e4a04696e4a06aa9d038164101558feb189f3a47a",
+        "cv_results.csv": "19c38dfd61c76f3b11eaca6e225a33d8f80ca86970275535a0ee8b221422fb41",
+        "splits.csv": "c3704a8fc3d6f6be0527186d15cbe1652dd73b04e3d2ba8dd7b45f3df95c6c93",
+        "test_complete.json": "c45e9cda0137265d70117886bcafe527a41d56bbd5ed8e09fc267dd288fdfdd0",
+        "test_predictions.csv": "642055d22a4bf05bb8fed6fb6d61587577d29e4771db64210dacc1ab1e3b8c89",
+        "test_results.csv": "d57c1a73d76d31519ce20f950b4d16ea3732ea6e703dd17d2cff8771294174ec",
+        "test_started.json": "13e1cbdda78b3f5abe335633b33858031bcc6071e0674aa37f205c0d2f6f3c34"
+      }
+    }
+  },
+  "reporting_rule": "Five-row validated descriptive CV/test tables: revised single/ensemble then three fixed conventional references; no test-driven reselection. Old eLCS findings are retained in parent-owned prose, not bound as artifacts.",
+  "restart_policy": "Fresh directory only; no automatic retry/resume or removal of interrupted-run markers."
+}

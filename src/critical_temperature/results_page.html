@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Plain-language results of seven models classifying known superconductors above 77 K, with final metrics, rule examples and saved evidence.">
+<meta name="description" content="Exploratory retraining results for superconductors above 77 K: five-model comparison on reused records, corrected training budgets, fitted rules and saved evidence.">
 <title>Superconductors above 77 K | Research results</title>
 <style>
 :root {
@@ -65,7 +65,7 @@ figcaption { color: var(--muted); margin-top: var(--s6); font-size: 14px; }
 .ensemble .bar { background: var(--warning); }
 .axis { display: flex; justify-content: space-between; color: var(--muted); font-size: 14px; border-top: 1px solid var(--border); padding-top: var(--s2); }
 .finding { font-size: 24px; font-family: var(--display); font-weight: 700; line-height: 1.3; }
-.negative { color: var(--warning); }
+.positive { color: var(--accent); }
 .error-table { margin-block: var(--s6); }
 .error-table th, .error-table td { padding: var(--s2) 0; }
 .error-table th { text-align: left; font-weight: 400; }
@@ -150,11 +150,11 @@ footer { padding-block: var(--s8); border-top: 1px solid var(--border); color: v
     <div>
       <h1 id="page-title">Superconductors above 77 K</h1>
       <p class="intro">Can composition features help identify known superconductors whose critical temperature exceeds the liquid-nitrogen threshold?</p>
-      <p class="metadata">Seven systems evaluated on the same 4,253 final records. Research results, not a material certification.</p>
+      <p class="metadata"><strong>Exploratory revision.</strong> Two retrained eLCS systems and three fixed conventional references compared on the same 4,253 reused evaluation records. Research results, not independent validation or a material certification.</p>
     </div>
     <div class="thesis">
       <h2>Random Forest led this comparison</h2>
-      <p>It reached <strong>$best_score balanced accuracy</strong>. The three-model eLCS ensemble performed worse than its matched single model, despite using more training effort.</p>
+      <p>It reached <strong>$best_score balanced accuracy</strong> as a fixed reference. After correcting the training budget, the eLCS ensemble reached <strong>$ensemble_score</strong>, slightly above the single model's $single_score. Neither the small ensemble advantage nor these reused-record scores establish independent generalization.</p>
       <p>Balanced accuracy gives equal weight to finding above-77-K and at-or-below-77-K records. It is not the percentage of all records classified correctly.</p>
     </div>
   </section>
@@ -162,7 +162,7 @@ footer { padding-block: var(--s8); border-top: 1px solid var(--border); color: v
   <div id="comparison" class="study-grid">
     <section aria-labelledby="chart-title">
       <h2 id="chart-title">How the models compared</h2>
-      <p>Final balanced accuracy, higher is better. All bars use the same 0–100% scale.</p>
+      <p>Exploratory evaluation balanced accuracy, higher is better. All bars use the same 0–100% scale.</p>
       <figure aria-labelledby="chart-title">
         <ol class="chart">
 $bars
@@ -172,13 +172,13 @@ $bars
       </figure>
     </section>
     <aside aria-labelledby="ensemble-title">
-      <h2 id="ensemble-title">The ensemble did not help</h2>
-      <p class="finding negative">$difference percentage points lower balanced accuracy</p>
+      <h2 id="ensemble-title">A small ensemble advantage</h2>
+      <p class="finding positive">$difference percentage points higher balanced accuracy</p>
       <p>The corrected single eLCS scored <strong>$single_score</strong>; the corrected ensemble scored <strong>$ensemble_score</strong>. The ensemble combined three seeds by majority vote.</p>
       <h3>What changed in practice?</h3>
-      <p>Of 779 above-77-K records, the ensemble detected fewer and missed more. It reduced false positives at the cost of recall.</p>
+      <p>Of 779 above-77-K records, the ensemble detected four more than the single model. It also produced 20 fewer false positives.</p>
       <table class="error-table">
-        <caption>Final prediction counts</caption>
+        <caption>Prediction counts on reused evaluation records</caption>
         <thead><tr><th scope="col">Outcome</th><th scope="col">Single</th><th scope="col">Ensemble</th></tr></thead>
         <tbody>
           <tr><th scope="row">Detected above 77 K</th><td>$single_detected</td><td>$ensemble_detected</td></tr>
@@ -186,20 +186,40 @@ $bars
           <tr><th scope="row">False positive predictions</th><td>$single_false</td><td>$ensemble_false</td></tr>
         </tbody>
       </table>
-      <p>Recall fell from <strong>$single_recall to $ensemble_recall</strong>. Precision rose from $single_precision to $ensemble_precision. This is a trade-off, not an improvement on the declared primary metric.</p>
+      <p>Recall rose from <strong>$single_recall to $ensemble_recall</strong>. Precision rose from $single_precision to $ensemble_precision. The ensemble still missed most positive records.</p>
       <details><summary>How certain is that difference?</summary><div class="disclosure">
-        <p>The predeclared paired test found a statistically significant difference against the ensemble: <strong>p = $p_value</strong>, using a two-sided 5% significance threshold.</p>
-        <p>Whole identical-feature groups were swapped together, preserving duplicate dependence. The test used $draws random swaps, seed 42, across $groups groups ($informative with nonzero effects).</p>
-        <p>The p-value uses a plus-one correction and is the smallest reportable value at this sampling budget. It is not the probability that the result is wrong. The test assumes independent groups and interchangeable model predictions under the null; unknown material-family relationships may violate those assumptions.</p>
-        <p><a href="reports/holdout/final_comparison/statistical_test.json">Open the statistical record</a></p>
+        <p><strong>No new significance test was performed.</strong> The $difference-point advantage is descriptive, not an established statistically significant improvement.</p>
+        <p>Development CV favored the single model: $single_cv_score versus $ensemble_cv_score for the ensemble. The small advantage on reused evaluation records is not a consistent ensemble improvement across stages.</p>
+        <p>The original significance result belongs to the original 1,000-update pair. It does not transfer to these retrained models.</p>
+        <p>These evaluation records and earlier scores had already been viewed. Configuration selection used development CV, but the revision is exploratory rather than an untouched-test confirmation.</p>
+        <p><a href="reports/holdout/elcs_exploratory_revision_v2/reporting_record.json">Open the reporting record frozen before revised scoring</a></p>
       </div></details>
-      <p class="stat-note">Each eLCS member used 1,000 iterations and population limit 100. Three members mean three times the single model's total iteration budget. No settings changed after final scores were viewed.</p>
+      <p class="stat-note">Each member used $iterations record updates and population limit $population. Three members mean three times the single model's aggregate update budget, not equal compute.</p>
     </aside>
   </div>
 
+  <section id="learning-budget" class="section limitations" aria-labelledby="budget-title" data-learning-iterations="$iterations_raw" data-training-rows="$training_rows_raw" data-learning-passes="$passes">
+    <div>
+      <h2 id="budget-title">What we corrected</h2>
+      <p>An eLCS iteration presents <strong>one training record</strong>, not an epoch. Our original selected model received only 1,000 updates: about <strong>5.9%</strong> of its training records received direct rule-learning updates. We initially gave this limitation insufficient prominence.</p>
+      <p>All supplied training records still informed feature characterization and class counts. The error was the limited rule-learning budget and its interpretation, not fabricated scores.</p>
+    </div>
+    <div>
+      <p>We tested six single-model configurations: 1, 5 and 20 final-development pass equivalents, each at population limits 100 and 1,000. Selection used mean development balanced accuracy, with ties preferring fewer updates, then a smaller population.</p>
+      <p>The selected single model and each ensemble member received <strong>$iterations updates over $training_rows training records: $passes complete passes</strong>, with population limit $population.</p>
+      <p>The same fixed update budget gave approximately $cv_passes passes in the smaller CV training partitions of $cv_training_min to $cv_training_max records. Training order was shuffled once per fit, not reshuffled at each pass.</p>
+      <p><strong>Twenty passes do not establish convergence or best achievable performance.</strong> Both budget and population changed relative to the original selected model; gains cannot be attributed to longer training alone.</p>
+      <details><summary>How do these findings compare with the original?</summary><div class="disclosure">
+        <p>Original evaluation balanced accuracy was 63.15% for single eLCS and 58.32% for the ensemble. The revision reached $single_score and $ensemble_score respectively. The single model's gain was modest; the ensemble reversed its earlier disadvantage.</p>
+        <p>The selected single model's mean development balanced accuracy rose from 61.9% to $single_cv_score. This is not the same quantity as evaluation balanced accuracy.</p>
+        <p>We deliberately reused the dataset and evaluation records after discovering the mistakes. The results are exploratory; greater training exposure cannot undo prior data exposure.</p>
+      </div></details>
+    </div>
+  </section>
+
   <section class="section" aria-labelledby="metrics-title">
     <h2 id="metrics-title">Read the scores without the jargon</h2>
-    <p>All metrics below use final records, not training results. Precision, recall and F1 treat above 77 K as the positive class.</p>
+    <p>All metrics below use reused evaluation records, not training results. Precision, recall and F1 treat above 77 K as the positive class.</p>
     <details><summary>What does each metric mean?</summary><div class="disclosure">
       <dl class="metric-definitions">
         <div><dt>Balanced accuracy</dt><dd>The average of recall for the two classes. Each class has equal importance, even though above-77-K records are less common. The primary comparison metric.</dd></div>
@@ -209,36 +229,41 @@ $bars
       </dl>
     </div></details>
     <table class="comparison" role="table">
-      <caption>Final results for all seven evaluated systems. Values are rounded to one decimal place; full precision is in the linked CSV.</caption>
+      <caption>Exploratory results for two retrained systems and three fixed conventional references. Values are rounded to one decimal place; full precision is in the linked CSV.</caption>
       <thead><tr><th scope="col">Model</th><th scope="col">Balanced accuracy</th><th scope="col">Precision</th><th scope="col">Recall</th><th scope="col">F1</th></tr></thead>
       <tbody>
 $table
       </tbody>
     </table>
-    <p class="metadata">Ordinary accuracy, probability-based metrics and full confusion counts are available in the <a href="reports/holdout/final_comparison/test_comparison.csv">final comparison CSV</a>. Probability-based metrics are unavailable for these eLCS records.</p>
+    <p class="metadata">Ordinary accuracy, probability-based metrics and full confusion counts are available in the <a href="reports/holdout/elcs_exploratory_revision_v2/descriptive_test_table.csv">exploratory comparison CSV</a>. Probability-based metrics are unavailable for these eLCS records.</p>
+    <div id="majority-reference" data-reference-accuracy="$majority_accuracy_raw" data-reference-balanced-accuracy="0.5" data-reference-recall="0">
+      <h3>The majority-class reference</h3>
+      <p>Always predicting “at or below 77 K” would score <strong>$majority_accuracy ordinary accuracy</strong>, <strong>50.0% balanced accuracy</strong> and <strong>0.0% positive recall</strong> on these reused records. This is a derived reference, not a sixth fitted model or a new hypothesis test. No model was fitted; it follows from the saved class counts.</p>
+      <p>The revised ensemble achieved $ensemble_accuracy ordinary accuracy, but detected only $ensemble_detected of 779 positive records. Its $ensemble_score balanced accuracy better exposes that limitation than ordinary accuracy alone.</p>
+    </div>
   </section>
 
   <section id="rules" class="section rules-layout" aria-labelledby="rules-title">
     <div>
       <h2 id="rules-title">What the learned rules say</h2>
-      <p>These are three real rules from the final ensemble, one per seed. Each rule describes a combination of feature conditions and votes for one class.</p>
+      <p>These are three real rules from the retrained ensemble, one per seed. Each rule describes a combination of feature conditions and votes for one class.</p>
       <p>Within a member, all matching rules vote using fitness multiplied by numerosity. The ensemble then takes the majority of the three member predictions. A single sample rule does not determine the final answer.</p>
       <p>If the rules cannot produce a useful decision, the corrected library falls back to the majority training class. That fallback is not a rule-based explanation.</p>
-      <p><strong>These rules have very few training matches.</strong> They are inspectable model patterns, not physical laws or trustworthy standalone recommendations.</p>
+      <p><strong>Training matches are repeated learning experiences, not independent validation.</strong> These rules are inspectable model patterns, not physical laws or trustworthy standalone recommendations.</p>
     </div>
     <div>
 $rules
-      <p class="metadata">Selected by class and training match count, not final-test success. “Weighted” features account for elemental proportions; valence, mass and radius are aggregate composition descriptors. Full, unrounded conditions are in the linked CSVs.</p>
+      <p class="metadata">Within each seed, the example with most training matches for the illustrated class was selected; fitness breaks ties. Selection did not use evaluation success. “Weighted” features account for elemental proportions; valence, mass and radius are aggregate composition descriptors. Full, unrounded conditions are in the linked CSVs.</p>
     </div>
   </section>
 
   <section class="section limitations" aria-labelledby="limits-title">
     <div><h2 id="limits-title">Where the evidence stops</h2><p>These findings apply to known superconductors in this dataset. A prediction does not establish that an arbitrary material is superconducting or commercially useful.</p></div>
     <ul>
-      <li>The final records had appeared in historical full-data analyses and rule exports. They are not a retroactively untouched external dataset.</li>
+      <li>The evaluation records appeared in earlier full-data analyses and rule exports, and their original scores were viewed before this revision. They are not an untouched external dataset.</li>
       <li>Identical feature vectors were grouped together, but related compositions and material families may still cross partitions.</li>
-      <li>Only a bounded set of eLCS budgets was tested. The study does not establish convergence or the best achievable performance of the algorithm.</li>
-      <li>The library repair and the ensemble enhancement are separate changes. The ensemble's negative result must not be credited as an improvement.</li>
+      <li>A bounded budget grid was tested. The largest budget won development selection, but convergence was not established and the grid was not extended after revised evaluation scores.</li>
+      <li>The library correctness repair, increased training exposure and ensemble are separate changes. The ensemble's small revised advantage is descriptive, and conventional models remain fixed references rather than tuned, equal-compute competitors.</li>
       <li>Model predictions are screening signals. Physical feasibility, operating margin, current, field response, cost and experimental validation remain outside this evaluation.</li>
     </ul>
   </section>
@@ -247,19 +272,19 @@ $rules
     <h2 id="evidence-title">Inspect the underlying evidence</h2>
     <p>This page is an offline snapshot generated from hash-verified saved results. No model runs when you open it. Keep it with the repository so the relative evidence links continue to work.</p>
     <ul class="evidence-list">
-      <li><a href="reports/holdout/final_comparison/test_comparison.csv">Final results CSV</a><p>All metrics and confusion counts for seven systems.</p></li>
-      <li><a href="reports/holdout/final_comparison/development_comparison.csv">Development results CSV</a><p>Five-fold development means and standard deviations, not final scores.</p></li>
-      <li><a href="reports/holdout/final_comparison/statistical_test.json">Statistical test JSON</a><p>Effect size, p-value, method and assumptions.</p></li>
-      <li><a href="reports/holdout/final_comparison/plan.json">Frozen evaluation plan</a><p>Settings and recipe recorded before final evaluation.</p></li>
-      <li><a href="notes/phase_two_results.md">Technical interpretation</a><p>Detailed methods, verification and limitations.</p></li>
-      <li><a href="reports/holdout/final_comparison/evaluation_complete.json">Completion and integrity record</a><p>Hashes binding the plan, final records and comparison outputs.</p></li>
+      <li><a href="reports/holdout/elcs_exploratory_revision_v2/descriptive_test_table.csv">Exploratory evaluation CSV</a><p>All metrics and confusion counts for the revised five-model comparison.</p></li>
+      <li><a href="reports/holdout/elcs_exploratory_revision_v2/descriptive_cv_table.csv">Development comparison CSV</a><p>Five-fold means and standard deviations, not evaluation scores.</p></li>
+      <li><a href="reports/holdout/elcs_exploratory_revision_v2/development_summary.csv">All six candidates and ensemble</a><p>The full bounded development sweep, not just the winner.</p></li>
+      <li><a href="reports/holdout/elcs_exploratory_revision_v2/plan.json">Frozen exploratory plan</a><p>Budgets, selection rule, exposure disclosure and reference hashes recorded before retraining.</p></li>
+      <li><a href="notes/exploratory_revision.md">Revision methods and findings</a><p>What went wrong, what changed and what the results establish.</p></li>
+      <li><a href="reports/holdout/elcs_exploratory_revision_v2/study_complete.json">Completion and integrity record</a><p>Hashes binding the revision artifacts, including predictions and fitted rules.</p></li>
     </ul>
-    <details><summary>Individual model predictions</summary><div class="disclosure"><p>Each CSV contains the final evaluation row IDs, labels and predictions. The files are records, not portable fitted models.</p><ul class="prediction-list">
+    <details><summary>Individual model predictions</summary><div class="disclosure"><p>Each CSV contains the reused evaluation row IDs, labels and predictions. The files are records, not portable fitted models.</p><ul class="prediction-list">
 $predictions
     </ul></div></details>
-    <p class="metadata">The original <a href="https://archive.ics.uci.edu/dataset/464/superconductivty+data">UCI Superconductivity dataset</a> contains 21,263 records and 81 numerical features. Its raw files are not included in Git; acquisition instructions are in the <a href="README.md#fetching-the-data">README</a>. Dataset licence: CC BY 4.0. The separate bundled eLCS source retains its GPL-3.0 licence.</p>
+    <p class="metadata">The original <a href="https://archive.ics.uci.edu/dataset/464/superconductivty+data">UCI Superconductivity dataset</a> contains 21,263 records and 81 numerical features. Acquisition instructions are in the <a href="README.md#fetching-the-data">README</a>. Dataset licence: CC BY 4.0. The separate bundled eLCS source retains its GPL-3.0 licence.</p>
   </section>
 </main>
-<footer class="wrap">Phase II research results. This page is a reader's summary, not the full assessment report. <a href="#main">Back to results</a></footer>
+<footer class="wrap">Phase II exploratory revision. This page is a reader's summary, not the full assessment report. <a href="#main">Back to results</a></footer>
 </body>
 </html>
