@@ -90,12 +90,13 @@ python src/critical_temperature/data_analysis.py
 ```
 
 Generated Phase I outputs are recreated under `data/processed/` and `reports/`.
-The Phase II baseline CSV described below is retained in Git as an experiment record.
+The processed CSVs are excluded from Git; see [data-directory instructions](data/README.md)
+for rebuilding them. Phase II experiment records under `reports/` remain versioned.
 
-### Starting Phase II
+### Loading Phase II inputs
 
-To get started, use this read-only loader from the repository root. It does not
-add any modelling dependencies yet:
+After installing the dependencies, use this read-only loader from the repository
+root. It loads model inputs without training or evaluating a model:
 
 ```python
 from src.critical_temperature.model_data import load_model_data
@@ -255,6 +256,9 @@ This verifies saved artifact hashes and replaces only `results.html`. It does no
 train models, evaluate the holdout or require the raw dataset. The checked-in page
 is ready to view; rebuilding is only needed after an intentional presentation edit.
 
+<details>
+<summary>Historical experiments</summary>
+
 ### Running the initial Phase II baseline
 
 The four baseline runners share the fold recipe in `model_data.model_folds()` and use
@@ -264,7 +268,7 @@ globally cleaned CSV. These runs save to
 `reports/elcs_training_dedup_<iterations>_iterations.csv`, leaving historical
 preprocessed results untouched. Matching folds across runs require the same raw
 data, row order, split settings and library version. See
-[the code follow-ups](notes/phase_two_code_followups.md) for remaining limitations.
+[results and interpretation](notes/phase_two_results.md) for evaluation limitations.
 
 From the repository root, after installing dependencies and fetching the raw data:
 
@@ -313,16 +317,18 @@ The historical increase from 100 to 1,000 iterations changed mean balanced
 accuracy from 0.412 to 0.428 and recall from 0.447 to 0.439. These results predate
 the fallback repair and do not establish convergence.
 
+</details>
+
 ## Analytical objective
 
-The original dataset supports regression using the numerical critical temperature. For this project, the target will be transformed into a binary classification label:
+The original dataset supports regression using the numerical critical temperature. This project transforms the target into a binary classification label:
 
 | Class | Definition | Interpretation |
 | --- | --- | --- |
 | `0` | `critical_temp <= 77` | Below the liquid-nitrogen threshold |
 | `1` | `critical_temp > 77` | Potentially liquid-nitrogen-compatible |
 
-The original `critical_temp` column will be retained for exploratory analysis and label generation, but removed from the model inputs to prevent target leakage.
+The original `critical_temp` column is retained for exploratory analysis and label generation, but removed from the model inputs to prevent target leakage.
 
 ## Project stages
 

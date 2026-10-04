@@ -46,10 +46,9 @@ not record implementation hashes; use the development workflow for new runs.
 | 100 | 0.389313 | 0.411878 | 0.447497 | 0.203868 | [Initial baseline](../reports/elcs_raw_baseline.csv) |
 | 1,000 | 0.420969 | 0.428072 | 0.439281 | 0.217201 | [1,000-iteration baseline](../reports/elcs_raw_1000_iterations.csv) |
 
-The model is integrated and baseline results are recorded, but it is not yet
-tuned or convergence-validated. Both recorded mean balanced accuracies are
-below 0.5. These small-budget runs do not establish the algorithm's best
-achievable performance.
+These historical baseline runs predate the completed bounded development study.
+Both recorded mean balanced accuracies are below 0.5. These small-budget runs do
+not establish convergence or the algorithm's best achievable performance.
 
 ## Bundled upstream files
 

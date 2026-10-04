@@ -34,8 +34,8 @@ coverage or establish convergence. Lower rule specificity increased coverage in
 single-fold experiments but did not improve balanced accuracy relative to the
 corrected default configuration.
 
-The 4,253 reserved holdout rows were not evaluated during this investigation. Historical baseline results
-must remain identified as using the unmodified library; future corrected runs
+The 4,253 reserved holdout rows were not evaluated during this investigation.
+Historical baseline results must remain identified as using the unmodified library; future corrected runs
 need separate result files and explicit attribution of this local library edit.
 The previous uncommitted comparison work and development artifacts were removed
 from the working tree and preserved in a Git stash named
@@ -97,8 +97,8 @@ preserved artifacts; only the study driver's bookkeeping differed from the
 original plan. Model, loader, split and bundled-library sources were unchanged.
 The original six experiments and plan were preserved. `selection.json` records
 the development-selected budget, and `study_complete.json` / `status.json` mark
-completion. No reserved holdout rows were evaluated at that development stage. The ensemble is a tested
-candidate enhancement, not a demonstrated performance improvement.
+completion. No reserved holdout rows were evaluated at that development stage.
+The ensemble is a tested candidate enhancement, not a demonstrated performance improvement.
 
 Verification: **30 tests passed**, covering tiny real-model fits of both variants,
 source provenance, training-only preprocessing and study selection boundaries.
@@ -108,5 +108,8 @@ source provenance, training-only preprocessing and study selection boundaries.
 The subsequently approved seven-system final evaluation and primary paired test
 are complete, with no post-test tuning. The ensemble was worse, not better, on
 balanced accuracy. See [results and interpretation](phase_two_results.md) for final
-findings, three rule examples, verification evidence and limitations. The project
-suite now contains 66 tests and passed in both the working and fresh environments.
+findings, three rule examples, verification evidence and limitations. At final
+evaluation completion, all 66 tests passed in both the working and fresh
+environments. The results-page work subsequently expanded the suite to 69 tests,
+which passed in the working environment; the fresh-environment result remains
+limited to the earlier 66-test suite.
