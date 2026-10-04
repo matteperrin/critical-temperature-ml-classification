@@ -1,0 +1,2 @@
+fold,training_rows_raw,training_rows,evaluation_rows,true_negatives,false_positives,false_negatives,true_positives,accuracy,balanced_accuracy,precision,recall,f1,roc_auc,average_precision
+test,17010,17010,4253,3353,121,123,656,0.9426287326592994,0.9036375481016877,0.8442728442728443,0.8421052631578947,0.8431876606683805,0.9767469402264243,0.8781584355722201

@@ -22,9 +22,11 @@ from sklearn.svm import SVC
 if __package__:
     from .model_data import DEFAULT_DATA_PATH, load_model_data, model_folds
     from . import elcs_runtime
+    from .extract_elcs_rules import export_rules
 else:
     from model_data import DEFAULT_DATA_PATH, load_model_data, model_folds
     import elcs_runtime
+    from extract_elcs_rules import export_rules
 
 ELCS_MODELS = ("elcs", "elcs_dedup", "ensemble", "ensemble_dedup")
 MODELS = (*ELCS_MODELS, "logistic_regression", "svm", "random_forest")
@@ -122,12 +124,15 @@ def split_table(length, dev, test, folds):
     return table
 
 
-def evaluate(config, X, y, source, train, valid, fold):
+def evaluate(config, X, y, source, train, valid, fold, *, rules_dir=None):
+    raw_train = np.asarray(train).copy()
     original_count = len(train)
     if config["name"] in ("elcs_dedup", "ensemble_dedup"):
         train = train[~source.iloc[train].duplicated().to_numpy()]
     model = make_model(config)
     model.fit(X.iloc[train].to_numpy(), y.iloc[train].to_numpy())
+    if rules_dir is not None and config["name"] in ELCS_MODELS:
+        export_rules(model, config, X.columns.tolist(), raw_train, train, rules_dir)
     values = X.iloc[valid].to_numpy()
     predictions = model.predict(values)
     truth = y.iloc[valid].to_numpy()
@@ -199,7 +204,8 @@ def run_cv(model, output_dir=None, *, data_path=DEFAULT_DATA_PATH, iterations=10
 def run_test(experiment):
     """Read frozen settings only; one final fit on development and one reserved test."""
     output = Path(experiment)
-    artifacts = ("test_started.json", "test_results.csv", "test_predictions.csv")
+    artifacts = ("test_started.json", "test_results.csv", "test_predictions.csv",
+                 "test_complete.json", "rules")
     if any((output / name).exists() for name in artifacts):
         raise FileExistsError("Final test was already started; existing results will not be overwritten.")
     completion = output / "cv_complete.json"
@@ -227,9 +233,17 @@ def run_test(experiment):
     # Exclusive marker also protects an interrupted final fit from accidental reruns.
     with (output / "test_started.json").open("x", encoding="utf-8") as stream:
         json.dump(config, stream, indent=2)
-    result, rows = evaluate(config["model"], X, y, source, dev, test, "test")
+    result, rows = evaluate(config["model"], X, y, source, dev, test, "test",
+                            rules_dir=output / "rules" if config["model"]["name"] in ELCS_MODELS else None)
     pd.DataFrame([result]).to_csv(output / "test_results.csv", index=False)
     rows.to_csv(output / "test_predictions.csv", index=False)
+    files = [output / name for name in ("config.json", "test_started.json",
+                                       "test_results.csv", "test_predictions.csv")]
+    if config["model"]["name"] in ELCS_MODELS:
+        files.extend(sorted((output / "rules").rglob("*")))
+    completed = {path.relative_to(output).as_posix(): data_hash(path)
+                 for path in files if path.is_file()}
+    (output / "test_complete.json").write_text(json.dumps(completed, indent=2), encoding="utf-8")
     print(f"Final test saved to {output}")
 
 

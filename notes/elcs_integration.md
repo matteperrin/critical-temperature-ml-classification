@@ -85,8 +85,8 @@ support serialization through the temporary namespace.
 Each experiment freezes bundled/effective source hashes, package metadata and
 variant. Final evaluation rejects changed or missing provenance; version `1.2.4`
 alone is insufficient. See the [README](../README.md#bounded-corrected-library-development-study)
-for study commands and selection, and [Matte's notes](matte_notes.md#development-study-progress)
-for results and unfinished work.
+for study commands and selection, and [Phase II results](phase_two_results.md)
+for the completed final comparison, statistical analysis and rule interpretation.
 
 Useful upstream references:
 

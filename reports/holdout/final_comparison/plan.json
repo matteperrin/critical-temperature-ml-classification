@@ -1,0 +1,95 @@
+{
+  "stage": "frozen_before_final_evaluation",
+  "experiments": [
+    {
+      "directory": "reports/holdout/elcs_development_v1/unmodified_raw_i1000_n100",
+      "config_sha256": "66e656932ff4e6fb9c31b50617cd3d0d2b9ae588dfc347f92ca561b5089f7607",
+      "cv_completion_sha256": "502475922236d38fceea57cf6bfd5eb77b65f957c279e96d4d4a7d25f1777ed3"
+    },
+    {
+      "directory": "reports/holdout/elcs_development_v1/unmodified_dedup_i1000_n100",
+      "config_sha256": "9bc99fd385df6764b3e3601c48be28acadbcd8e0666f1e0be2491404199012a9",
+      "cv_completion_sha256": "7e5b9e024f224ae02548cdba3b6678a4df108c711b30437352257d9a7b026957"
+    },
+    {
+      "directory": "reports/holdout/elcs_development_v1/corrected_dedup_i1000_n100",
+      "config_sha256": "c894321d36a55c91c2959daf9b844e21cdd03ff81da81edcbaecd24ac0c12559",
+      "cv_completion_sha256": "fe161a4d962fb07bc35339d4ef8afeaad0c909b18237bb704c296d62a02dd2aa"
+    },
+    {
+      "directory": "reports/holdout/elcs_development_v1/corrected_ensemble_dedup_selected",
+      "config_sha256": "c10c182251a3ff0a2dfc23b21ac9b62907b41f0422fdd063b1798ae853421d86",
+      "cv_completion_sha256": "d96fcafd9ca175f3db77228e7b02e382d5f0ea9919c1cd10995e972864a87537"
+    },
+    {
+      "directory": "reports/holdout/conventional_defaults/logistic_regression",
+      "config_sha256": "f06b780c494aad94cce0866d9760dcfcaab0c60965e862704dc7c842054feb5d",
+      "cv_completion_sha256": "46b11ba8313bf15d2ce5fb3f5a7912504aecac5cedfc524f3f1e35a0174475fa"
+    },
+    {
+      "directory": "reports/holdout/conventional_defaults/svm",
+      "config_sha256": "6355272547a133bd476c8a0d4c263895bc26a9f4aae7201c46e370d9dc0e6b51",
+      "cv_completion_sha256": "e632c14c4b31086b2945d6016a6034f2c533f849f540fa2df02271bcad9843a7"
+    },
+    {
+      "directory": "reports/holdout/conventional_defaults/random_forest",
+      "config_sha256": "13e1cbdda78b3f5abe335633b33858031bcc6071e0674aa37f205c0d2f6f3c34",
+      "cv_completion_sha256": "16372b5ae419085e097c0b4538d3abc4e1041af4f5eda67a7c675d31dad8a3ad"
+    }
+  ],
+  "primary_comparison": {
+    "baseline": "reports/holdout/elcs_development_v1/corrected_dedup_i1000_n100",
+    "improved": "reports/holdout/elcs_development_v1/corrected_ensemble_dedup_selected",
+    "metric": "balanced_accuracy",
+    "alternative": "two-sided",
+    "alpha": 0.05,
+    "method": "paired_group_permutation",
+    "permutations": 19999,
+    "random_state": 42,
+    "exact_threshold_informative_groups": 16
+  },
+  "source_sha256": {
+    "src\\critical_temperature\\compare_models.py": "dd9ae1719da837426d088ff3eaf1d966b7d9f707c723f049e398a378a828696f",
+    "src\\critical_temperature\\data_analysis.py": "978b20e47f190da6dea48f293af423d4b63fbcfab51b7b62a6a2b8df4371d7e3",
+    "src\\critical_temperature\\data_cleaning.py": "048254e9cc832f843cc5445678bc6aa63b69a9c0f6097e8298f91eb6ad6b416e",
+    "src\\critical_temperature\\data_inspection.py": "c380edfece53284a47f91110d40480c0d6e85f05a7fca44be80d771a035915b9",
+    "src\\critical_temperature\\data_transformation.py": "84bdde68c632a138b289b7b8e3338b791751dc6ab1d1eedfa9307866642fd91b",
+    "src\\critical_temperature\\elcs_runtime.py": "815108297a887831a57a288fbc53c11b8bb458869fabc8732522479edff00d41",
+    "src\\critical_temperature\\extract_elcs_rules.py": "c22121f13d08c7e42c31e5c8983d596d5528889106f806e4d985c29bd112e557",
+    "src\\critical_temperature\\fetch_data.py": "c8cf390b5e06af645cd8b27e2fe62f819e96092fbedb3de148c8576c4004e9b0",
+    "src\\critical_temperature\\model_data.py": "b196022e554f3682c6fcb4784f71790a5bf1ecd888033b372220ba940227f01b",
+    "src\\critical_temperature\\preprocess.py": "72cb786e87b47f10b1424d54aa2230171164d8a52cbcbe0d38a01a36500285d7",
+    "src\\critical_temperature\\run_development_experiments.py": "91a0514aa979f0c7073a18bb64d2b23965f302d88887f9c6e03213ce646706e9",
+    "src\\critical_temperature\\run_elcs.py": "4c972b63cea158daea62d94cdf60edabd34987d25481103763ffac043f4e88cd",
+    "src\\critical_temperature\\run_elcs_ensemble.py": "33b062db969879b6e343dee5cb05b873bab47da1119570902ff5527cfe42afd4",
+    "src\\critical_temperature\\run_holdout.py": "cf9b36f53551ef5962e5f3e38aa3ab1607a88adcb946960b06d37d7b49a6f350",
+    "src\\critical_temperature\\run_logistic_regression.py": "216ad1679d31d3a560720ea8f92a4d5c5f3f4a7f0b2d6e550f7336287f5d1fd9",
+    "src\\critical_temperature\\run_random_forest.py": "8d247834536f588366740fd3368f134788bfc025b2484c7941fcba24756e5342",
+    "src\\critical_temperature\\run_svm.py": "6ee1fc0281c0f158691b81796833a7980c84f799efe624cf4a95344e4614d2b5",
+    "src\\critical_temperature\\statistical_comparison.py": "ff949c908d0b8e163b7a359057791c6529d719cfddf11d1abcd6bfc50b90ec58",
+    "third_party\\scikit-eLCS\\skeLCS\\__init__.py": "ad0e86be8c79d496cbd0d540874e7ac80a7bce8cd02e225ae96edb842ec4fe14",
+    "third_party\\scikit-eLCS\\skeLCS\\Classifier.py": "e5210cf77c96dbb13a133bbd4c785d971981aca9a6cf4e859205b04659de87f7",
+    "third_party\\scikit-eLCS\\skeLCS\\ClassifierSet.py": "f0151476f8d47e5fb30d9c1d4065b831679def77ca1a15e8d21bfe2ea35e7944",
+    "third_party\\scikit-eLCS\\skeLCS\\DataCleanup.py": "1e15a8bf3221903e5aa3428f72b6e91e6c6a9fe1c3c900a94f15590cec800a14",
+    "third_party\\scikit-eLCS\\skeLCS\\DataManagement.py": "2f11d587e7d4daf2834bb93a27eddc7a47b8da11fb2668e451aab24c5667d699",
+    "third_party\\scikit-eLCS\\skeLCS\\eLCS.py": "d14e76dea1f99ca844e7353bcda30f4aed1f903f84e774ca5fa24c470683cb2e",
+    "third_party\\scikit-eLCS\\skeLCS\\IterationRecord.py": "6c3746747ebd0bf4ffc1768f150032ab6ea0b04bd2ae22453474972ff5343e69",
+    "third_party\\scikit-eLCS\\skeLCS\\OfflineEnvironment.py": "5129f4e31f8630dc989ea03e5b76aa44ebe3773ee3b18456dbaccd3aa5bda20d",
+    "third_party\\scikit-eLCS\\skeLCS\\Prediction.py": "244a72ac8d332c58b17287c67578db610b98d4f223c193d923b8f5835dbdb7f6",
+    "third_party\\scikit-eLCS\\skeLCS\\Timer.py": "d6e656566c78459863fa8080e128357c51a8f24601691e70d70fd1da02be05e6"
+  },
+  "python": "3.13.9",
+  "packages": {
+    "numpy": "2.5.1",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "scipy": "1.18.0",
+    "joblib": "1.5.3",
+    "threadpoolctl": "3.6.0",
+    "scikit-eLCS": "1.2.4"
+  },
+  "development_rows": 17010,
+  "reserved_rows": 4253,
+  "historical_exposure": "Earlier full-data analyses and rule exports used these records. This is not a retroactively untouched external dataset.",
+  "post_test_policy": "No configuration changes or tuning using final scores. Other model comparisons are descriptive; no additional hypothesis tests are planned."
+}

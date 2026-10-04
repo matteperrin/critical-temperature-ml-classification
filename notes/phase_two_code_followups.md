@@ -24,12 +24,27 @@ Use the `cv` command to compare configurations, then the separate `test` command
 
 The earlier full-data experiments already used these records. Reserving them now separates future runs, but does not make them unseen for decisions already made. See the README for commands.
 
-## Code still to do
+## Completed code and evaluations
 
-- **Improved eLCS:** the development grid and preprocessed ensemble comparison are complete. The ensemble did not beat the selected single model on balanced accuracy; discuss the lack of improvement honestly. See [findings](matte_notes.md#development-study-progress).
-- **Statistical test:** add a suitable test for comparing the models. Fold means and standard deviations alone do not cover this requirement.
-- **Results:** the eLCS-only study writes `development_summary.csv`, but the full six-system comparison is still needed. The conventional models save ROC-AUC and average precision, while eLCS saves confusion counts. The legacy `pr_auc` column is average precision, not trapezoidal PR-AUC.
-- **Tests:** add coverage for the standalone preprocessing script and rule export. The shared-fold test uses fake models and a test scaler, so it checks the pipeline rather than model performance or old result files.
-- **Rule export:** let `extract_elcs_rules.py` use the final model configuration. It currently trains on all the raw data, so keep that separate from held-out evaluation.
+The development grid, shared-fold conventional baselines, seven frozen final
+evaluations, validated comparison reports, paired statistical test and
+configuration-linked rule exports are complete. Standalone preprocessing and
+rule-export tests were added. All 66 project tests passed, including in a fresh
+isolated environment. See [results and interpretation](phase_two_results.md) for
+findings, three sample rules, verification limits and artifact links.
 
-There is no need to add another conventional model or write eLCS from scratch for these fixes. Keep any new experiment results separate from the old CSVs.
+The corrected ensemble was significantly worse than the matched single eLCS on
+the declared final balanced-accuracy comparison. Do not call it a demonstrated
+improvement. Other final comparisons are descriptive. No post-test tuning occurred.
+
+## Remaining assessment work
+
+- Complete the 5,000–6,500-word report: methods/pseudocode, references, results,
+  limitations, contributions and reflections.
+- Prepare GitHub evidence, the demonstration and required Turnitin/submission
+  artifacts. Passing tests cannot establish completion of these deliverables.
+- Do not reuse the now-scored final rows to select another configuration. Future
+  tuning requires a separate evaluation plan and honest exposure disclosure.
+
+No additional conventional model or eLCS reimplementation is needed for this
+scope. Preserve historical results and their original/corrected attribution.

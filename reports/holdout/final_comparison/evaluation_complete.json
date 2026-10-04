@@ -1,0 +1,18 @@
+{
+  "plan_sha256": "06f51bd1c6ab476dc786be25c5e704fbbd9c2a6721442a4e422c73d4d630e4bc",
+  "final_manifests": {
+    "reports/holdout/elcs_development_v1/unmodified_raw_i1000_n100": "f2ea0f57ef261043135679205c4187014c9e549f379e95d9f599bf15466a2cc7",
+    "reports/holdout/elcs_development_v1/unmodified_dedup_i1000_n100": "928fefd60ba8cb62390ee93eef0a14206a8b4cc7cf7ff0ee008af53b329140f9",
+    "reports/holdout/elcs_development_v1/corrected_dedup_i1000_n100": "236553b1c05ea9bba5f08576a54b670c63c37fb5c86d3142dccb24bdd04fadc3",
+    "reports/holdout/elcs_development_v1/corrected_ensemble_dedup_selected": "6e791fbb34dd89917853b38f62d5a5d83333fe1947a440ab6f09fddcc3225afb",
+    "reports/holdout/conventional_defaults/logistic_regression": "b16601358ba278c83d101206c3a5609d4c9ee3f21dcc5ab7eefd960903ab8fb2",
+    "reports/holdout/conventional_defaults/svm": "18a45e3af8063ba3d7226533561d690b744b2112b476ae7963fb4ef02e56c19f",
+    "reports/holdout/conventional_defaults/random_forest": "c45e9cda0137265d70117886bcafe527a41d56bbd5ed8e09fc267dd288fdfdd0"
+  },
+  "outputs": {
+    "development_comparison.csv": "12717a84ed65d23a25f8c9bd947be95142263901b3be5ef08d3ec297d095e766",
+    "test_comparison.csv": "76518f762663a0ddf5a5f70f179a5864fbe17c16569554f2bac592345338298f",
+    "statistical_test.json": "45dbca1403f586f7ab7054e0dfb32640238bf778a3506c8591c2202e98dc607f"
+  },
+  "post_test_tuning_performed": false
+}

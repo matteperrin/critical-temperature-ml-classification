@@ -2,6 +2,16 @@
 
 An end-to-end data engineering and machine-learning project using the UCI Superconductivity dataset to classify known superconductors according to whether their critical temperature exceeds 77 K—the approximate threshold for liquid-nitrogen cooling.
 
+## Read the results
+
+**[Reader-friendly results page](results.html)**: the main findings, a model
+comparison chart, metric explanations, three rule examples and links to evidence.
+
+Download or clone this repository, then double-click **`results.html`** to open it
+in your browser. It works offline, without Python, a server or any installation.
+GitHub's file viewer shows HTML source rather than rendering the page; open the
+file from your downloaded copy instead.
+
 ## Research question
 
 > Can the elemental and compositional features of known superconductors be used to identify materials with a critical temperature above 77 K?
@@ -204,6 +214,46 @@ JSON. `study_complete.json` appears only when all eight experiments finish.
 Existing directories are refused, and interrupted studies are not automatically
 resumed. No final holdout is evaluated. Development selection does not establish
 unbiased performance, statistical significance or convergence.
+
+### Completed Phase II comparisons and rules
+
+Start with the [reader-friendly results page](results.html). The
+[technical interpretation](notes/phase_two_results.md) gives detailed methods,
+verification and limitations. Supporting records are
+under `reports/holdout/final_comparison/`: the frozen plan, development/final CSVs,
+statistical result and completion record. The final holdout has now been scored;
+**do not tune configurations against these results or remove final-run markers**.
+
+`compare_models.py table` combines compatible completed experiments using
+`--stage cv` or `--stage test`, `--experiments` and a new `--output` path. It checks
+saved hashes, dataset identity, rows, labels and folds; it never trains models.
+The `stats` command is restricted to the declared corrected deduplicated
+single-versus-ensemble settings, 19,999 draws and seed 42. Its output is numeric;
+the assumptions and significance interpretation are in the results note.
+
+Final eLCS evaluations automatically export the exact fitted populations and
+training-row provenance, including separate files for each ensemble member.
+Validate and list existing exports without fitting or scoring again:
+
+```bash
+python src/critical_temperature/extract_elcs_rules.py --experiment reports/holdout/elcs_development_v1/corrected_ensemble_dedup_selected
+```
+
+The rule exporter's old all-data fitting command is no longer supported. Training
+rule accuracy is not held-out accuracy. Run project tests with the unittest command
+above; optional pytest users should use `python -m pytest tests -q`, not vendor-wide
+discovery. Verification includes a fresh isolated installation of the recorded
+dependencies; see the results note for limits.
+
+To rebuild the HTML page from the saved evidence (Python standard library only):
+
+```bash
+python src/critical_temperature/build_results_page.py
+```
+
+This verifies saved artifact hashes and replaces only `results.html`. It does not
+train models, evaluate the holdout or require the raw dataset. The checked-in page
+is ready to view; rebuilding is only needed after an intentional presentation edit.
 
 ### Running the initial Phase II baseline
 

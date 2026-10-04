@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Plain-language results of seven models classifying known superconductors above 77 K, with final metrics, rule examples and saved evidence.">
+<title>Superconductors above 77 K | Research results</title>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f6f8fa; --surface: #fcfdfe; --fg: #17232c; --muted: #46545e;
+  --border: #c4cdd4; --track: #e1e7eb; --accent: #00584f; --warning: #963e28;
+  --display: "Bahnschrift", "Arial Narrow", sans-serif;
+  --body: "Trebuchet MS", Arial, sans-serif;
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s6: 24px;
+  --s8: 32px; --s12: 48px; --s16: 64px; --s20: 80px;
+}
+@supports (color: oklch(0.5 0.1 190)) {
+  :root {
+    --bg: oklch(0.978 0.004 240); --surface: oklch(0.994 0.002 240);
+    --fg: oklch(0.245 0.022 240); --muted: oklch(0.430 0.020 240);
+    --border: oklch(0.840 0.012 240); --track: oklch(0.920 0.008 240);
+    --accent: oklch(0.410 0.075 190); --warning: oklch(0.480 0.120 35);
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: var(--s6); }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.6 var(--body); }
+::selection { background: var(--accent); color: var(--surface); }
+a { color: var(--accent); text-underline-offset: 4px; transition: color 120ms ease-out; }
+a:hover { color: var(--fg); text-decoration-thickness: 2px; }
+a:active { color: var(--warning); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+h1, h2, h3, summary { font-family: var(--display); }
+h1 { font-size: clamp(32px, 4vw, 48px); line-height: 1.12; font-weight: 800; margin: 0 0 var(--s6); }
+h2 { font-size: 32px; line-height: 1.2; font-weight: 700; margin: 0 0 var(--s4); }
+h3 { font-size: 24px; line-height: 1.3; font-weight: 700; margin: 0 0 var(--s3); }
+p { margin: 0 0 var(--s4); }
+strong, td, .bar-label { font-variant-numeric: tabular-nums; }
+code { overflow-wrap: anywhere; font-size: 14px; }
+ul { padding-left: var(--s6); }
+.wrap { width: min(100% - 64px, 1152px); margin-inline: auto; }
+.page-header { display: flex; justify-content: space-between; align-items: center; gap: var(--s6); padding-block: var(--s6); border-bottom: 1px solid var(--border); }
+.project-name { font-family: var(--display); font-weight: 700; }
+nav { display: flex; gap: var(--s6); flex-wrap: wrap; }
+nav a { display: inline-flex; align-items: center; min-height: 44px; }
+.skip-link { position: absolute; top: var(--s2); left: var(--s4); padding: var(--s3); background: var(--surface); transform: translateY(-160%); z-index: 1; }
+.skip-link:focus { transform: translateY(0); }
+.hero { display: grid; grid-template-columns: 7fr 5fr; gap: var(--s16); padding-block: var(--s16) var(--s12); }
+.hero .intro { font-size: 20px; }
+.thesis { align-self: start; padding-top: var(--s2); }
+.thesis h2 { font-size: 24px; }
+.metadata { color: var(--muted); font-size: 14px; }
+.study-grid { display: grid; grid-template-columns: 7fr 5fr; gap: var(--s16); padding-bottom: var(--s16); }
+.section { padding-block: var(--s12); border-top: 1px solid var(--border); }
+figure { margin: 0; }
+figcaption { color: var(--muted); margin-top: var(--s6); font-size: 14px; }
+.chart { list-style: none; padding: 0; margin: var(--s6) 0 0; }
+.chart-row { margin-bottom: var(--s6); }
+.bar-label { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s4); margin-bottom: var(--s2); }
+.bar-label strong { white-space: nowrap; }
+.track { height: 12px; background: var(--track); }
+.bar { height: 100%; background: var(--muted); }
+.single .bar { background: var(--accent); }
+.ensemble .bar { background: var(--warning); }
+.axis { display: flex; justify-content: space-between; color: var(--muted); font-size: 14px; border-top: 1px solid var(--border); padding-top: var(--s2); }
+.finding { font-size: 24px; font-family: var(--display); font-weight: 700; line-height: 1.3; }
+.negative { color: var(--warning); }
+.error-table { margin-block: var(--s6); }
+.error-table th, .error-table td { padding: var(--s2) 0; }
+.error-table th { text-align: left; font-weight: 400; }
+.error-table td { text-align: right; }
+.error-table thead th { font-weight: 700; font-size: 14px; }
+.error-table thead th:not(:first-child) { text-align: right; }
+.stat-note { margin-top: var(--s6); font-size: 14px; color: var(--muted); }
+details { border-top: 1px solid var(--border); }
+summary { cursor: pointer; min-height: 44px; padding-block: var(--s4); font-weight: 700; }
+summary:hover { color: var(--accent); }
+summary:active { color: var(--warning); }
+.disclosure { padding-bottom: var(--s4); }
+.disclosure p:last-child { margin-bottom: 0; }
+.metric-definitions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s6) var(--s12); margin-block: var(--s6); }
+.metric-definitions dt { font-weight: 700; }
+.metric-definitions dd { margin: var(--s2) 0 0; }
+table { border-collapse: collapse; width: 100%; }
+.comparison { margin-top: var(--s6); background: var(--surface); }
+.comparison caption { text-align: left; padding-bottom: var(--s4); color: var(--muted); }
+.comparison th, .comparison td { padding: var(--s4); border-bottom: 1px solid var(--border); }
+.comparison thead th { text-align: right; font-size: 14px; }
+.comparison thead th:first-child { text-align: left; }
+.comparison tbody th { text-align: left; font-weight: 400; }
+.comparison td { text-align: right; white-space: nowrap; }
+.rules-layout { display: grid; grid-template-columns: 5fr 7fr; gap: var(--s16); }
+.rule-example summary span { display: block; font: 14px/1.6 var(--body); color: var(--muted); margin-top: var(--s1); }
+.conditions li { margin-bottom: var(--s2); }
+.limitations { display: grid; grid-template-columns: 5fr 7fr; gap: var(--s16); }
+.limitations ul { margin-top: 0; }
+.limitations li { margin-bottom: var(--s4); }
+.evidence-list { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s6) var(--s12); list-style: none; padding: 0; margin-block: var(--s6); }
+.evidence-list a, .prediction-list a { display: inline-block; padding-block: var(--s2); min-height: 44px; }
+.evidence-list p { color: var(--muted); font-size: 14px; margin-bottom: 0; }
+.prediction-list { columns: 2; column-gap: var(--s12); }
+.prediction-list li { break-inside: avoid; }
+footer { padding-block: var(--s8); border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
+@media (max-width: 800px) {
+  .hero, .study-grid, .rules-layout, .limitations { grid-template-columns: 1fr; gap: var(--s8); }
+  .page-header { align-items: flex-start; flex-direction: column; gap: var(--s2); }
+  .hero { padding-top: var(--s12); }
+  .study-grid { padding-bottom: var(--s12); }
+  h2 { font-size: 24px; }
+}
+@media (max-width: 560px) {
+  .wrap { width: calc(100% - 32px); }
+  nav { gap: var(--s4); }
+  .metric-definitions, .evidence-list { grid-template-columns: 1fr; }
+  .prediction-list { columns: 1; }
+  .comparison thead { display: block; position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .comparison, .comparison tbody, .comparison tr, .comparison th, .comparison td { display: block; }
+  .comparison caption { display: block; width: 100%; padding: var(--s4); }
+  .comparison tr { border-bottom: 1px solid var(--border); padding: var(--s4); }
+  .comparison tbody th { font-weight: 700; padding: 0 0 var(--s3); border: 0; }
+  .comparison td { display: flex; justify-content: space-between; gap: var(--s4); padding: var(--s1) 0; border: 0; }
+  .comparison td::before { content: attr(data-label); text-align: left; color: var(--muted); }
+}
+@media (prefers-reduced-motion: reduce) { a { transition: none; } }
+@media print {
+  body { background: var(--surface); font-size: 14px; }
+  .wrap { width: 100%; }
+  nav, .skip-link { display: none; }
+  .hero, .study-grid, .rules-layout, .limitations { display: block; }
+  .hero, .section { padding-block: var(--s6); }
+  .thesis, aside, .rules-layout > div { margin-top: var(--s6); }
+  details > .disclosure { display: block !important; }
+  details { break-inside: avoid; }
+  h2, h3 { break-after: avoid; }
+  a { color: var(--fg); }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to results</a>
+<header class="wrap page-header">
+  <span class="project-name">Critical temperature classification</span>
+  <nav aria-label="Results sections">
+    <a href="#comparison">Compare models</a><a href="#rules">Read rules</a><a href="#evidence">Evidence</a>
+  </nav>
+</header>
+<main id="main" class="wrap" tabindex="-1">
+  <section class="hero" aria-labelledby="page-title">
+    <div>
+      <h1 id="page-title">Superconductors above 77 K</h1>
+      <p class="intro">Can composition features help identify known superconductors whose critical temperature exceeds the liquid-nitrogen threshold?</p>
+      <p class="metadata">Seven systems evaluated on the same 4,253 final records. Research results, not a material certification.</p>
+    </div>
+    <div class="thesis">
+      <h2>Random Forest led this comparison</h2>
+      <p>It reached <strong>90.4% balanced accuracy</strong>. The three-model eLCS ensemble performed worse than its matched single model, despite using more training effort.</p>
+      <p>Balanced accuracy gives equal weight to finding above-77-K and at-or-below-77-K records. It is not the percentage of all records classified correctly.</p>
+    </div>
+  </section>
+
+  <div id="comparison" class="study-grid">
+    <section aria-labelledby="chart-title">
+      <h2 id="chart-title">How the models compared</h2>
+      <p>Final balanced accuracy, higher is better. All bars use the same 0–100% scale.</p>
+      <figure aria-labelledby="chart-title">
+        <ol class="chart">
+<li class="chart-row " data-score="90.36375481016877"><div class="bar-label"><span>Random forest</span><strong>90.4%</strong></div><div class="track" aria-hidden="true"><div class="bar" style="width:90.36375481016877%"></div></div></li>
+<li class="chart-row " data-score="80.7617452367597"><div class="bar-label"><span>Logistic regression</span><strong>80.8%</strong></div><div class="track" aria-hidden="true"><div class="bar" style="width:80.7617452367597%"></div></div></li>
+<li class="chart-row " data-score="78.95795504178112"><div class="bar-label"><span>SVM</span><strong>79.0%</strong></div><div class="track" aria-hidden="true"><div class="bar" style="width:78.95795504178112%"></div></div></li>
+<li class="chart-row single" data-score="63.149063315012754"><div class="bar-label"><span>Corrected eLCS (deduplicated)</span><strong>63.1%</strong></div><div class="track" aria-hidden="true"><div class="bar" style="width:63.149063315012754%"></div></div></li>
+<li class="chart-row ensemble" data-score="58.315300974116916"><div class="bar-label"><span>Corrected eLCS ensemble (deduplicated)</span><strong>58.3%</strong></div><div class="track" aria-hidden="true"><div class="bar" style="width:58.315300974116916%"></div></div></li>
+<li class="chart-row " data-score="47.539839319854885"><div class="bar-label"><span>Unmodified eLCS (deduplicated)</span><strong>47.5%</strong></div><div class="track" aria-hidden="true"><div class="bar" style="width:47.539839319854885%"></div></div></li>
+<li class="chart-row " data-score="42.351877841112746"><div class="bar-label"><span>Unmodified eLCS (raw)</span><strong>42.4%</strong></div><div class="track" aria-hidden="true"><div class="bar" style="width:42.351877841112746%"></div></div></li>
+        </ol>
+        <div class="axis" aria-hidden="true"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+        <figcaption>eLCS is a rule-learning classifier. “Corrected” refers to a library bug repair. “Deduplicated” means exact duplicate source rows were removed from training only. Evaluation rows were unchanged. Model rankings are descriptive, not significance-tested.</figcaption>
+      </figure>
+    </section>
+    <aside aria-labelledby="ensemble-title">
+      <h2 id="ensemble-title">The ensemble did not help</h2>
+      <p class="finding negative">4.8 percentage points lower balanced accuracy</p>
+      <p>The corrected single eLCS scored <strong>63.1%</strong>; the corrected ensemble scored <strong>58.3%</strong>. The ensemble combined three seeds by majority vote.</p>
+      <h3>What changed in practice?</h3>
+      <p>Of 779 above-77-K records, the ensemble detected fewer and missed more. It reduced false positives at the cost of recall.</p>
+      <table class="error-table">
+        <caption>Final prediction counts</caption>
+        <thead><tr><th scope="col">Outcome</th><th scope="col">Single</th><th scope="col">Ensemble</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Detected above 77 K</th><td>282</td><td>167</td></tr>
+          <tr><th scope="row">Missed above 77 K</th><td>497</td><td>612</td></tr>
+          <tr><th scope="row">False positive predictions</th><td>344</td><td>167</td></tr>
+        </tbody>
+      </table>
+      <p>Recall fell from <strong>36.2% to 21.4%</strong>. Precision rose from 45.0% to 50.0%. This is a trade-off, not an improvement on the declared primary metric.</p>
+      <details><summary>How certain is that difference?</summary><div class="disclosure">
+        <p>The predeclared paired test found a statistically significant difference against the ensemble: <strong>p = 0.00005</strong>, using a two-sided 5% significance threshold.</p>
+        <p>Whole identical-feature groups were swapped together, preserving duplicate dependence. The test used 19,999 random swaps, seed 42, across 3,031 groups (328 with nonzero effects).</p>
+        <p>The p-value uses a plus-one correction and is the smallest reportable value at this sampling budget. It is not the probability that the result is wrong. The test assumes independent groups and interchangeable model predictions under the null; unknown material-family relationships may violate those assumptions.</p>
+        <p><a href="reports/holdout/final_comparison/statistical_test.json">Open the statistical record</a></p>
+      </div></details>
+      <p class="stat-note">Each eLCS member used 1,000 iterations and population limit 100. Three members mean three times the single model's total iteration budget. No settings changed after final scores were viewed.</p>
+    </aside>
+  </div>
+
+  <section class="section" aria-labelledby="metrics-title">
+    <h2 id="metrics-title">Read the scores without the jargon</h2>
+    <p>All metrics below use final records, not training results. Precision, recall and F1 treat above 77 K as the positive class.</p>
+    <details><summary>What does each metric mean?</summary><div class="disclosure">
+      <dl class="metric-definitions">
+        <div><dt>Balanced accuracy</dt><dd>The average of recall for the two classes. Each class has equal importance, even though above-77-K records are less common. The primary comparison metric.</dd></div>
+        <div><dt>Precision</dt><dd>Of records predicted to be above 77 K, how many actually were? Higher precision means fewer false leads.</dd></div>
+        <div><dt>Recall</dt><dd>Of records actually above 77 K, how many did the model find? Higher recall means fewer missed candidates.</dd></div>
+        <div><dt>F1</dt><dd>The harmonic mean of positive-class precision and recall. It balances these two quantities but does not include true negatives.</dd></div>
+      </dl>
+    </div></details>
+    <table class="comparison" role="table">
+      <caption>Final results for all seven evaluated systems. Values are rounded to one decimal place; full precision is in the linked CSV.</caption>
+      <thead><tr><th scope="col">Model</th><th scope="col">Balanced accuracy</th><th scope="col">Precision</th><th scope="col">Recall</th><th scope="col">F1</th></tr></thead>
+      <tbody>
+<tr><th scope="row">Random forest</th><td data-label="Balanced accuracy">90.4%</td><td data-label="Precision">84.4%</td><td data-label="Recall">84.2%</td><td data-label="F1">84.3%</td></tr>
+<tr><th scope="row">Logistic regression</th><td data-label="Balanced accuracy">80.8%</td><td data-label="Precision">67.9%</td><td data-label="Recall">68.8%</td><td data-label="F1">68.4%</td></tr>
+<tr><th scope="row">SVM</th><td data-label="Balanced accuracy">79.0%</td><td data-label="Precision">67.1%</td><td data-label="Recall">65.1%</td><td data-label="F1">66.1%</td></tr>
+<tr><th scope="row">Corrected eLCS (deduplicated)</th><td data-label="Balanced accuracy">63.1%</td><td data-label="Precision">45.0%</td><td data-label="Recall">36.2%</td><td data-label="F1">40.1%</td></tr>
+<tr><th scope="row">Corrected eLCS ensemble (deduplicated)</th><td data-label="Balanced accuracy">58.3%</td><td data-label="Precision">50.0%</td><td data-label="Recall">21.4%</td><td data-label="F1">30.0%</td></tr>
+<tr><th scope="row">Unmodified eLCS (deduplicated)</th><td data-label="Balanced accuracy">47.5%</td><td data-label="Precision">17.0%</td><td data-label="Recall">50.6%</td><td data-label="F1">25.4%</td></tr>
+<tr><th scope="row">Unmodified eLCS (raw)</th><td data-label="Balanced accuracy">42.4%</td><td data-label="Precision">14.7%</td><td data-label="Recall">50.4%</td><td data-label="F1">22.7%</td></tr>
+      </tbody>
+    </table>
+    <p class="metadata">Ordinary accuracy, probability-based metrics and full confusion counts are available in the <a href="reports/holdout/final_comparison/test_comparison.csv">final comparison CSV</a>. Probability-based metrics are unavailable for these eLCS records.</p>
+  </section>
+
+  <section id="rules" class="section rules-layout" aria-labelledby="rules-title">
+    <div>
+      <h2 id="rules-title">What the learned rules say</h2>
+      <p>These are three real rules from the final ensemble, one per seed. Each rule describes a combination of feature conditions and votes for one class.</p>
+      <p>Within a member, all matching rules vote using fitness multiplied by numerosity. The ensemble then takes the majority of the three member predictions. A single sample rule does not determine the final answer.</p>
+      <p>If the rules cannot produce a useful decision, the corrected library falls back to the majority training class. That fallback is not a rule-based explanation.</p>
+      <p><strong>These rules have very few training matches.</strong> They are inspectable model patterns, not physical laws or trustworthy standalone recommendations.</p>
+    </div>
+    <div>
+<details class="rule-example"><summary>Seed 11: predicts above 77 K<span>4 correct / 9 training matches</span></summary>
+<div class="disclosure"><p>This rule specifies <strong>41 of 81 features</strong>. Three condition excerpts:</p><ul class="conditions"><li><code>mean_atomic_mass</code>: between 13.1584 and 145.2273 (strict)</li><li><code>wtd_mean_Valence</code>: between 1.7865 and 3.7335 (strict)</li><li><code>range_Valence</code>: equal to 3</li></ul>
+<p>All specified conditions must match together. These rounded excerpts are not the complete rule. The remaining features are unrestricted.</p>
+<p>Training accuracy: <strong>44.4%</strong>. Fitness: 0.01734. Numerosity: 1. This is limited training experience, not held-out rule performance or a causal explanation.</p>
+<p><a href="reports/holdout/elcs_development_v1/corrected_ensemble_dedup_selected/rules/member_11/rules.csv">Full population CSV (row 23, including header)</a></p></div></details>
+<details class="rule-example"><summary>Seed 42: predicts at or below 77 K<span>3 correct / 5 training matches</span></summary>
+<div class="disclosure"><p>This rule specifies <strong>45 of 81 features</strong>. Three condition excerpts:</p><ul class="conditions"><li><code>range_atomic_mass</code>: between 96.9095 and 148.9026 (strict)</li><li><code>mean_fie</code>: between 622.4621 and 928.3879 (strict)</li><li><code>wtd_mean_Valence</code>: between 0.0827 and 4.4487 (strict)</li></ul>
+<p>All specified conditions must match together. These rounded excerpts are not the complete rule. The remaining features are unrestricted.</p>
+<p>Training accuracy: <strong>60.0%</strong>. Fitness: 0.07776. Numerosity: 1. This is limited training experience, not held-out rule performance or a causal explanation.</p>
+<p><a href="reports/holdout/elcs_development_v1/corrected_ensemble_dedup_selected/rules/member_42/rules.csv">Full population CSV (row 76, including header)</a></p></div></details>
+<details class="rule-example"><summary>Seed 73: predicts above 77 K<span>3 correct / 8 training matches</span></summary>
+<div class="disclosure"><p>This rule specifies <strong>35 of 81 features</strong>. Three condition excerpts:</p><ul class="conditions"><li><code>mean_Valence</code>: between 1.8525 and 3.3475 (strict)</li><li><code>wtd_mean_atomic_radius</code>: between 91.8782 and 139.0449 (strict)</li><li><code>mean_atomic_mass</code>: between 71.1485 and 141.1851 (strict)</li></ul>
+<p>All specified conditions must match together. These rounded excerpts are not the complete rule. The remaining features are unrestricted.</p>
+<p>Training accuracy: <strong>37.5%</strong>. Fitness: 0.00742. Numerosity: 1. This is limited training experience, not held-out rule performance or a causal explanation.</p>
+<p><a href="reports/holdout/elcs_development_v1/corrected_ensemble_dedup_selected/rules/member_73/rules.csv">Full population CSV (row 73, including header)</a></p></div></details>
+      <p class="metadata">Selected by class and training match count, not final-test success. “Weighted” features account for elemental proportions; valence, mass and radius are aggregate composition descriptors. Full, unrounded conditions are in the linked CSVs.</p>
+    </div>
+  </section>
+
+  <section class="section limitations" aria-labelledby="limits-title">
+    <div><h2 id="limits-title">Where the evidence stops</h2><p>These findings apply to known superconductors in this dataset. A prediction does not establish that an arbitrary material is superconducting or commercially useful.</p></div>
+    <ul>
+      <li>The final records had appeared in historical full-data analyses and rule exports. They are not a retroactively untouched external dataset.</li>
+      <li>Identical feature vectors were grouped together, but related compositions and material families may still cross partitions.</li>
+      <li>Only a bounded set of eLCS budgets was tested. The study does not establish convergence or the best achievable performance of the algorithm.</li>
+      <li>The library repair and the ensemble enhancement are separate changes. The ensemble's negative result must not be credited as an improvement.</li>
+      <li>Model predictions are screening signals. Physical feasibility, operating margin, current, field response, cost and experimental validation remain outside this evaluation.</li>
+    </ul>
+  </section>
+
+  <section id="evidence" class="section" aria-labelledby="evidence-title">
+    <h2 id="evidence-title">Inspect the underlying evidence</h2>
+    <p>This page is an offline snapshot generated from hash-verified saved results. No model runs when you open it. Keep it with the repository so the relative evidence links continue to work.</p>
+    <ul class="evidence-list">
+      <li><a href="reports/holdout/final_comparison/test_comparison.csv">Final results CSV</a><p>All metrics and confusion counts for seven systems.</p></li>
+      <li><a href="reports/holdout/final_comparison/development_comparison.csv">Development results CSV</a><p>Five-fold development means and standard deviations, not final scores.</p></li>
+      <li><a href="reports/holdout/final_comparison/statistical_test.json">Statistical test JSON</a><p>Effect size, p-value, method and assumptions.</p></li>
+      <li><a href="reports/holdout/final_comparison/plan.json">Frozen evaluation plan</a><p>Settings and recipe recorded before final evaluation.</p></li>
+      <li><a href="notes/phase_two_results.md">Technical interpretation</a><p>Detailed methods, verification and limitations.</p></li>
+      <li><a href="reports/holdout/final_comparison/evaluation_complete.json">Completion and integrity record</a><p>Hashes binding the plan, final records and comparison outputs.</p></li>
+    </ul>
+    <details><summary>Individual model predictions</summary><div class="disclosure"><p>Each CSV contains the final evaluation row IDs, labels and predictions. The files are records, not portable fitted models.</p><ul class="prediction-list">
+<li><a href="reports/holdout/conventional_defaults/random_forest/test_predictions.csv">Random forest</a></li>
+<li><a href="reports/holdout/conventional_defaults/logistic_regression/test_predictions.csv">Logistic regression</a></li>
+<li><a href="reports/holdout/conventional_defaults/svm/test_predictions.csv">SVM</a></li>
+<li><a href="reports/holdout/elcs_development_v1/corrected_dedup_i1000_n100/test_predictions.csv">Corrected eLCS (deduplicated)</a></li>
+<li><a href="reports/holdout/elcs_development_v1/corrected_ensemble_dedup_selected/test_predictions.csv">Corrected eLCS ensemble (deduplicated)</a></li>
+<li><a href="reports/holdout/elcs_development_v1/unmodified_dedup_i1000_n100/test_predictions.csv">Unmodified eLCS (deduplicated)</a></li>
+<li><a href="reports/holdout/elcs_development_v1/unmodified_raw_i1000_n100/test_predictions.csv">Unmodified eLCS (raw)</a></li>
+    </ul></div></details>
+    <p class="metadata">The original <a href="https://archive.ics.uci.edu/dataset/464/superconductivty+data">UCI Superconductivity dataset</a> contains 21,263 records and 81 numerical features. Its raw files are not included in Git; acquisition instructions are in the <a href="README.md#fetching-the-data">README</a>. Dataset licence: CC BY 4.0. The separate bundled eLCS source retains its GPL-3.0 licence.</p>
+  </section>
+</main>
+<footer class="wrap">Phase II research results. This page is a reader's summary, not the full assessment report. <a href="#main">Back to results</a></footer>
+</body>
+</html>

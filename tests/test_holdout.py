@@ -39,6 +39,15 @@ class HoldoutTests(unittest.TestCase):
 
             def predict_proba(self, X):
                 return np.tile([0.6, 0.4], (len(X), 1))
+
+            @property
+            def members(self):
+                # This recorder stands in for the default three-member ensemble.
+                return [self, self, self]
+
+            def export_final_rule_population(self, **kwargs):
+                pd.DataFrame({"Accuracy": [1.0], "Match Count": [len(self.train)],
+                              "Fitness": [1.0]}).to_csv(kwargs["filename"], index=False)
         return Estimator
 
     def test_split_mapping_and_fail_closed(self):

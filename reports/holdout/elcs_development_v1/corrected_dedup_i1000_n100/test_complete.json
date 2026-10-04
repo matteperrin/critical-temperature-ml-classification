@@ -1,0 +1,9 @@
+{
+  "config.json": "c894321d36a55c91c2959daf9b844e21cdd03ff81da81edcbaecd24ac0c12559",
+  "test_started.json": "c894321d36a55c91c2959daf9b844e21cdd03ff81da81edcbaecd24ac0c12559",
+  "test_results.csv": "17aad02ccb50a7e27bfa63e212f02316a1aa6c6f2fb05d0a2aa5216d5a867f88",
+  "test_predictions.csv": "02f8520380133211b0b75d93064c6968c198f00b4c5e2944ce4c66550167d538",
+  "rules/metadata.json": "43cc22ec3cff9b3e78609efc79e6db40adf24c8e0aa4a44356fd200440707e25",
+  "rules/rules.csv": "075fe432b2cc9d8a561a616cd1019a545241fb579c19d810b90f3509fcea79c0",
+  "rules/top_rules.csv": "ffd4ec50ab3a0509e7ff767ecceabcea7d731bbcdc0a5a213ec0d06c0669fe12"
+}

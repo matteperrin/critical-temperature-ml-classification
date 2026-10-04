@@ -1,0 +1,61 @@
+{
+  "model": {
+    "name": "elcs_dedup",
+    "parameters": {
+      "learning_iterations": 1000,
+      "N": 100,
+      "random_state": 42
+    },
+    "library_variant": "corrected",
+    "runtime": {
+      "loader": "isolated-bundled-namespace-v1",
+      "source_root": "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification\\third_party\\scikit-eLCS",
+      "package_name": "scikit-eLCS",
+      "package_version": "1.2.4",
+      "library_variant": "corrected",
+      "source_sha256": {
+        "__init__.py": "ad0e86be8c79d496cbd0d540874e7ac80a7bce8cd02e225ae96edb842ec4fe14",
+        "Classifier.py": "e5210cf77c96dbb13a133bbd4c785d971981aca9a6cf4e859205b04659de87f7",
+        "ClassifierSet.py": "f0151476f8d47e5fb30d9c1d4065b831679def77ca1a15e8d21bfe2ea35e7944",
+        "DataCleanup.py": "1e15a8bf3221903e5aa3428f72b6e91e6c6a9fe1c3c900a94f15590cec800a14",
+        "DataManagement.py": "2f11d587e7d4daf2834bb93a27eddc7a47b8da11fb2668e451aab24c5667d699",
+        "eLCS.py": "d14e76dea1f99ca844e7353bcda30f4aed1f903f84e774ca5fa24c470683cb2e",
+        "IterationRecord.py": "6c3746747ebd0bf4ffc1768f150032ab6ea0b04bd2ae22453474972ff5343e69",
+        "OfflineEnvironment.py": "5129f4e31f8630dc989ea03e5b76aa44ebe3773ee3b18456dbaccd3aa5bda20d",
+        "Prediction.py": "244a72ac8d332c58b17287c67578db610b98d4f223c193d923b8f5835dbdb7f6",
+        "Timer.py": "d6e656566c78459863fa8080e128357c51a8f24601691e70d70fd1da02be05e6"
+      },
+      "effective_source_sha256": {
+        "__init__.py": "ad0e86be8c79d496cbd0d540874e7ac80a7bce8cd02e225ae96edb842ec4fe14",
+        "Classifier.py": "e5210cf77c96dbb13a133bbd4c785d971981aca9a6cf4e859205b04659de87f7",
+        "ClassifierSet.py": "f0151476f8d47e5fb30d9c1d4065b831679def77ca1a15e8d21bfe2ea35e7944",
+        "DataCleanup.py": "1e15a8bf3221903e5aa3428f72b6e91e6c6a9fe1c3c900a94f15590cec800a14",
+        "DataManagement.py": "2f11d587e7d4daf2834bb93a27eddc7a47b8da11fb2668e451aab24c5667d699",
+        "eLCS.py": "d14e76dea1f99ca844e7353bcda30f4aed1f903f84e774ca5fa24c470683cb2e",
+        "IterationRecord.py": "6c3746747ebd0bf4ffc1768f150032ab6ea0b04bd2ae22453474972ff5343e69",
+        "OfflineEnvironment.py": "5129f4e31f8630dc989ea03e5b76aa44ebe3773ee3b18456dbaccd3aa5bda20d",
+        "Prediction.py": "244a72ac8d332c58b17287c67578db610b98d4f223c193d923b8f5835dbdb7f6",
+        "Timer.py": "d6e656566c78459863fa8080e128357c51a8f24601691e70d70fd1da02be05e6"
+      },
+      "metadata_sha256": {
+        "setup.py": "4199216aaafd81800620865f973204035c74a6b51a73ce3932ea2df2191cd329",
+        "setup.cfg": "d4ef8a1566ce43a6411113cbcfeb425255e23942b4e126f598aaa8f812dd035c",
+        "scikit_eLCS.egg-info/PKG-INFO": "61bff4dc2c92a154b544836026ef77baa8eaffb1abe14f6450c78416fb904f06"
+      },
+      "majority_repair": {
+        "file": "skeLCS/DataManagement.py",
+        "upstream_line": "self.majorityClass = max(self.classCount)",
+        "corrected_line": "self.majorityClass = max(self.classCount, key=self.classCount.get)",
+        "applied": true
+      }
+    }
+  },
+  "data_path": "C:\\Users\\matte\\Documents\\DataEngineeringAndAI\\critical-temperature-ml-classification\\data\\raw\\train.csv",
+  "data_sha256": "4dfb6e3a1f6ffd969e5a5e42f093c4800d1e2a6c8b1e309f8fcd9f23d86952f3",
+  "sklearn_version": "1.9.0",
+  "split": {
+    "n_splits": 5,
+    "random_state": 42,
+    "outer_fold": 1
+  }
+}

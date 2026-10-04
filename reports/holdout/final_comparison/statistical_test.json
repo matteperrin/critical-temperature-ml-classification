@@ -1,0 +1,28 @@
+{
+  "baseline_balanced_accuracy": 0.6314906331501275,
+  "improved_balanced_accuracy": 0.5831530097411691,
+  "difference": -0.048337623408958384,
+  "p_value": 5e-05,
+  "method": "monte_carlo",
+  "evaluation_rows": 4253,
+  "group_count": 3031,
+  "informative_groups": 328,
+  "permutations_evaluated": 19999,
+  "random_state": 42,
+  "seed": 42,
+  "draws": 19999,
+  "alpha": 0.05,
+  "test_name": "paired_group_permutation",
+  "metric": "balanced_accuracy",
+  "alternative": "two-sided",
+  "assumptions": [
+    "Both prediction vectors refer to the same final shared holdout rows, not pooled cross-validation.",
+    "Groups are independent under the null.",
+    "Entire model prediction vectors are exchangeable within each group under the null.",
+    "Feature-vector groups do not fully identify related material families."
+  ],
+  "baseline_experiment": "reports/holdout/elcs_development_v1/corrected_dedup_i1000_n100",
+  "improved_experiment": "reports/holdout/elcs_development_v1/corrected_ensemble_dedup_selected",
+  "dataset_sha256": "4dfb6e3a1f6ffd969e5a5e42f093c4800d1e2a6c8b1e309f8fcd9f23d86952f3",
+  "stage": "test"
+}
