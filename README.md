@@ -51,8 +51,9 @@ These summaries are calculated for properties such as atomic mass, atomic radius
 
 ### Setup
 
-From the repository root, create a virtual environment and install the recorded
-dependencies. eLCS is installed from the bundled `third_party/scikit-eLCS`
+Use **Python 3.13** (the tested runtime). Other Python versions have not been
+verified with these pinned dependencies. From the repository root, create a
+virtual environment and install the recorded dependencies. eLCS is installed from the bundled `third_party/scikit-eLCS`
 source; other dependencies (and any required build tools) still need access to
 a package index or a local cache. This is not a fully offline setup:
 
@@ -75,7 +76,15 @@ The script uses only the Python standard library to download the original UCI da
 - `data/raw/train.csv` — 81 engineered features and the `critical_temp` target
 - `data/raw/unique_m.csv` — elemental quantities, `critical_temp` and chemical formula
 
-The files are excluded from Git because they can be reproduced by rerunning the script. The script overwrites existing copies with the files from the current UCI archive, and an internet connection is required. See [`data/README.md`](data/README.md) for data-directory details.
+The files are excluded from Git because they can be reproduced by rerunning the
+script. An internet connection is required. Before replacing either CSV, the
+script checks both files against the SHA-256 hashes and byte sizes in
+[`data/source_manifest.json`](data/source_manifest.json). A source change fails
+without replacing the existing CSVs; investigate it rather than bypassing the
+check. Successful downloads record their UTC acquisition time in
+`data/raw/acquisition.json`. The original acquisition date of the existing data
+is unknown; the manifest records when its local identity was documented, not a
+new download. See [`data/README.md`](data/README.md) for details.
 
 ### Reproducing the Phase I pipeline
 
@@ -89,9 +98,18 @@ python src/critical_temperature/data_transformation.py
 python src/critical_temperature/data_analysis.py
 ```
 
-Generated Phase I outputs are recreated under `data/processed/` and `reports/`.
-The processed CSVs are excluded from Git; see [data-directory instructions](data/README.md)
-for rebuilding them. Phase II experiment records under `reports/` remain versioned.
+Generated Phase I outputs are recreated under `data/processed/`,
+`reports/tables/` and `reports/figures/`; these outputs are excluded from Git.
+The final analysis step regenerates the quality/cleaning summaries, class balance,
+descriptive statistics, repeated-formula review, IQR outlier counts, signed
+Pearson/Spearman correlations, near-zero-variance assessment, class-conditional
+feature summaries, compositional-complexity summaries, and element/composition
+frequencies. It also generates distribution, correlation and composition figures.
+See [data-directory instructions](data/README.md) for rebuilding them.
+`target_boxplot.png` is an obsolete local artifact, not a pipeline output; use
+`critical_temperature_boxplot.png`. The scripts do not remove old unrelated files.
+These full-dataset analyses are exploratory, not model feature selection.
+Phase II experiment records under `reports/` remain versioned.
 
 ### Loading Phase II inputs
 
@@ -216,19 +234,46 @@ Existing directories are refused, and interrupted studies are not automatically
 resumed. No final holdout is evaluated. Development selection does not establish
 unbiased performance, statistical significance or convergence.
 
-### Completed Phase II comparisons and rules
+### Current Phase II results: completed exploratory revision
 
-Start with the [reader-friendly results page](results.html). The
-[technical interpretation](notes/phase_two_results.md) gives detailed methods,
-verification and limitations. Supporting records are
-under `reports/holdout/final_comparison/`: the frozen plan, development/final CSVs,
-statistical result and completion record. The final holdout has now been scored;
-**do not tune configurations against these results or remove final-run markers**.
+Start with the [reader-friendly results page](results.html) and the
+[current technical record](notes/exploratory_revision.md). Supporting records are
+under `reports/holdout/elcs_exploratory_revision_v2/`, including all six development
+candidates, selection, descriptive CV/evaluation tables, fitted rules and completion
+records. The page presents the revised single eLCS and ensemble alongside three
+unchanged conventional-model references.
 
-The comparison is limited to the recorded configurations: selected eLCS training
-used only 1,000 individual record presentations, not epochs. The results page and
-technical note explain this sub-epoch budget and a derived majority-class reference;
-neither addition replaces the saved experiments or constitutes a new evaluation.
+The revision selected 339,280 record updates per fit/member and population limit
+1,000 using development CV. Its evaluation reused previously viewed records:
+**these results are exploratory, not an untouched holdout or external validation**.
+No new confirmatory significance test applies to the revised pair. Do not tune
+against these evaluation scores or remove scoring start markers.
+
+Reproducing the complete revision is an expensive, explicit training operation.
+After installing dependencies and fetching the data, use a **new** directory
+(the existing completed directory is refused):
+
+```bash
+python src/critical_temperature/run_exploratory_revision.py --output-dir reports/holdout/elcs_exploratory_revision_reproduction
+```
+
+This runs the entire fixed grid serially, selects using development CV, trains the
+matched ensemble and scores the selected pair once on reused evaluation records.
+It requires the committed conventional reference artifacts. Interrupted runs are
+not automatically resumed. It does not replace the frozen original or revised
+records, and does not establish independent generalization.
+
+The HTML builder below only presents the committed `elcs_exploratory_revision_v2`
+evidence; it does not automatically switch to a reproduction directory.
+
+### Historical Phase II comparisons and rules
+
+The [original technical interpretation](notes/phase_two_results.md) and
+`reports/holdout/final_comparison/` describe the earlier seven-system comparison,
+including its original statistical test. Those configurations used only 1,000
+record presentations for selected eLCS training, not epochs. They remain historical
+evidence, not the current page's results. The original significance test must not
+be applied to the revised models. Original and revised scores are preserved.
 
 `compare_models.py table` combines compatible completed experiments using
 `--stage cv` or `--stage test`, `--experiments` and a new `--output` path. It checks
@@ -248,8 +293,10 @@ python src/critical_temperature/extract_elcs_rules.py --experiment reports/holdo
 The rule exporter's old all-data fitting command is no longer supported. Training
 rule accuracy is not held-out accuracy. Run project tests with the unittest command
 above; optional pytest users should use `python -m pytest tests -q`, not vendor-wide
-discovery. Verification includes a fresh isolated installation of the recorded
-dependencies; see the results note for limits.
+discovery. The GitHub Actions workflow is configured to run the offline project
+suite and `pip check` on Python 3.13 for Linux and Windows. It does not download the dataset or retrain the studies.
+Historical fresh-install verification is recorded in the original results note;
+see that note for its scope and limits.
 
 To rebuild the HTML page from the saved evidence (Python standard library only):
 

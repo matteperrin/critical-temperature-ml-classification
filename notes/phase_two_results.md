@@ -1,8 +1,11 @@
 # Phase II results and interpretation
 
-This is a technical results summary, not the final assessment report. For the
-plain-language presentation, open [results.html](../results.html) in a browser
-from a downloaded or cloned copy of the repository. This interpretation revision
+**Historical results:** this note describes the original 1,000-update eLCS study,
+not the current retrained models. The [exploratory revision](exploratory_revision.md)
+is the current technical record; [results.html](../results.html) presents that
+revision. The statistical test below applies only to the original model pair.
+
+This is a technical results summary, not the final assessment report. This interpretation revision
 makes the learning-budget limitation explicit and adds a derived majority-class
 reference. Frozen configurations, predictions, scores and statistical results
 are unchanged; no additional final evaluations or hypothesis tests were run.

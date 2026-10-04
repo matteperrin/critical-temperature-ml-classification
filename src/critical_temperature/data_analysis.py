@@ -1,107 +1,96 @@
+"""Full-dataset exploratory plots and tables; not model feature selection."""
 from pathlib import Path
 
 import matplotlib.pyplot as plt
-import pandas as pd
 
-# Load transformed dataset
+if __package__:
+    from .phase_one_reports import PROJECT_ROOT, generate_reports, load_inputs
+else:
+    from phase_one_reports import PROJECT_ROOT, generate_reports, load_inputs
 
-project_root = Path(__file__).resolve().parents[2]
-figures_dir = project_root / "reports" / "figures"
-figures_dir.mkdir(parents=True, exist_ok=True)
 
-df = pd.read_csv(project_root / "data" / "processed" / "train_transformed.csv")
+def run_analysis(root=PROJECT_ROOT, *, train=None, unique=None, processed=None):
+    """Regenerate Phase I outputs without modifying raw or processed inputs."""
+    root = Path(root)
+    train, unique, df = load_inputs(root, train=train, unique=unique, processed=processed)
+    tables = generate_reports(root, train=train, unique=unique, processed=df)
+    figures_dir = root / "reports/figures"
+    figures_dir.mkdir(parents=True, exist_ok=True)
 
-print("Dataset loaded successfully.")
-print("Shape:", df.shape)
+    def save(fig, filename):
+        fig.tight_layout()
+        fig.savefig(figures_dir / filename, dpi=300)
+        plt.close(fig)
 
-# Descriptive statistics
-print("\n--- DESCRIPTIVE STATISTICS ---")
-print(df.describe().T.to_string())
+    fig, ax = plt.subplots()
+    balance = tables["class_balance.csv"]
+    ax.bar(balance.above_77k, balance.record_count)
+    ax.set(title="Class Distribution", xlabel="Above 77 K", ylabel="Number of Records")
+    ax.set_xticks([0, 1], ["0 = 77 K or below", "1 = Above 77 K"])
+    save(fig, "class_distribution.png")
 
-# Class distribution
-print("\n--- CLASS DISTRIBUTION ---")
-print(df["above_77k"].value_counts().sort_index())
+    fig, ax = plt.subplots()
+    ax.hist(df.critical_temp, bins=30)
+    ax.set(title="Distribution of Critical Temperature", xlabel="Critical Temperature (K)", ylabel="Frequency")
+    save(fig, "critical_temperature_histogram.png")
 
-print("\nClass proportions:")
-print(df["above_77k"].value_counts(normalize=True).sort_index())
+    fig, ax = plt.subplots()
+    ax.boxplot(df.critical_temp.dropna())
+    ax.set(title="Critical Temperature Boxplot", ylabel="Critical Temperature (K)")
+    save(fig, "critical_temperature_boxplot.png")
 
-# Plot class distribution
-df["above_77k"].value_counts().sort_index().plot(kind="bar")
+    # Correlation ranking is used only for this exploratory visualization.
+    columns = tables["feature_target_correlations.csv"].dropna(subset=["pearson_correlation"]).feature.head(10).tolist()
+    columns += ["critical_temp"]
+    fig, ax = plt.subplots(figsize=(10, 8))
+    image = ax.imshow(df[columns].corr(), aspect="auto", vmin=-1, vmax=1, cmap="coolwarm")
+    fig.colorbar(image, ax=ax, label="Pearson Correlation")
+    ax.set_xticks(range(len(columns)), columns, rotation=90)
+    ax.set_yticks(range(len(columns)), columns)
+    ax.set_title("Exploratory Correlation Heatmap")
+    save(fig, "correlation_heatmap.png")
 
-plt.title("Class Distribution")
-plt.xlabel("Above 77 K")
-plt.ylabel("Number of Records")
-plt.xticks([0, 1], ["0 = 77 K or below", "1 = Above 77 K"], rotation=0)
-plt.tight_layout()
-plt.savefig(figures_dir / "class_distribution.png", dpi=300)
-plt.close()
+    fig, ax = plt.subplots()
+    ax.scatter(df.wtd_mean_Valence, df.critical_temp, alpha=.4)
+    ax.set(title="Weighted Mean Valence vs Critical Temperature", xlabel="Weighted Mean Valence", ylabel="Critical Temperature (K)")
+    save(fig, "weighted_mean_valence_scatter.png")
 
-# Histogram of critical temperature
-plt.hist(df["critical_temp"], bins=30)
+    selected = [name for name in ("wtd_mean_Valence", "wtd_std_ThermalConductivity", "number_of_elements") if name in df]
+    fig, axes = plt.subplots(1, len(selected), figsize=(5 * len(selected), 4), squeeze=False)
+    for ax, feature in zip(axes.flat, selected):
+        for label in (0, 1):
+            values = df.loc[df.above_77k.eq(label), feature].dropna()
+            if not values.empty:
+                ax.hist(values, bins=25, alpha=.5, density=True, label=f"above_77k = {label}")
+        ax.set(xlabel=feature, ylabel="Density")
+        ax.legend()
+    fig.suptitle("Exploratory Class-conditional Feature Distributions")
+    save(fig, "class_feature_distribution.png")
 
-plt.title("Distribution of Critical Temperature")
-plt.xlabel("Critical Temperature (K)")
-plt.ylabel("Frequency")
-plt.tight_layout()
-plt.savefig(figures_dir / "critical_temperature_histogram.png", dpi=300)
-plt.close()
+    elements = unique.drop(columns=["critical_temp", "material"]).select_dtypes(include="number")
+    complexity = elements.gt(0).sum(axis=1)
+    fig, ax = plt.subplots()
+    for label in (0, 1):
+        mask = df.above_77k.eq(label)
+        ax.scatter(complexity[mask], train.loc[mask, "critical_temp"], alpha=.25, label=f"above_77k = {label}")
+    ax.set(title="Composition Complexity vs Critical Temperature", xlabel="Number of Present Elements", ylabel="Critical Temperature (K)")
+    ax.legend()
+    save(fig, "composition_complexity_temperature.png")
 
-# Boxplot of critical temperature
-plt.boxplot(df["critical_temp"])
+    fig, ax = plt.subplots(figsize=(9, 5))
+    prevalence = tables["element_prevalence.csv"].head(20)
+    ax.bar(prevalence.element, prevalence.record_proportion)
+    ax.set(title="Most Common Elements", xlabel="Element", ylabel="Proportion of Records Containing Element")
+    save(fig, "element_prevalence.png")
+    return tables
 
-plt.title("Critical Temperature Boxplot")
-plt.ylabel("Critical Temperature (K)")
-plt.tight_layout()
-plt.savefig(figures_dir / "critical_temperature_boxplot.png", dpi=300)
-plt.close()
 
-# Correlation analysis
-correlations = (
-    df.corr(numeric_only=True)["critical_temp"]
-    .drop(["critical_temp", "above_77k"])
-    .abs()
-    .sort_values(ascending=False)
-)
+def main():
+    tables = run_analysis()
+    for filename, table in tables.items():
+        print(f"\n--- {filename} ---")
+        print(table.head(20).to_string(index=False))
 
-print("\n--- TOP CORRELATIONS WITH CRITICAL TEMPERATURE ---")
-print(correlations.head(10))
 
-# These full-dataset rankings are exploratory, not model feature selection.
-# Any learned selection for evaluation must be fitted on training folds only.
-top_features = correlations.head(10).index.tolist()
-heatmap_columns = top_features + ["critical_temp"]
-
-correlation_matrix = df[heatmap_columns].corr()
-
-# Plot correlation heatmap
-plt.figure(figsize=(10, 8))
-plt.imshow(correlation_matrix, aspect="auto")
-plt.colorbar(label="Correlation")
-
-plt.xticks(range(len(heatmap_columns)), heatmap_columns, rotation=90)
-
-plt.yticks(range(len(heatmap_columns)), heatmap_columns)
-
-plt.title("Correlation Heatmap of Key Features")
-plt.tight_layout()
-plt.savefig(figures_dir / "correlation_heatmap.png", dpi=300)
-plt.close()
-
-# Scatter plot: weighted mean valence vs critical temperature
-plt.scatter(df["wtd_mean_Valence"], df["critical_temp"], alpha=0.4)
-
-plt.title("Weighted Mean Valence vs Critical Temperature")
-plt.xlabel("Weighted Mean Valence")
-plt.ylabel("Critical Temperature (K)")
-plt.tight_layout()
-plt.savefig(figures_dir / "weighted_mean_valence_scatter.png", dpi=300)
-plt.close()
-
-print("\n--- KEY EDA FINDINGS ---")
-print("The dataset is class imbalanced, with fewer materials above 77 K.")
-print("Critical temperature is unevenly distributed and has one clear high outlier.")
-print(
-    "Several thermal conductivity and atomic-radius features are related "
-    "to critical temperature."
-)
-print("Weighted mean valence shows a negative relationship with critical temperature.")
+if __name__ == "__main__":
+    main()

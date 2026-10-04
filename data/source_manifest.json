@@ -1,0 +1,19 @@
+{
+  "dataset": "UCI Superconductivty Data (464)",
+  "source_url": "https://archive.ics.uci.edu/static/public/464/superconductivty+data.zip",
+  "doi": "10.24432/C53P47",
+  "license": "CC BY 4.0",
+  "identity_recorded_on": "2026-10-05",
+  "original_acquisition_date": null,
+  "provenance_note": "Hashes recorded from the existing local raw CSVs used by this project; the original acquisition date is unknown. This manifest does not claim a fresh network download.",
+  "files": {
+    "train.csv": {
+      "sha256": "4dfb6e3a1f6ffd969e5a5e42f093c4800d1e2a6c8b1e309f8fcd9f23d86952f3",
+      "size_bytes": 23859780
+    },
+    "unique_m.csv": {
+      "sha256": "b68ae6b55ea8581eff8b1ffba073a899db7e2d2f7f3b781bb0802f643f51e5f7",
+      "size_bytes": 4291603
+    }
+  }
+}
