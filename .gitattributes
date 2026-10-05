@@ -1,0 +1,7 @@
+# Frozen manifests bind the historical Windows CRLF bytes, not Git's LF blobs.
+# Keep their checkout bytes identical on every OS; do not rewrite saved hashes.
+reports/holdout/**/*.json text eol=crlf
+reports/holdout/**/*.csv text=auto eol=crlf
+
+# Upstream rule exports contain NUL bytes. They must never pass a text filter.
+reports/holdout/**/rules.csv -text

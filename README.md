@@ -136,6 +136,12 @@ Run the loader and baseline-runner tests with:
 python -m unittest discover -s tests -v
 ```
 
+Git must be available on `PATH` for the evidence-checkout regression test.
+`.gitattributes` preserves the historical holdout artifacts' CRLF checkout bytes
+on every OS so their recorded SHA-256 hashes remain valid. Binary rule exports
+are kept byte-for-byte. Do not normalize these artifacts or regenerate their
+manifests to bypass integrity failures.
+
 ### scikit-eLCS implementation and bundled reference
 
 We integrate **scikit-eLCS 1.2.4** rather than implementing the eLCS algorithm

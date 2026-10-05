@@ -81,3 +81,8 @@ interpretations or alter frozen model evidence.
 For the recorded raw inputs and current dependencies, regeneration was verified
 byte-for-byte against all three previously tracked CSVs. Phase II configurations,
 splits, predictions, rules and completion records under `reports/` remain versioned.
+The frozen holdout JSON/text CSV hashes bind historical CRLF bytes;
+`.gitattributes` restores those same checkout bytes on Linux and Windows.
+NUL-containing upstream rule CSVs bypass text conversion entirely. Keep these
+attributes and the original hashes intact; do not rewrite experiment manifests
+to accommodate platform line-ending conversion.
