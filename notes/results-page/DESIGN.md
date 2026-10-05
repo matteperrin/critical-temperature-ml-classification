@@ -2,7 +2,7 @@
 
 ## Context
 - Artifact: offline research results sheet for readers without ML tooling.
-- Action: understand the revised comparison, then inspect metrics, rules and evidence.
+- Action: understand the revised comparison and comparative conclusions, follow the commit-based process, then inspect metrics, rules and evidence.
 - Direction: preserve the existing custom Swiss research sheet; no framework or visual overhaul.
 - Dials: DESIGN_VARIANCE=4, MOTION_INTENSITY=1, VISUAL_DENSITY=5.
 - Signature: full-scale ranked comparison paired with concrete single/ensemble prediction counts.
@@ -42,9 +42,13 @@
 - Print expands disclosure bodies.
 - Five models: revised single/ensemble and three fixed conventional references.
 - No inherited p-value or untouched-holdout claim. Explicit budget units, historical errors and bounded conclusions.
+- Conclusions summarize recorded findings: precision/recall trade-offs, development versus reused evaluation, and separately labeled historical comparisons.
+- Our process is a seven-step commit-anchored chronology, not individual contribution certification. Reuse existing grid, heading and native disclosure styles.
 - Rule excerpts belong to the actual retrained populations; training matches include repeated presentations.
 
 ## Verification
+- Content expansion: generated-page equality, HTML anchors/local evidence links, offline constraints and new conclusions/process assertions checked with `python -m pytest tests/test_results_page.py -q`.
+- The content expansion has not been visually rechecked in a browser; the render evidence below describes the earlier page.
 - Rendered and inspected in headless Chrome at 1920px and 375px.
 - No horizontal overflow, external resource requests or browser runtime errors.
 - Keyboard skip link and native rule disclosure verified; two accessible tables retained.

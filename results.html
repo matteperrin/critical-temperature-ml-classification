@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Exploratory retraining results for superconductors above 77 K: five-model comparison on reused records, corrected training budgets, fitted rules and saved evidence.">
+<meta name="description" content="Superconductors above 77 K: comparative conclusions, commit-based project process, exploratory model results, corrected training budgets and saved evidence.">
 <title>Superconductors above 77 K | Research results</title>
 <style>
 :root {
@@ -142,7 +142,7 @@ footer { padding-block: var(--s8); border-top: 1px solid var(--border); color: v
 <header class="wrap page-header">
   <span class="project-name">Critical temperature classification</span>
   <nav aria-label="Results sections">
-    <a href="#comparison">Compare models</a><a href="#rules">Read rules</a><a href="#evidence">Evidence</a>
+    <a href="#comparison">Compare models</a><a href="#conclusions">Conclusions</a><a href="#process">Our process</a><a href="#rules">Read rules</a><a href="#evidence">Evidence</a>
   </nav>
 </header>
 <main id="main" class="wrap" tabindex="-1">
@@ -249,6 +249,79 @@ footer { padding-block: var(--s8); border-top: 1px solid var(--border); color: v
       <p>Always predicting “at or below 77 K” would score <strong>81.7% ordinary accuracy</strong>, <strong>50.0% balanced accuracy</strong> and <strong>0.0% positive recall</strong> on these reused records. This is a derived reference, not a sixth fitted model or a new hypothesis test. No model was fitted; it follows from the saved class counts.</p>
       <p>The revised ensemble achieved 86.4% ordinary accuracy, but detected only 233 of 779 positive records. Its 64.49% balanced accuracy better exposes that limitation than ordinary accuracy alone.</p>
     </div>
+  </section>
+
+  <section id="conclusions" class="section" aria-labelledby="conclusions-title">
+    <h2 id="conclusions-title">Comparative conclusions</h2>
+    <p>The recorded results support composition-based classification within this dataset, but not a claim of independent materials discovery. The useful comparison is not simply which model has the largest score: it is what each model finds, misses and costs.</p>
+    <div class="metric-definitions">
+      <div>
+        <h3>Random Forest offered the strongest balance</h3>
+        <p>Its 90.4% balanced accuracy and 84.3% F1 led the five evaluated systems. It detected <strong>656 of 779</strong> positive records, missed 123 and produced 121 false positives. That is substantially broader candidate coverage than either revised eLCS system.</p>
+        <p>This supports Random Forest as the strongest recorded reference, not as a universally superior algorithm. The conventional models used fixed project defaults, and neither equal-compute tuning nor significance tests between them were performed.</p>
+      </div>
+      <div>
+        <h3>Precision is not candidate coverage</h3>
+        <p>The revised ensemble had the highest positive precision, <strong>87.9%</strong>, versus 84.4% for Random Forest. But it detected only 233 positive records and missed 546. Fewer false leads came with many more missed candidates.</p>
+        <p>High precision alone therefore does not make eLCS the best screening system. Broad discovery favors recall; a small, selective shortlist emphasizes precision. The current evidence does not include threshold tuning or experimentally validated recommendations.</p>
+      </div>
+      <div>
+        <h3>The simpler conventional references remained competitive</h3>
+        <p>Logistic regression reached 80.8% balanced accuracy, compared with SVM's 79.0%; their positive recalls were 68.8% and 65.1%. Both were ahead of the revised eLCS pair on balanced accuracy, recall and F1, though below Random Forest.</p>
+        <p>Logistic regression's descriptive lead does not establish statistical superiority, and the results do not prove that more complex models always perform better. They compare these recorded settings and preprocessing choices.</p>
+      </div>
+      <div>
+        <h3>Development and evaluation tell different stories</h3>
+        <p>Five-fold development balanced accuracy favored single eLCS: <strong>67.1% versus 63.7%</strong>. On reused evaluation records, the ensemble instead led by 0.54 points. The ensemble advantage was small and did not persist across both stages, despite three times the aggregate record-update budget.</p>
+        <p>The conventional development ranking matched evaluation: Random Forest 91.2%, logistic regression 80.8%, SVM 78.6%. These are unweighted fold means, not independent replications or confidence intervals. <a href="reports/holdout/elcs_exploratory_revision_v2/descriptive_cv_table.csv">Inspect all development scores and fold standard deviations</a>.</p>
+      </div>
+    </div>
+    <details><summary>Historical comparisons: repair, deduplication and retraining</summary><div class="disclosure">
+      <p><strong>Library correctness mattered.</strong> In the original matched 1,000-update evaluation, unmodified deduplicated eLCS achieved 47.5% balanced accuracy; the corrected version achieved 63.1%. The majority-class fallback repair was the only difference in that pair. This is distinct from the later training-budget revision.</p>
+      <p><strong>Deduplication was a separate data-handling choice.</strong> At the original 1,000-update / population-100 setting, corrected development balanced accuracy was 59.5% with raw training rows and 61.9% with exact training-row deduplication. That descriptive difference is not proof that deduplication always helps. Different continuous-temperature measurements were retained, and evaluation rows were never removed.</p>
+      <p><strong>The original ensemble result was unfavorable.</strong> It reached 58.32% evaluation balanced accuracy versus 63.15% for single eLCS. The original group-paired statistical comparison favored the single model under its stated assumptions; it does not apply to the retrained pair. The original ensemble's higher ordinary accuracy did not overturn its loss on the primary metric.</p>
+      <p><strong>Retraining changed the result, not the evidence boundary.</strong> Single eLCS rose by approximately 0.80 percentage points and the ensemble by approximately 6.18 points on reused evaluation records. Both budget and population increased, so longer training alone cannot explain these gains. Twenty passes still did not close the gap to the conventional references or demonstrate convergence.</p>
+      <p>Sources: <a href="notes/phase_two_results.md">original results and statistical assumptions</a>, <a href="notes/matte_notes.md#development-study-progress">original matched development findings</a>, and <a href="notes/exploratory_revision.md">completed exploratory revision</a>. Historical scores are not additional models in the current five-model chart.</p>
+    </div></details>
+    <h3>What we can take forward</h3>
+    <p>Keep balanced accuracy and positive recall visible alongside precision; treat readable rules as inspectable patterns, not validated physical explanations; and separate correctness repairs from modeling enhancements. An independent dataset with material-family-aware separation, a justified training/convergence study and experimentally checked candidates would be needed to strengthen the claims. These are next steps, not completed validations.</p>
+  </section>
+
+  <section id="process" class="section" aria-labelledby="process-title">
+    <h2 id="process-title">Our process</h2>
+    <p>We moved from reproducible data acquisition to model comparison, then revised the interpretation when library behavior and training-budget limits became clear. The milestones below summarize the repository's commit history, not a complete record of individual contributions or an assessment submission log.</p>
+    <ol>
+      <li>
+        <h3>Acquire and inspect the data</h3>
+        <p>Added a repeatable fetch script, then inspected types, ranges, unique values, missing values, duplicates and class distribution. This established the data-engineering foundation before model fitting. Commit anchors: <code>3bb1ab8</code>, <code>c42baaa</code>, <code>3dafc62</code>, <code>4246415</code>.</p>
+      </li>
+      <li>
+        <h3>Define the target and make the pipeline reproducible</h3>
+        <p>Separated target creation from inspection, explored cleaning and duplicate handling, and defined class 1 as <code>critical_temp &gt; 77</code>. Added variance checks, exploratory visualizations, quality validation and saved figures while preserving raw datasets. Commit anchors: <code>23e7faf</code>, <code>b6a72f3</code>, <code>d4d7a46</code>, <code>dc4fff1</code>, <code>c8ef018</code>, <code>6a8b3fe</code>.</p>
+      </li>
+      <li>
+        <h3>Build baselines and inspect learned rules</h3>
+        <p>Prepared Phase II inputs and tests, ran the first eLCS experiment, introduced five-fold evaluation, and added Random Forest, SVM and logistic regression. Made the eLCS update budget configurable, saved confusion counts and exported ranked rules. Preprocessing variants and shared test folds made comparisons more consistent. Commit anchors: <code>a049def</code>, <code>1c2119d</code>, <code>0f21b9e</code>, <code>f74d7e0</code>, <code>5d345e1</code>, <code>5c46c9c</code>, <code>6053d45</code>, <code>de1924a</code>.</p>
+      </li>
+      <li>
+        <h3>Separate development, repair the library and test an ensemble</h3>
+        <p>Added the multi-seed ensemble and a separate final-evaluation workflow. Identical feature vectors stayed in the same partition; training-only deduplication and training-fitted scaling avoided changing validation rows or fitting transformations on them. Repaired the bundled eLCS majority-class fallback and compared supplied versus corrected versions. Commit anchors: <code>e1d366c</code>, <code>e5abc0e</code>, <code>639a5fc</code>, <code>cc9c319</code>.</p>
+        <p>The separation protected subsequent development choices, but could not make records from earlier full-data analyses and rule exports retroactively unseen.</p>
+      </li>
+      <li>
+        <h3>Freeze and report the original comparison</h3>
+        <p>Completed bounded development experiments, selected using mean development balanced accuracy, froze the original evaluation plan and reported the model comparison, including the unsuccessful ensemble result. Saved predictions, fitted rules and integrity records rather than replacing unfavorable outcomes. Commit anchors: <code>ed0cc0b</code>, <code>69a3d91</code>.</p>
+      </li>
+      <li>
+        <h3>Correct training exposure and label the revision honestly</h3>
+        <p>Recognized that an eLCS iteration updates on one record, not one epoch. The exploratory revision tested six full-pass-budget candidates, selected on development CV, then scored the selected single/ensemble pair once on the already-viewed evaluation rows. Kept conventional references and historical artifacts unchanged, disclosed exposure, and applied no new significance test. Commit anchor: <code>4d94af2</code>.</p>
+      </li>
+      <li>
+        <h3>Finish the handoff and protect reproducibility</h3>
+        <p>Finished the analysis pipeline and handoff documentation, added automated Linux and Windows checks, and preserved frozen evidence bytes across platforms. The offline results page is rebuilt from hash-verified artifacts without training or scoring models. Commit anchors: <code>4cb9509</code>, <code>7bb1a87</code>, <code>4d50ece</code>.</p>
+      </li>
+    </ol>
+    <p class="metadata">Inspect these milestones locally with <code>git log --reverse --oneline</code> and <code>git show &lt;commit&gt;</code>. For detailed methods and limitations, read the <a href="README.md">repository guide</a>, <a href="notes/elcs_integration.md">eLCS integration record</a> and <a href="notes/exploratory_revision.md">revision record</a>. Commit history documents changes; passing automated checks does not establish external scientific validity.</p>
   </section>
 
   <section id="rules" class="section rules-layout" aria-labelledby="rules-title">

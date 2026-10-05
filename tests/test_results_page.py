@@ -95,6 +95,21 @@ class ResultsPageTests(unittest.TestCase):
         self.assertIn("Repeated presentations", page)
         self.assertIn("Only unspecified features are unrestricted", page)
 
+    def test_conclusions_and_commit_based_process_are_present(self):
+        page = build_page()
+        parsed = PageParser()
+        parsed.feed(page)
+        self.assertIn("conclusions", parsed.ids)
+        self.assertIn("process", parsed.ids)
+        self.assertIn("Our process", page)
+        self.assertIn("Precision is not candidate coverage", page)
+        self.assertIn("Development and evaluation tell different stories", page)
+        self.assertIn("Historical comparisons", page)
+        self.assertIn("639a5fc", page)
+        self.assertIn("4d94af2", page)
+        self.assertIn("4d50ece", page)
+        self.assertIn("not a complete record of individual contributions", page)
+
     def test_changed_evidence_is_rejected_without_writing(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
